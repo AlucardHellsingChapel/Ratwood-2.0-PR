@@ -96,19 +96,17 @@
 
 /datum/advclass/mercenary/warscholar/pontifex
 	name = "Naledi Pontifex"
-	tutorial = "You are a Naledi Pontifex, a warrior trained into a hybridized style of movement-controlling magic and hand-to-hand combat. Your chosen Path determines your specialization, though you'll never match another mage in pure magical power. Instead, you manifest an imitation of a shard of PSYDON's blade and rely on trickery and battlefield control."
+	tutorial = "You are a Naledi Pontifex, a warrior trained into a hybridized style of movement-controlling magic and hand-to-hand combat. You'll never match another mage in pure magical power. Instead, you gather arcyne momentum with your fists, manifest an imitation of a shard of PSYDON's blade, and rely on trickery and battlefield control."
 	outfit = /datum/outfit/job/roguetown/mercenary/warscholar_pontifex
-	subclass_languages = list(/datum/language/celestial)
+	subclass_languages = list(/datum/language/celestial, /datum/language/thievescant)
 	traits_applied = list(TRAIT_DODGEEXPERT, TRAIT_CIVILIZEDBARBARIAN, TRAIT_ARCYNE_T1, TRAIT_NALEDI)
 	subclass_stats = list(
-		STATKEY_STR = 3,
-		STATKEY_SPD = 2,
-		STATKEY_WIL = 1,
-		STATKEY_PER = -1,
-		STATKEY_CON = -1
+		STATKEY_STR = 2,
+		STATKEY_WIL = 2,
+		STATKEY_CON = 3
 	)
 	subclass_skills = list(
-		/datum/skill/combat/wrestling = SKILL_LEVEL_EXPERT,
+		/datum/skill/combat/wrestling = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/combat/unarmed = SKILL_LEVEL_EXPERT,
 		/datum/skill/misc/swimming = SKILL_LEVEL_NOVICE,
 		/datum/skill/misc/climbing = SKILL_LEVEL_JOURNEYMAN,
@@ -146,31 +144,13 @@
 	if(H.mind)
 		detailcolor = input("Choose a color.", "NALEDIAN COLORPLEX") as anything in naledicolors
 		detailcolor = naledicolors[detailcolor]
-		H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/prestidigitation)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/summonrogueweapon/bladeofpsydon)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/shadowstep)
-		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/fetch)
-		H.mind.AddSpell(new/obj/effect/proc_holder/spell/invoked/projectile/repel)
-		var/weapons = list("Path of War","Path of Control","Path of Shadows","Path of Survival")
-		var/weapon_choice = input(H, "Choose your path.", "WHAT PATH DO YOU WALK?") as anything in weapons
-		switch(weapon_choice)
-			if("Path of War")//Weak combat stuff only
-				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/airblade)//longer CD than arcane bolt but more versatile
-				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/enchant_weapon)
-			if("Path of Control")//Battlefield control, minimal damage dealing
-				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/ensnare)
-				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/forcewall/greater)
-			if("Path of Shadows")//Sneaky trickster punchmage
-				H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/lesserknock)
-				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/invisibility)
-				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/blindness/warscholar)
-			if("Path of Survival")//Trade magic for skills
-				H.adjust_skillrank_up_to(/datum/skill/misc/medicine, 3, TRUE)
-				H.adjust_skillrank_up_to(/datum/skill/craft/cooking, 3, TRUE)
-				H.adjust_skillrank_up_to(/datum/skill/craft/alchemy, 2, TRUE)
-				H.adjust_skillrank_up_to(/datum/skill/misc/athletics, 4, TRUE)
-				H.adjust_skillrank_up_to(/datum/skill/misc/swimming, 3, TRUE)
-				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/diagnose/secular)//as a bodyguard it can be REALLY important to find where the bleed is.
+		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/spellfist/fist_of_psydon)
+		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/spellfist/grasp_of_psydon)
+		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/spellfist/storm_of_psydon)
+		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/enchant_weapon)
+		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/mending)
 
 	head = /obj/item/clothing/head/roguetown/roguehood/pontifex
 	gloves = /obj/item/clothing/gloves/roguetown/angle/pontifex
@@ -182,15 +162,18 @@
 	wrists = /obj/item/clothing/neck/roguetown/psicross/naledi
 	belt = /obj/item/storage/belt/rogue/leather/black
 	beltl = /obj/item/flashlight/flare/torch
-	beltr = /obj/item/storage/belt/rogue/pouch/coins/poor
 	shoes = /obj/item/clothing/shoes/roguetown/sandals
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	backpack_contents = list(
 		/obj/item/roguekey/mercenary = 1,
 		/obj/item/lockpick = 1,
 		/obj/item/rogueweapon/huntingknife = 1,
-		/obj/item/rogueweapon/scabbard/sheath = 1
+		/obj/item/rogueweapon/scabbard/sheath = 1,
+		/obj/item/storage/belt/rogue/pouch/coins/poor = 1
 		)
+	var/list/sidearms = list("Katar" = /obj/item/rogueweapon/katar, "Knuckles" = /obj/item/rogueweapon/knuckles)
+	var/sidearm_choice = input(H, "Choose the sidearm you carry beside your fists.", "WHAT DO YOU CARRY?") as anything in sidearms
+	beltr = sidearms[sidearm_choice] || /obj/item/rogueweapon/katar
 	H.merctype = 14
 
 /datum/advclass/mercenary/warscholar/vizier
@@ -306,6 +289,8 @@
 			V.color = detailcolor
 			V.update_icon()
 	H.regenerate_icons()
+	if(!visualsOnly)
+		H.apply_status_effect(/datum/status_effect/buff/arcyne_momentum)
 
 /datum/outfit/job/roguetown/mercenary/warscholar_vizier/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	. = ..()
