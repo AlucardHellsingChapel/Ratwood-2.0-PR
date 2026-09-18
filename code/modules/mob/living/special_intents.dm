@@ -1222,13 +1222,17 @@ SPECIALS START HERE
 		if(fx.icon_state == post_icon_state)
 			fx.color = "#e50000" 
 
+	var/turf/front_turf = get_step(howner, howner.dir)
+
 	for(var/mob/living/L in get_hearers_in_view(0, T))
 		if(L != howner)
-			L.apply_status_effect(/datum/status_effect/debuff/exposed, exposed_dur)
 			if(L.mobility_flags & MOBILITY_STAND)
 				apply_generic_weapon_damage(L, dam, "slash", BODY_ZONE_CHEST, bclass = BCLASS_CUT)
+				if(T == front_turf)
+					L.apply_status_effect(/datum/status_effect/debuff/exposed, exposed_dur)
 	playsound(T, sfx_post_delay, 100, TRUE)
 	..()
+
 
 /datum/special_intent/dragons_fang_strong
 	name = "Dragon's Fang (Strong)"
@@ -1248,7 +1252,7 @@ SPECIALS START HERE
 	sfx_post_delay = 'sound/combat/sidesweep_hit.ogg'
 	cooldown = 60 SECONDS
 	stamcost = 30
-	var/dam = 200
+	var/dam = 100
 	var/self_immob_dur = 1 SECONDS
 	var/exposed_dur = 3 SECONDS
 
@@ -1262,16 +1266,72 @@ SPECIALS START HERE
 		if(fx.icon_state == post_icon_state)
 			fx.color = "#e50000" 
 
+	var/turf/front_turf = get_step(howner, howner.dir)
+
 	for(var/mob/living/L in get_hearers_in_view(0, T))
 		if(L != howner)
-			L.apply_status_effect(/datum/status_effect/debuff/exposed, exposed_dur)
 			if(L.mobility_flags & MOBILITY_STAND)
 				apply_generic_weapon_damage(L, dam, "slash", BODY_ZONE_CHEST, bclass = BCLASS_CUT)
+				if(T == front_turf)
+					L.apply_status_effect(/datum/status_effect/debuff/exposed, exposed_dur)
 	playsound(T, sfx_post_delay, 100, TRUE)
 	..()
 
 #undef FANG_WAVE2
 
+
+/datum/special_intent/dragon_draw
+	name = "Dragon's Draw"
+	desc = ""
+	tile_coordinates = list(list(0,0), list(0,1), list(0,2))
+	use_clickloc = FALSE
+	respect_adjacency = FALSE
+	respect_dir = TRUE
+	delay = 0.3 SECONDS
+	fade_delay = 0.4 SECONDS
+	pre_icon_state = "trap"
+	post_icon_state = "sweep_fx" 
+	sfx_pre_delay = 'sound/combat/polearm_woosh.ogg'
+	sfx_post_delay = 'sound/combat/sidesweep_hit.ogg' 
+	cooldown = 15 SECONDS
+	stamcost = 40
+	var/dam = 100
+	var/exposed_dur = 3 SECONDS
+
+/datum/special_intent/dragon_draw/on_create()
+	. = ..()
+	to_chat(howner, span_warning("I draw the Fang into a devastating upward cleave!"))
+
+/datum/special_intent/dragon_draw/post_delay(list/turfs)
+	. = ..()
+	if(istype(iparent, /obj/item/rogueweapon/scabbard))
+		var/obj/item/rogueweapon/scabbard/S = iparent
+		if(istype(S.sheathed, /obj/item))
+			var/obj/item/blade = S.sheathed
+			S.sheathed = null
+			S.update_icon()
+			
+			if(S == howner.get_active_held_item())
+				if(!howner.put_in_inactive_hand(blade))
+					blade.forceMove(get_turf(howner))
+			else if(S == howner.get_inactive_held_item())
+				if(!howner.put_in_active_hand(blade))
+					blade.forceMove(get_turf(howner))
+			else
+				howner.put_in_hands(blade)
+
+/datum/special_intent/dragon_draw/apply_hit(turf/T)
+	for(var/obj/effect/temp_visual/special_intent/fx in T)
+		if(fx.icon_state == post_icon_state)
+			fx.color = "#ffcc00" 
+
+	for(var/mob/living/L in get_hearers_in_view(0, T))
+		if(L != howner)
+			if(L.mobility_flags & MOBILITY_STAND)
+				apply_generic_weapon_damage(L, dam, "slash", BODY_ZONE_CHEST, bclass = BCLASS_CHOP)
+				L.apply_status_effect(/datum/status_effect/debuff/exposed, exposed_dur)
+	playsound(T, sfx_post_delay, 100, TRUE)
+	..()
 
 /* 				EXAMPLES
 /datum/special_intent/another_example_cast

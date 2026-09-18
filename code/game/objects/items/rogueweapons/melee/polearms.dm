@@ -2148,7 +2148,7 @@
 /obj/item/rogueweapon/greatsword/dragonfang // SWORD HUNTER ONLY do not give it to any other class
 	name = "Dragon's Fang"
 	icon_state = "dragonfang"
-	desc = "An unusually long saber of Xiyinese origin. The lighter blade lends itself to one-handed use better than a zweihander, but maintaining edge alignment is tricky and requires experience."
+	desc = "A blade molded out of pure Rontz, it is ‎<font color='FF0000'>FLAME-HOT</font> to the touch, the rich texture seeming to flicker with fire... You see a draconic eye peer back at you from the blade."
 	force = 22
 	force_wielded = 27
 	minstr = 8

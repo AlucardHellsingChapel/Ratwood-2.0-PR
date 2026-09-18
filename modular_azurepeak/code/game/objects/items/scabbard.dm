@@ -800,3 +800,26 @@
 	wdefense = 3
 
 	max_integrity = 0
+
+/obj/item/rogueweapon/scabbard/sword/dragonmaw
+	name = "Dragon's Maw"
+	desc = ""
+	icon_state = "kazscab_gold"
+	item_state = "kazscab_gold"
+	associated_skill = /datum/skill/combat/swords
+	special = /datum/special_intent/dragon_draw
+	w_class = WEIGHT_CLASS_BULKY
+	possible_item_intents = list(SHIELD_BASH, SHIELD_BLOCK, SHIELD_SMASH)
+	max_integrity = 500
+
+/obj/item/rogueweapon/scabbard/sword/dragonmaw/weapon_check(mob/living/user, obj/A)
+	if(sheathed)
+		to_chat(user, span_warning("The sheath is occupied!"))
+		return FALSE
+	if(HAS_TRAIT(A, TRAIT_NODROP))
+		to_chat(user, span_warning("I cannot sheath [A] while it is bound."))
+		return FALSE
+	if(!istype(A, /obj/item/rogueweapon/greatsword/dragonfang))
+		to_chat(user, span_warning("[A] won't fit in there."))
+		return FALSE
+	return TRUE
