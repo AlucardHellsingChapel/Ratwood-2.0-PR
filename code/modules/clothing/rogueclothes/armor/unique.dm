@@ -49,6 +49,9 @@
 	armor = ARMOR_LEATHER_STUDDED // Makes it the equivalence of studded with less integrity and better armor 
 	max_integrity = ARMOR_INT_CHEST_LIGHT_MEDIUM
 
+/obj/item/clothing/suit/roguetown/armor/basiceast/crafteast/outlaw
+	color = "#404040"
+
 //craftable variation of eastsuit, essentially requiring the presence of a tailor with relevant materials
 //still weak against blunt
 
