@@ -1,4 +1,4 @@
-/*
+	/*
 	Combat Mode Music Track Datums
 	---
 	Currently only used for overriding the default combat music that comes with your job or antagonist.
@@ -633,3 +633,31 @@ GLOBAL_LIST_EMPTY(cmode_tracks_by_name)
 	shortname = "Ancient"
 	credits = "Bathory - Call from the Grave"
 	musicpath = list('sound/music/combatheraldprogress.ogg')
+
+/datum/combat_music/sohei
+	name = "Sohei"
+	desc = "Blades cross, sparks fly."
+	shortname = "Sohei"
+	credits = "Rapid As Wildfires - Yu-peng Chen"
+	musicpath = list('sound/music/combat_sohei.ogg')
+
+/datum/combat_music/swordhunter
+	name = "Sword Hunter"
+	desc = "Violence and greed, feeding into one another. Perpetuate the cycle."
+	shortname = "Sword Hunter"
+	credits = "Metal Gear Rising Revengeance - The Only Thing I Know For Real (Acoustic + Demo)"
+	musicpath = list('sound/music/combat_swordhunter.ogg')
+
+/datum/combat_music/swordsaint
+	name = "Sword Saint"
+	desc = "The blade is the only truth."
+	shortname = "Sword Saint"
+	credits = "Sword Saint | Sekiro™: Shadows Die Twice OST"
+	musicpath = list('sound/music/combat_swordsaint.ogg')
+
+/datum/combat_music/strenghtanddiscipline
+	name = "Strength and Discipline"
+	desc = "The path of the warrior is the path of the mind."
+	shortname = "Strength & Discipline"
+	credits = "Sekiro OST: Strength And Discipline-Yuka Kitamura"
+	musicpath = list('sound/music/combat_owl.ogg')
