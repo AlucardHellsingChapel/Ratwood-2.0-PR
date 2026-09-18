@@ -45,7 +45,7 @@
 	mask = /obj/item/clothing/mask/rogue/facemask/steel/kazengun
 	beltr = /obj/item/rogueweapon/huntingknife/idagger/steel/kazengun
 	backr = /obj/item/storage/back/bladerack
-	l_hand = /obj/item/rogueweapon/greatsword/miaodao
+	l_hand = /obj/item/rogueweapon/greatsword/dragonfang
 	r_hand = /obj/item/rogueweapon/scabbard/gwstrap // they will need it
 	backpack_contents = list(
 		/obj/item/storage/belt/rogue/pouch/coins/poor = 1,
