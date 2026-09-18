@@ -1187,6 +1187,92 @@ SPECIALS START HERE
 	playsound(T, sfx_post_delay, 100, TRUE)
 	..()
 
+//Dragon Fang
+#define FANG_WAVE2 0.5 SECONDS
+
+/datum/special_intent/dragons_fang_weak
+	name = "Dragon's Fang (Weak)"
+	desc = "A blade capable of carving the very air in an intersecting cross. Strikes in two sweeping motions that overlap directly in front of the caster."
+	tile_coordinates = list(
+		list(-1,-1), list(-1,0), list(0,0), list(0,1), list(1,1),
+		list(1,-1, FANG_WAVE2), list(1,0, FANG_WAVE2), list(0,0, FANG_WAVE2), list(0,1, FANG_WAVE2), list(-1,1, FANG_WAVE2)
+	)
+	use_clickloc = FALSE
+	respect_adjacency = TRUE
+	respect_dir = TRUE
+	delay = 0.5 SECONDS
+	fade_delay = 0.5 SECONDS
+	pre_icon_state = "trap"
+	post_icon_state = "sweep_fx"
+	sfx_pre_delay = 'sound/combat/wooshes/bladed/wooshlarge (1).ogg'
+	sfx_post_delay = 'sound/combat/sidesweep_hit.ogg'
+	cooldown = 30 SECONDS
+	stamcost = 15
+	var/dam = 50
+	var/self_immob_dur = 1 SECONDS
+	var/exposed_dur = 3 SECONDS
+
+/datum/special_intent/dragons_fang_weak/on_create()
+	. = ..()
+	howner.Immobilize(self_immob_dur)
+	to_chat(howner, span_warning("I ready the Fang for a swift cross-cleave!"))
+
+/datum/special_intent/dragons_fang_weak/apply_hit(turf/T)
+	for(var/obj/effect/temp_visual/special_intent/fx in T)
+		if(fx.icon_state == post_icon_state)
+			fx.color = "#e50000" 
+
+	for(var/mob/living/L in get_hearers_in_view(0, T))
+		if(L != howner)
+			L.apply_status_effect(/datum/status_effect/debuff/exposed, exposed_dur)
+			if(L.mobility_flags & MOBILITY_STAND)
+				apply_generic_weapon_damage(L, dam, "slash", BODY_ZONE_CHEST, bclass = BCLASS_CUT)
+	playsound(T, sfx_post_delay, 100, TRUE)
+	..()
+
+/datum/special_intent/dragons_fang_strong
+	name = "Dragon's Fang (Strong)"
+	desc = "A blade capable of carving the very air in an intersecting cross. Strikes in two sprawling sweeping motions that overlap directly in front of the caster."
+	tile_coordinates = list(
+		list(-1,-1), list(-1,0), list(0,0), list(0,1), list(1,1), list(1,2), list(2,2), list(3,2), list(3,1),
+		list(1,-1, FANG_WAVE2), list(1,0, FANG_WAVE2), list(0,0, FANG_WAVE2), list(0,1, FANG_WAVE2), list(-1,1, FANG_WAVE2), list(-1,2, FANG_WAVE2), list(-2,2, FANG_WAVE2), list(-3,2, FANG_WAVE2), list(-3,1, FANG_WAVE2)
+	)
+	use_clickloc = FALSE
+	respect_adjacency = TRUE
+	respect_dir = TRUE
+	delay = 1 SECONDS
+	fade_delay = 1 SECONDS
+	pre_icon_state = "trap"
+	post_icon_state = "sweep_fx"
+	sfx_pre_delay = 'sound/combat/wooshes/bladed/wooshlarge (1).ogg'
+	sfx_post_delay = 'sound/combat/sidesweep_hit.ogg'
+	cooldown = 60 SECONDS
+	stamcost = 30
+	var/dam = 200
+	var/self_immob_dur = 1 SECONDS
+	var/exposed_dur = 3 SECONDS
+
+/datum/special_intent/dragons_fang_strong/on_create()
+	. = ..()
+	howner.Immobilize(self_immob_dur)
+	to_chat(howner, span_warning("I ready the Fang for a devastating cross-cleave!"))
+
+/datum/special_intent/dragons_fang_strong/apply_hit(turf/T)
+	for(var/obj/effect/temp_visual/special_intent/fx in T)
+		if(fx.icon_state == post_icon_state)
+			fx.color = "#e50000" 
+
+	for(var/mob/living/L in get_hearers_in_view(0, T))
+		if(L != howner)
+			L.apply_status_effect(/datum/status_effect/debuff/exposed, exposed_dur)
+			if(L.mobility_flags & MOBILITY_STAND)
+				apply_generic_weapon_damage(L, dam, "slash", BODY_ZONE_CHEST, bclass = BCLASS_CUT)
+	playsound(T, sfx_post_delay, 100, TRUE)
+	..()
+
+#undef FANG_WAVE2
+
+
 /* 				EXAMPLES
 /datum/special_intent/another_example_cast
 	name = "Expanding Rectangle Pattern"

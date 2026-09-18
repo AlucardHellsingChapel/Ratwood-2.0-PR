@@ -1,6 +1,6 @@
 /datum/advclass/wretch/swordhunter
 	name = "Sword Hunter"
-	tutorial = "Hailing from Xinyi, yours is a unique art: You seek the swords of worthy foes and add them to your collection, all in worship of Matthios."
+	tutorial = "Born in Xinyi, you've travelled far and wide with but one goal in mind: Avarice. Longing for the blades of worthy foes, utilize your Dragonfang to gather a hoard worthy of the Many-Faced God."
 	class_select_category = CLASS_CAT_WARRIOR
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = NON_DWARVEN_RACE_TYPES
@@ -30,7 +30,7 @@
 
 /datum/outfit/job/roguetown/wretch/swordhunter/pre_equip(mob/living/carbon/human/H)
 	..()
-	to_chat(H, span_warning("Hailing from Lingyue, yours is an unique art: You seek the swords of worthy foes and add them to your collection in worship of Matiosu."))
+	to_chat(H, span_warning("Born in Xinyi, you've travelled far and wide with but one goal in mind: Avarice. Longing for the blades of worthy foes, utilize your Dragonfang to gather a hoard worthy of the Many-Faced God."))
 	H.set_patron(/datum/patron/inhumen/matthios)
 	head = /obj/item/clothing/head/roguetown/roguehood/shalal/hijab/kazengunese
 	pants = /obj/item/clothing/under/roguetown/heavy_leather_pants/eastpants2
