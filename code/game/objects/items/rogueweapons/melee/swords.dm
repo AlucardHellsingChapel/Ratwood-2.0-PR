@@ -2555,6 +2555,10 @@
 	sellprice = 100 // lets not make it too profitable
 	smeltresult = /obj/item/ingot/blacksteel
 
+/obj/item/rogueweapon/sword/capsabre/Initialize(mapload)
+	. = ..()
+	ADD_TRAIT(src, TRAIT_SNOWFLAKE_GEAR, INNATE_TRAIT)
+
 /obj/item/rogueweapon/sword/gold
 	name = "golden arming sword"
 	desc = "A heavenly arming sword, who's golden blade and besilked handle lays separated by a duocruciformic crossguard. This particular weapon \

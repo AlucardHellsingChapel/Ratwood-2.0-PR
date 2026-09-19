@@ -529,6 +529,10 @@
 	screen_max_rows = 8
 	screen_max_columns = 8
 
+/datum/component/storage/concrete/grid/swordrack/Initialize(mapload)
+	. = ..()
+	set_holdable(list(/obj/item/rogueweapon))
+
 /obj/item/storage/back/bladerack
 	name = "trophy rack"
 	desc = "A heavy leather strap designed to carry a multitude of stolen blades."
@@ -540,11 +544,40 @@
 	
 	var/active_tier = 0
 	var/active_legendary = FALSE
-	var/static/list/tier_buffs = list(/datum/status_effect/buff/trophy_tier1, /datum/status_effect/buff/trophy_tier2, /datum/status_effect/buff/trophy_tier3)
+	var/static/list/tier_buffs = list(
+		/datum/status_effect/buff/trophy_tier1,
+		/datum/status_effect/buff/trophy_tier2,
+		/datum/status_effect/buff/trophy_tier3
+	)
 
 /obj/item/storage/back/bladerack/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/cursed_item, TRAIT_COMMIE, "TROPHY RACK")
+
+// attackby acts as the voice. It only speaks when a user manually clicks.
+/obj/item/storage/back/bladerack/attackby(obj/item/I, mob/living/user, params)
+	if(istype(I, /obj/item/rogueweapon))
+		if(!HAS_TRAIT(I, TRAIT_SNOWFLAKE_GEAR))
+			to_chat(user, span_warning("[I] lacks the prestige to be mounted here."))
+			return TRUE
+			
+		for(var/obj/item/stored_blade in contents)
+			if(I.type == stored_blade.type)
+				to_chat(user, span_warning("I already have a [I.name] mounted upon the rack!"))
+				return TRUE
+	return ..()
+
+// StorageBlock acts as the shield. It silently blocks duplicates from the UI Grid and background checks.
+/obj/item/storage/back/bladerack/StorageBlock(obj/item/I, mob/user)
+	if(istype(I, /obj/item/rogueweapon))
+		if(!HAS_TRAIT(I, TRAIT_SNOWFLAKE_GEAR))
+			return TRUE 
+			
+		for(var/obj/item/stored_blade in contents)
+			if(I.type == stored_blade.type)
+				return TRUE 
+				
+	return FALSE 
 
 /obj/item/storage/back/bladerack/examine(mob/user)
 	. = ..()
@@ -553,7 +586,8 @@
 	for(var/obj/item/rogueweapon/I in contents)
 		count++
 		blade_list += "\n  [I.name]"
-	if(count) to_chat(user, span_notice("It has [count] blade(s) mounted upon it:[blade_list]"))
+	if(count)
+		to_chat(user, span_notice("It has [count] blade(s) mounted upon it:[blade_list]"))
 
 /obj/item/storage/back/bladerack/equipped(mob/living/user, slot)
 	. = ..()
@@ -573,12 +607,14 @@
 
 /obj/item/storage/back/bladerack/proc/update_tiers(mob/living/user)
 	if(!user) return
+	
 	var/count = 0
 	var/has_leg = FALSE
 	
 	for(var/obj/item/rogueweapon/I in contents)
 		count++
-		if(HAS_TRAIT(I, TRAIT_LEGENDARY_GEAR)) has_leg = TRUE
+		if(!has_leg && HAS_TRAIT(I, TRAIT_LEGENDARY_GEAR))
+			has_leg = TRUE
 
 	var/new_tier = (count >= 5) ? 3 : (count >= 3) ? 2 : (count >= 1) ? 1 : 0
 
@@ -598,13 +634,3 @@
 	if(active_legendary) user.remove_status_effect(/datum/status_effect/buff/trophy_legendary)
 	active_tier = 0
 	active_legendary = FALSE
-
-/datum/component/storage/concrete/grid/swordrack/Initialize(mapload)
-	. = ..()
-	set_holdable(list(/obj/item/rogueweapon))
-
-/datum/component/storage/concrete/grid/swordrack/can_insert(obj/item/I, mob/user, bypass_w_limit, bypass_locked, stop_messages)
-	if(!HAS_TRAIT(I, TRAIT_SNOWFLAKE_GEAR))
-		if(user && !stop_messages) to_chat(user, span_warning("[I] lacks the prestige to be mounted here."))
-		return FALSE
-	return ..()
