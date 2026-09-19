@@ -563,11 +563,9 @@
 /obj/item/storage/back/bladerack
 	name = "trophy rack"
 	desc = "A heavy leather strap designed to carry a multitude of stolen blades."
-	icon = 'modular_azurepeak/icons/obj/items/gwstrap.dmi'
-	icon_state = "gws0"  // Placeholder sprite till I get something better
-	item_state = "gwstrap"
+	icon = 'modular_azurepeak/icons/obj/items/trophyrack.dmi'
+	icon_state = "trophyrack"
 	slot_flags = ITEM_SLOT_BACK
-	bigboy = TRUE
 	max_integrity = 9999 // WE DO NOT WANT IT TO BREAK DO WE?
 	component_type = /datum/component/storage/concrete/grid/swordrack
 	
