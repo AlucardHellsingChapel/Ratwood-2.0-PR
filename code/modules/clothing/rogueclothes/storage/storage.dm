@@ -529,135 +529,82 @@
 	screen_max_rows = 8
 	screen_max_columns = 8
 
-/datum/component/storage/concrete/grid/swordrack/Initialize(mapload)
-	. = ..()	
-	set_holdable(list(
-		/obj/item/rogueweapon/greatsword/psygsword/relic, // Apocryphra
-		/obj/item/rogueweapon/sword/long/oathkeeper, // Marshal
-		/obj/item/rogueweapon/sword/long/holysee, // Eclipsium (not sure if it even is used anywhere)
-		/obj/item/rogueweapon/sword/long/exe/berserk, // Guts sword
-		/obj/item/rogueweapon/greatsword/grenz/flamberge/ravox, // Ravox Templar
-		/obj/item/rogueweapon/sword/long/exe/berserk/dragonslayer, //The True Guts Sword
-		/obj/item/rogueweapon/sword/long/judgement/vlord, // Vampire Lord
-		/obj/item/rogueweapon/sword/rapier/eora, // Eoran Rapier
-		/obj/item/rogueweapon/sword/capsabre, // KC sabre
-		/obj/item/rogueweapon/sword/long/exe/astrata, // Astratan Templar
-		/obj/item/rogueweapon/sword/rapier/courtphysician, // Cane Sword 
-		/obj/item/rogueweapon/sword/long/exe/cloth, // Termminus Est
-		/obj/item/rogueweapon/sword/sabre/mulyeog, 
-		/obj/item/rogueweapon/greatsword/bsword/psy/relic, // Creed
-		/obj/item/rogueweapon/greatsword/bsword/psy/unforgotten, // Unforgotten Blade
-		/obj/item/rogueweapon/sword/rapier/psy/relic, // Inquisitorial Rapier
-		/obj/item/rogueweapon/sword/long/blacksteel, // Blacksteel swords
-		/obj/item/rogueweapon/sword/short/messer/blacksteel, 
-		/obj/item/rogueweapon/sword/rapier/blacksteel,
-		/obj/item/rogueweapon/sword/blacksteel,
-		/obj/item/rogueweapon/sword/decorated/blacksteel,
-		/obj/item/rogueweapon/greatsword/grenz/flamberge/blacksteel,
-		/obj/item/rogueweapon/greatsword/bsword/psy, // Forgotten Blade
-		/obj/item/rogueweapon/halberd/capglaive, // Yes a glaive
-		/obj/item/rogueweapon/greataxe/steel/necran // Yes an axe
-
-	))
-
 /obj/item/storage/back/bladerack
 	name = "trophy rack"
 	desc = "A heavy leather strap designed to carry a multitude of stolen blades."
 	icon = 'modular_azurepeak/icons/obj/items/trophyrack.dmi'
 	icon_state = "trophyrack"
 	slot_flags = ITEM_SLOT_BACK
-	max_integrity = 9999 // WE DO NOT WANT IT TO BREAK DO WE?
+	max_integrity = 9999
 	component_type = /datum/component/storage/concrete/grid/swordrack
 	
 	var/active_tier = 0
 	var/active_legendary = FALSE
+	var/static/list/tier_buffs = list(/datum/status_effect/buff/trophy_tier1, /datum/status_effect/buff/trophy_tier2, /datum/status_effect/buff/trophy_tier3)
 
 /obj/item/storage/back/bladerack/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/cursed_item, TRAIT_COMMIE, "TROPHY RACK")
 
-/obj/item/storage/back/bladerack/proc/get_blade_count()
-	var/count = 0
-	for(var/obj/item/I in contents)
-		if(istype(I, /obj/item/rogueweapon))
-			count++
-	return count
-
-/obj/item/storage/back/bladerack/proc/has_legendary_blade()
-	for(var/obj/item/I in contents)
-		if(istype(I, /obj/item/rogueweapon/sword/long/exe/berserk/dragonslayer) || istype(I, /obj/item/rogueweapon/sword/long/judgement/vlord))
-			return TRUE
-	return FALSE
-
 /obj/item/storage/back/bladerack/examine(mob/user)
 	. = ..()
-	var/count = get_blade_count()
-	to_chat(user, span_notice("It has [count] blade(s) mounted upon it:"))
-	for(var/obj/item/I in contents)
-		if(istype(I, /obj/item/rogueweapon))
-			to_chat(user, span_notice("  [I.name]"))
+	var/count = 0
+	var/blade_list = ""
+	for(var/obj/item/rogueweapon/I in contents)
+		count++
+		blade_list += "\n  [I.name]"
+	if(count) to_chat(user, span_notice("It has [count] blade(s) mounted upon it:[blade_list]"))
 
 /obj/item/storage/back/bladerack/equipped(mob/living/user, slot)
 	. = ..()
-	if(slot == ITEM_SLOT_BACK && istype(user))
-		update_tiers(user)
+	if(slot == ITEM_SLOT_BACK && istype(user)) update_tiers(user)
 
 /obj/item/storage/back/bladerack/dropped(mob/living/user)
 	. = ..()
-	if(istype(user))
-		remove_tiers(user)
+	if(istype(user)) remove_tiers(user)
 
 /obj/item/storage/back/bladerack/Entered(atom/movable/AM, atom/oldloc)
 	. = ..()
-	if(istype(AM, /obj/item/rogueweapon) && istype(loc, /mob/living))
-		update_tiers(loc)
+	if(istype(AM, /obj/item/rogueweapon) && istype(loc, /mob/living)) update_tiers(loc)
 
 /obj/item/storage/back/bladerack/Exited(atom/movable/AM, atom/newloc)
 	. = ..()
-	if(istype(AM, /obj/item/rogueweapon) && istype(loc, /mob/living))
-		update_tiers(loc)
+	if(istype(AM, /obj/item/rogueweapon) && istype(loc, /mob/living)) update_tiers(loc)
 
 /obj/item/storage/back/bladerack/proc/update_tiers(mob/living/user)
-	if(!user)
-		return
+	if(!user) return
+	var/count = 0
+	var/has_leg = FALSE
+	
+	for(var/obj/item/rogueweapon/I in contents)
+		count++
+		if(HAS_TRAIT(I, TRAIT_LEGENDARY_GEAR)) has_leg = TRUE
 
-	var/count = get_blade_count()
-	var/target_tier = 0
+	var/new_tier = (count >= 5) ? 3 : (count >= 3) ? 2 : (count >= 1) ? 1 : 0
 
-	if(count >= 5)
-		target_tier = 3
-	else if(count >= 3)
-		target_tier = 2
-	else if(count >= 1)
-		target_tier = 1
+	if(active_tier != new_tier)
+		if(active_tier) user.remove_status_effect(tier_buffs[active_tier])
+		active_tier = new_tier
+		if(active_tier) user.apply_status_effect(tier_buffs[active_tier])
 
-	if(active_tier != target_tier)
-		user.remove_status_effect(/datum/status_effect/buff/trophy_tier1)
-		user.remove_status_effect(/datum/status_effect/buff/trophy_tier2)
-		user.remove_status_effect(/datum/status_effect/buff/trophy_tier3)
-		active_tier = target_tier
-
-		if(active_tier == 3)
-			user.apply_status_effect(/datum/status_effect/buff/trophy_tier3)
-		else if(active_tier == 2)
-			user.apply_status_effect(/datum/status_effect/buff/trophy_tier2)
-		else if(active_tier == 1)
-			user.apply_status_effect(/datum/status_effect/buff/trophy_tier1)
-
-	var/has_legend = has_legendary_blade()
-	if(active_legendary != has_legend)
-		active_legendary = has_legend
-		if(active_legendary)
-			user.apply_status_effect(/datum/status_effect/buff/trophy_legendary)
-		else
-			user.remove_status_effect(/datum/status_effect/buff/trophy_legendary)
+	if(active_legendary != has_leg)
+		active_legendary = has_leg
+		if(active_legendary) user.apply_status_effect(/datum/status_effect/buff/trophy_legendary)
+		else user.remove_status_effect(/datum/status_effect/buff/trophy_legendary)
 
 /obj/item/storage/back/bladerack/proc/remove_tiers(mob/living/user)
-	if(!user)
-		return
-	user.remove_status_effect(/datum/status_effect/buff/trophy_tier1)
-	user.remove_status_effect(/datum/status_effect/buff/trophy_tier2)
-	user.remove_status_effect(/datum/status_effect/buff/trophy_tier3)
-	user.remove_status_effect(/datum/status_effect/buff/trophy_legendary)
+	if(!user) return
+	if(active_tier) user.remove_status_effect(tier_buffs[active_tier])
+	if(active_legendary) user.remove_status_effect(/datum/status_effect/buff/trophy_legendary)
 	active_tier = 0
 	active_legendary = FALSE
+
+/datum/component/storage/concrete/grid/swordrack/Initialize(mapload)
+	. = ..()
+	set_holdable(list(/obj/item/rogueweapon))
+
+/datum/component/storage/concrete/grid/swordrack/can_insert(obj/item/I, mob/user, bypass_w_limit, bypass_locked, stop_messages)
+	if(!HAS_TRAIT(I, TRAIT_SNOWFLAKE_GEAR))
+		if(user && !stop_messages) to_chat(user, span_warning("[I] lacks the prestige to be mounted here."))
+		return FALSE
+	return ..()

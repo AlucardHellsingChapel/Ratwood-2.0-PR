@@ -843,6 +843,8 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 //item traits
 #define TRAIT_NODROP "nodrop"
 #define TRAIT_NOEMBED "noembed"
+#define TRAIT_SNOWFLAKE_GEAR "snowflake"
+#define TRAIT_LEGENDARY_GEAR "legendary"
 /// Visible on t-ray scanners if the atom/var/level == 1
 #define TRAIT_T_RAY_VISIBLE "t-ray-visible"
 /// you just can't
