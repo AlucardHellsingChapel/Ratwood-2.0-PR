@@ -116,6 +116,7 @@
 	wdefense_wbonus = 2 //Increased defense when wielded.
 	max_blade_int = 500 //Sharper than sharp.
 	resistance_flags = FIRE_PROOF
+	snowflake = TRUE
 
 /obj/item/rogueweapon/stoneaxe/oath
 	force = 30
@@ -139,6 +140,7 @@
 	gripped_intents = list(/datum/intent/axe/cut/battle ,/datum/intent/axe/chop/battle, /datum/intent/axe/bash)
 	minstr = 12
 	wdefense = 5
+	snowflake = TRUE
 
 /obj/item/rogueweapon/stoneaxe/oath/getonmobprop(tag)
 	if(tag)
@@ -215,6 +217,7 @@
 	icon_state = "abyssoraxe"
 	icon = 'icons/roguetown/weapons/axes32.dmi'
 	max_integrity = 400 // higher int than usual
+	snowflake = TRUE
 
 //Pickaxe-axe ; Technically both a tool and a weapon, but it goes here due to weapon function. Subtype of woodcutter axe, mostly a weapon.
 /obj/item/rogueweapon/stoneaxe/woodcut/pick
@@ -572,6 +575,7 @@
 	max_blade_int = 500
 	wdefense_wbonus = 3 //Increased defense when wielded.
 	resistance_flags = FIRE_PROOF
+	snowflake = TRUE
 
 /obj/item/rogueweapon/greataxe/bronze
 	force = 15
@@ -601,6 +605,7 @@
 	max_integrity = 300//+50 - Tidecleaver is +150. This gets blade int AND integrity, by comparison.
 	walking_stick = TRUE
 	vorpal = TRUE // snicker snack this shit cuts heads off effortlessly (DO NOT PUT THIS ON ANYTHING ELSE UNLESS IT'S SUPER FUCKING RARE!!!)
+	snowflake = TRUE
 
 /datum/intent/spear/bash/poleaxe
 	name = "poleaxe bash"
@@ -716,6 +721,7 @@
 	icon_state = "minotaurgreataxe"
 	max_blade_int = 250
 	minstr = 14 //Double-headed greataxe with extra durability. Rare dungeon loot in minotaur dungeons; no longer drops from every single minotaur.
+	snowflake = TRUE
 
 /obj/item/rogueweapon/stoneaxe/woodcut/troll
 	name = "crude heavy axe"

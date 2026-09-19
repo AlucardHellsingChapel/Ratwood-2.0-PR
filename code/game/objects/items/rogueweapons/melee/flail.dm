@@ -181,6 +181,7 @@
 	icon_state = "necraflail"
 	force = 35
 	is_silver = TRUE
+	snowflake = TRUE
 
 /obj/item/rogueweapon/flail/sflail/necraflail/ComponentInitialize()
 	AddComponent(\
@@ -233,6 +234,7 @@
 	desc = "The weight of His anguish, His pain, His hope and His love for humenkind - all hanging on the ornamental silver-steel head chained to this arm. <br><br>A declaration of love for all that Psydon lives for, and a crushing reminder to the arch-nemesis that they will not triumph as long as He endures."
 	icon_state = "psymorningstar"
 	possible_item_intents = list(/datum/intent/flail/strike, /datum/intent/mace/smash/flailrange)
+	snowflake = TRUE
 
 /obj/item/rogueweapon/flail/sflail/psyflail/relic/ComponentInitialize()
 	AddComponent(\
@@ -325,6 +327,7 @@
 	anvilrepair = /datum/skill/craft/weaponsmithing
 	smeltresult = /obj/item/ingot/blacksteel
 	special = /datum/special_intent/greatflail_swing//snowflake version of greatsword special that does blunt
+	snowflake = TRUE
 
 /obj/item/rogueweapon/flail/peasantwarflail/matthios
 	no_loot_taint = TRUE

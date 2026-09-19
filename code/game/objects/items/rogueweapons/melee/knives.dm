@@ -563,6 +563,7 @@
 	desc = "A wicked deliverer of poison, serrated and notched. Curved steel cradles the knuckles, ensuring that the wielder doesn't inflict the fatal dose on themselves. </br>I can coat this dagger in most poisons, ensuring that my next strike leaves a festering surprise."
 	icon_state = "pdagger"
 	sheathe_icon = "combatknife"
+	snowflake = TRUE
 
 /obj/item/rogueweapon/huntingknife/idagger/warden_machete
 	possible_item_intents = list(/datum/intent/dagger/thrust/weak, /datum/intent/dagger/cut/heavy, /datum/intent/dagger/chop/cleaver, /datum/intent/dagger/sucker_punch) // Stronger cut and chop, but no pick.
@@ -601,6 +602,7 @@
 	smeltresult = /obj/item/ingot/silver
 	is_silver = TRUE
 	picklvl = 1.1
+	snowflake = TRUE
 
 /obj/item/rogueweapon/huntingknife/idagger/steel/holysee/ComponentInitialize()
 	AddComponent(\
@@ -619,6 +621,7 @@
 	icon_state = "pestrasickle"
 	force = 22 // 10% - This is a 8 clickCD weapon
 	max_integrity = 200
+	snowflake = TRUE
 
 /obj/item/rogueweapon/huntingknife/idagger/steel/pestrasickle/Initialize(mapload)
 	. = ..()
@@ -633,6 +636,7 @@
 	max_integrity = 200
 	smeltresult = /obj/item/ingot/steel
 	picklvl = 1.3
+	snowflake = TRUE
 
 /obj/item/rogueweapon/huntingknife/idagger/dtace/Initialize(mapload)
 	. = ..()
@@ -648,6 +652,7 @@
 	max_integrity = 180
 	max_blade_int = 250
 	smeltresult = /obj/item/ingot/blacksteel
+	snowflake = TRUE
 
 /obj/item/rogueweapon/huntingknife/idagger/blacksteel/heavy
 	name = "blacksteel misericorde"
@@ -660,6 +665,7 @@
 	max_integrity = 180
 	max_blade_int = 300
 	picklvl = 1.3
+	snowflake = TRUE
 
 /obj/item/rogueweapon/huntingknife/idagger/steel/parrying
 	name = "steel parrying dagger"
@@ -698,6 +704,7 @@
 	desc = "A wave-bladed dagger of Elven design, whose elegant steel craftsmanship is only rivaled by its deceptive lethality."
 	icon_state = "elfsdagger"
 	sheathe_icon = "elfdagger"
+	snowflake = TRUE
 
 /obj/item/rogueweapon/huntingknife/idagger/silver
 	name = "silver dagger"
@@ -737,6 +744,7 @@
 	equip_delay_self = 0 //No delay when stowing away, without a scabbard.
 	unequip_delay_self = 0 //No delay when drawing.
 	inv_storage_delay = 0 //No delay when retrieving from a storage slot.
+	snowflake = TRUE
 
 /obj/item/rogueweapon/huntingknife/idagger/silver/stake/ComponentInitialize()
 	AddComponent(\
@@ -918,6 +926,7 @@
 	last_used = 0
 	is_silver = TRUE
 	picklvl = 1.2
+	snowflake = TRUE
 
 /obj/item/rogueweapon/huntingknife/idagger/navaja
 	possible_item_intents = list(/datum/intent/dagger/thrust,/datum/intent/dagger/cut,  /datum/intent/dagger/thrust/pick)

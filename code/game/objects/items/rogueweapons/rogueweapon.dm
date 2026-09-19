@@ -51,6 +51,9 @@
 	/// Special datum holder
 	var/datum/special_intent/special
 
+	///SNOWFLAKE&LEGENDARY
+	var/snowflake = FALSE
+	var/legendary = FALSE
 
 	var/cast_time_reduction = null
 
@@ -73,6 +76,10 @@
 			added_int = 25,\
 			added_def = 2,\
 		)
+	if(snowflake)
+		ADD_TRAIT(src, TRAIT_SNOWFLAKE_GEAR, INNATE_TRAIT)
+	if(legendary)
+		ADD_TRAIT(src, TRAIT_LEGENDARY_GEAR, INNATE_TRAIT)
 
 /obj/item/rogueweapon/get_examine_string(mob/user, thats = FALSE)
 	return "[thats? "That's ":""]<b>[get_examine_name(user)]</b> <font size = 1>[get_blade_dulling_text(src)]</font>"

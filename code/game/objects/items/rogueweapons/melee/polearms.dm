@@ -709,6 +709,7 @@
 	max_blade_int = 2600
 	wdefense = 8
 	throwforce = 50
+	snowflake = TRUE
 
 /obj/item/rogueweapon/fishspear/attack_self(mob/user)
 	if(user.used_intent.type == SPEAR_CAST)
@@ -874,6 +875,7 @@
 	force = 25 // better in one hand. Use it with the shield.
 	max_blade_int = 225
 	smeltresult = /obj/item/ingot/steel
+	snowflake = TRUE
 
 /obj/item/rogueweapon/halberd/bardiche
 	possible_item_intents = list(/datum/intent/spear/thrust/eaglebeak/oneh, SPEAR_BASH) //bash is for nonlethal takedowns, only targets limbs
@@ -913,6 +915,7 @@
 	force_wielded = 35
 	max_blade_int = 400
 	wdefense_wbonus = 3 //+3 over the traditional spear, once wielded.
+	snowflake = TRUE
 	var/used = FALSE
 	var/list/selection = list(
 		/datum/special_intent/polearm_backstep,
@@ -972,6 +975,7 @@
 	gripped_intents = list(/datum/intent/spear/cut/bardiche, /datum/intent/spear/cut/bardiche/cleave, /datum/intent/spear/cut/glaive/sweep, /datum/intent/axe/chop/scythe)
 	force_wielded = 33 // +3
 	max_integrity = 300 // +50
+	snowflake = TRUE
 
 /obj/item/rogueweapon/halberd/psyhalberd/relic
 	name = "Stigmata"
@@ -979,6 +983,7 @@
 	icon_state = "psyhalberd"
 	force = 25
 	force_wielded = 25
+	snowflake = TRUE
 
 /obj/item/rogueweapon/halberd/psyhalberd/relic/ComponentInitialize()
 	AddComponent(\
@@ -1085,6 +1090,7 @@
 	force_wielded = 35
 	wdefense_wbonus = 3 //+3 over the traditional spear, once wielded.
 	max_integrity = 350 //Basic idea - blacksteel blunt weapons get more integrity, blacksteel edged weapons get more sharpness. Minimal overlap?
+	snowflake = TRUE
 	var/used = FALSE
 	var/list/selection = list(
 		/datum/special_intent/polearm_backstep,
@@ -1387,6 +1393,7 @@
 	max_integrity = 240
 	max_blade_int = 240
 	wdefense = 7//You are truly unique, m'lord.
+	snowflake = TRUE
 
 /obj/item/rogueweapon/greatsword/grenz/flamberge/blacksteel
 	name = "blacksteel flamberge"
@@ -1398,6 +1405,7 @@
 	force_wielded = 40
 	max_blade_int = 200
 	smeltresult = /obj/item/ingot/blacksteel
+	snowflake = TRUE
 
 /obj/item/rogueweapon/greatsword/psygsword
 	name = "psydonic greatsword"
@@ -1425,6 +1433,7 @@
 	icon_state = "psygsword"
 	possible_item_intents = list(/datum/intent/sword/cut/zwei, /datum/intent/sword/thrust/exe, /datum/intent/sword/chop/heavy, /datum/intent/sword/strike)
 	gripped_intents = list(/datum/intent/sword/cut/zwei, /datum/intent/rend, /datum/intent/sword/thrust/exe, /datum/intent/sword/chop/cleave)
+	snowflake = TRUE
 
 /obj/item/rogueweapon/greatsword/psygsword/relic/ComponentInitialize()
 	AddComponent(\
@@ -1450,6 +1459,7 @@
 	alt_intents = list(/datum/intent/effect/daze, /datum/intent/sword/strike, /datum/intent/sword/bash)
 	is_silver = TRUE
 	smeltresult = /obj/item/ingot/silver
+	snowflake = TRUE
 
 /obj/item/rogueweapon/greatsword/bsword/psy/ComponentInitialize()
 	AddComponent(\
@@ -1470,6 +1480,7 @@
 	force_wielded = 25
 	is_silver = TRUE
 	smeltresult = /obj/item/ingot/silver
+	snowflake = TRUE
 
 /obj/item/rogueweapon/greatsword/bsword/psy/getonmobprop(tag)
 	. = ..()
@@ -1497,6 +1508,7 @@
 	icon_state = "forgottenblade"
 	is_silver = TRUE
 	smeltresult = /obj/item/ingot/silver
+	snowflake = TRUE
 
 /obj/item/rogueweapon/greatsword/bsword/psy/unforgotten/ComponentInitialize()
 	AddComponent(\
@@ -1801,6 +1813,7 @@
 	max_integrity = 280	//-20 than the actual ducal standard
 	smeltresult = /obj/item/ingot/steel
 	resistance_flags = FIRE_PROOF
+	snowflake = TRUE
 
 /obj/item/rogueweapon/spear/otava/update_icon()
 	cut_overlays()
@@ -1891,6 +1904,7 @@
 	smeltresult = /obj/item/ingot/blacksteel
 	possible_item_intents = list(/datum/intent/spear/thrust, /datum/intent/lance/onehand, SPEAR_BASH)
 	gripped_intents = list(/datum/intent/spear/thrust/lance, /datum/intent/lance, SPEAR_BASH)
+	snowflake = TRUE
 
 /obj/item/rogueweapon/spear/naginata
 	name = "naginata"
@@ -2081,6 +2095,8 @@
 	alt_intents = null
 	is_silver = TRUE
 	smeltresult = /obj/item/rogueweapon/sword/long/exe/berserk//Too thick to completely melt.
+	legendary = TRUE
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/long/exe/berserk/dragonslayer/ComponentInitialize()
 	AddComponent(\

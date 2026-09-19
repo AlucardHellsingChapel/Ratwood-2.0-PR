@@ -802,6 +802,7 @@
 	var/repair_time = 3 MINUTES//Quite some time for a full repair.
 	var/last_repair
 	var/secondary_tag = FALSE//Does this have two flag states?
+	snowflake = TRUE
 
 //This is an eagle's beak greataxe combination, basically, with some quirks.
 //Will actual poleaxes function like this? No. But it's a unique fluff weapon right now.
@@ -820,6 +821,7 @@
 	/datum/intent/axe/cut/battle/greataxe, /datum/intent/axe/chop/battle/greataxe)//You get special intents, you special guy, you...
 	icon_state = "standard"
 	secondary_tag = TRUE
+	snowflake = TRUE
 
 //This is awful and I apologise.
 /obj/item/rogueweapon/spear/keep_standard/attack_self(mob/living/user)

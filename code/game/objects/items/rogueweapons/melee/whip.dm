@@ -116,6 +116,7 @@
 	desc = "The chimes of this whip are said to sound as the trickster's laughter itself."
 	icon_state = "xylixwhip"
 	force = 24
+	snowflake = TRUE
 
 /obj/item/rogueweapon/whip/antique
 	name = "Repenta En"
@@ -123,6 +124,7 @@
 	force = 25
 	minstr = 11
 	icon_state = "gwhip"
+	snowflake = TRUE
 
 /obj/item/rogueweapon/whip/blacksteel
 	name = "blacksteel whip"
@@ -133,6 +135,7 @@
 	minstr = 9
 	wdefense = 1
 	smeltresult = /obj/item/ingot/blacksteel
+	snowflake = TRUE
 
 /obj/item/rogueweapon/whip/antique/psywhip
 	name = "Daybreak"
@@ -146,6 +149,7 @@
 	anvilrepair = /datum/skill/craft/weaponsmithing
 	smeltresult = /obj/item/ingot/silver
 	wbalance = WBALANCE_HEAVY
+	snowflake = TRUE
 
 /obj/item/rogueweapon/whip/antique/psywhip/ComponentInitialize()
 	AddComponent(\
@@ -210,6 +214,7 @@
 	possible_item_intents = list(/datum/intent/whip/lash/holy, /datum/intent/whip/crack, /datum/intent/whip/punish, /datum/intent/dagger/sucker_punch) // sucker as a little flavor and bonus. 
 	force = 22
 	minstr = 10 //meant for a medium armor mounted soldier. With the +2 from the drow merc statspread, it should cover most statpack silliness save for Wary.  
+	snowflake = TRUE
 
 /obj/item/rogueweapon/whip/bronze
 	name = "bronze whip"
@@ -371,3 +376,4 @@
 	max_integrity = 280
 	max_blade_int = 280
 	smeltresult = /obj/item/ingot/blacksteel
+	snowflake = TRUE

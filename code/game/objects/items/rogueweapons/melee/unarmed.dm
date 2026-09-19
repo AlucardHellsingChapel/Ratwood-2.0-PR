@@ -144,6 +144,7 @@
 	icon_state = "abyssorclaw"
 	force = 27	//Its thrust will be able to pen 80 stab armor if the wielder has 17 STR. (With softcap)
 	max_integrity = 80
+	snowflake = TRUE
 
 // swapped from katar to pata cause it's cool. Otherwise indentical
 /obj/item/rogueweapon/katar/bronze
@@ -304,6 +305,7 @@
 	desc = "Some times call for a more intimate approach."
 	force = 24
 	icon_state = "eoraknuckle"
+	snowflake = TRUE
 
 /obj/item/rogueweapon/knuckles/blacksteel
 	name = "blacksteel knuckles"
@@ -313,6 +315,7 @@
 	max_integrity = 300
 	wdefense = 7
 	smeltresult = /obj/item/ingot/blacksteel
+	snowflake = TRUE
 
 //Claws. God, I hate these.
 /obj/item/rogueweapon/handclaw
@@ -371,6 +374,7 @@
 	wbalance = WBALANCE_SWIFT
 	max_blade_int = 200
 	max_integrity = 200
+	snowflake = TRUE
 
 /obj/item/rogueweapon/handclaw/getonmobprop(tag)
 	. = ..()
@@ -396,6 +400,7 @@
 	max_blade_int = 350
 	smeltresult = /obj/item/ingot/blacksteel
 	sharpness_mod = 2
+	snowflake = TRUE
 
 /datum/intent/claw/lunge
 	name = "lunge"

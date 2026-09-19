@@ -336,6 +336,7 @@
 	max_integrity = 350
 	is_silver = TRUE
 	smeltresult = /obj/item/ingot/silverblessed
+	snowflake = TRUE
 
 /obj/item/rogueweapon/shield/tower/metal/psy/ComponentInitialize()
 	AddComponent(\
@@ -536,6 +537,7 @@
 	grid_height = 64
 	sellprice = 100 // lets not make it too profitable
 	smeltresult = /obj/item/ingot/blacksteel
+	snowflake = TRUE
 
 /obj/item/rogueweapon/shield/capbuckler/examine(mob/living/user)
 	. = ..()
@@ -617,6 +619,7 @@
 	possible_item_intents = list(SHIELD_BASH_METAL, SHIELD_BLOCK, SHIELD_SMASH_METAL, /datum/intent/effect/daze)
 	minstr = 11
 	wdefense = 14
+	snowflake = TRUE
 
 /obj/item/rogueweapon/shield/steam
 	name = "steam shield"

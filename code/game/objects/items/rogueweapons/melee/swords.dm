@@ -411,6 +411,7 @@
 	max_integrity = 180
 	wdefense_wbonus = 5
 	smeltresult = /obj/item/ingot/blacksteel
+	snowflake = TRUE
 	var/used = FALSE
 	var/list/selection = list(
 		/datum/special_intent/side_sweep,
@@ -448,6 +449,7 @@
 	icon_state = "churchsword"
 	max_blade_int = 300
 	max_integrity = 180
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/long/undivided/getonmobprop(tag)
 	. = ..()
@@ -546,15 +548,6 @@
 				"westabove" = 0,
 				)
 
-
-
-/obj/item/rogueweapon/sword/long/church
-	name = "see longsword"
-	desc = "A blessed longsword, wielded by the Holy See's templars in their stalwart defense against evil. Originating in the wake of the Celestial Empire's collapse, legends say that it is the grandfather to longswords all across Psydonia: the triumph of an ancient Malumite priest, stricken with divine inspiration in humenity's darkest hour. Centuries later, it still remains the ideal choice for skewering infidels and monsters alike. </br>'I am the holder of light, in the dark abyss..' </br>'..I am the holder of order and ward against vileness..' </br>'..let the Gods guide my hand, and let the Inhumen cower before me.'"
-	icon_state = "churchsword"
-	max_blade_int = 250
-	max_integrity = 180
-
 /obj/item/rogueweapon/sword/long/holysee_lesser
 	name = "eclipsum longsword"//Is the name similar to the 'eclipsum sword'? Yeah. Almost identical. Still better than decablade.
 	desc = "With a drop of holy Eclipsum, doth the blade rise. Gilded, gleaming, radiant heat, warm my soul, immolate my enemies."
@@ -564,6 +557,7 @@
 	max_integrity = 180
 	force = 28
 	force_wielded = 33
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/long/holysee_lesser/getonmobprop(tag)
 	. = ..()
@@ -744,6 +738,7 @@
 	gripped_intents = list(/datum/intent/sword/cut, /datum/intent/sword/thrust, /datum/intent/sword/strike, /datum/intent/sword/chop)
 	icon_state = "heirloom"
 	sheathe_icon = "heirloom"
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/long/heirloom/getonmobprop(tag)
 	. = ..()
@@ -763,6 +758,7 @@
 	wbalance = WBALANCE_HEAVY
 	sellprice = 363
 	static_price = TRUE
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/long/judgement/getonmobprop(tag)
 	. = ..()
@@ -791,7 +787,7 @@
 	sellprice = 999
 	static_price = TRUE
 	max_integrity = 9999
-
+	legendary = TRUE
 
 /obj/item/rogueweapon/sword/long/judgement/vlord
 	name = "\"Ichor Fang\""
@@ -808,6 +804,8 @@
 	static_price = TRUE
 	equip_delay_self = 0
 	unequip_delay_self = 0
+	legendary = TRUE
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/long/judgement/vlord/Initialize(mapload)
 	. = ..()
@@ -896,6 +894,7 @@
 	decorated crossguard. This weapon calls for order."
 	icon_state = "astratasword"
 	force_wielded = 33//As above.
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/long/exe/getonmobprop(tag)
 	. = ..()
@@ -919,6 +918,7 @@
 	smeltresult = /obj/item/ingot/gold // It is the most valuable component
 	max_blade_int = 363
 	smelt_bar_num = 2
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/long/exe/cloth/rmb_self(mob/user)
 	user.changeNext_move(CLICK_CD_MELEE)
@@ -997,6 +997,7 @@
 	wdefense = 9
 	minstr_req = TRUE
 	max_blade_int = 400
+	snowflake = TRUE
 
 /datum/intent/sword/chop/cleave
 	name = "staggering cleave"
@@ -1433,6 +1434,7 @@
 	sheathe_icon = "bs_messer"
 	max_blade_int = 300
 	wbalance = WBALANCE_SWIFT
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/sabre
 	name = "sabre"
@@ -1502,6 +1504,7 @@
 	force = 25	//Base is 22
 	possible_item_intents = list(/datum/intent/sword/cut/sabre, /datum/intent/sword/thrust, /datum/intent/sword/chop/falx, /datum/intent/sword/peel)
 	max_integrity = 200
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/sabre/elf
 	name = "elvish saber"
@@ -1518,6 +1521,7 @@
 	is_silver = FALSE
 	smeltresult = /obj/item/ingot/gold
 	smelt_bar_num = 2
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/sabre/stalker
 	name = "stalker sabre"
@@ -1527,6 +1531,7 @@
 	force_wielded = 25
 	minstr = 7
 	wdefense = 9
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/sabre/shamshir
 	name = "shamshir"
@@ -1691,6 +1696,7 @@
 	max_blade_int = 400
 	possible_item_intents = list(/datum/intent/sword/thrust/rapier, /datum/intent/sword/cut/rapier, /datum/intent/sword/peel)
 	wdefense = 9 //Absurdly high defense, but no added integrity; for the discerning duelmaster.
+	snowflake = TRUE
 	var/used = FALSE
 	var/list/selection = list(
 		/datum/special_intent/piercing_lunge,
@@ -1794,6 +1800,7 @@
 	wdefense = 8
 	smeltresult = /obj/item/ingot/silver
 	is_silver = TRUE
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/rapier/psy/relic/ComponentInitialize()
 	AddComponent(\
@@ -1817,6 +1824,7 @@
 	max_integrity = 300
 	max_blade_int = 300
 	wdefense = 7
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/rapier/eora
 	name = "\"Heartstring\""
@@ -1830,6 +1838,7 @@
 	bigboy = FALSE
 	force = 25 // Same statline as the cup hilted etruscan rapier
 	wdefense = 8
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/rapier/courtphysician
 	name = "cane blade"
@@ -1845,6 +1854,7 @@
 	possible_item_intents = list(/datum/intent/sword/thrust/rapier, /datum/intent/sword/cut/rapier)
 	gripped_intents = null
 	force_wielded = 0
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/rapier/hand
 	name = "dark sister"
@@ -1856,6 +1866,7 @@
 	icon_state = "staffblade"
 	item_state = "staffblade"
 	sheathe_icon = "staffblade"
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/cutlass
 	name = "cutlass"
@@ -2007,6 +2018,7 @@
 	smelt_bar_num = 1
 	wdefense = 5
 	is_silver = TRUE
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/silver/decorated/ComponentInitialize()
 	AddComponent(\
@@ -2143,6 +2155,7 @@
 	possible_item_intents = list(/datum/intent/sword/cut/sabre, /datum/intent/sword/thrust, /datum/intent/sword/strike)
 	icon_state = "kingslayer"
 	sheathe_icon = "kingslayer"
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/long/oathkeeper/getonmobprop(tag)
 	. = ..()
@@ -2339,6 +2352,7 @@
 	max_integrity = 200
 	sharpness_mod = 2
 	sellprice = 50
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/sabre/mulyeog/rumacaptain
 	force = 27
@@ -2348,6 +2362,7 @@
 	max_integrity = 200
 	sharpness_mod = 2
 	sellprice = 150
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/sabre/hook
 	force = 20
@@ -2552,12 +2567,11 @@
 	minstr = 5
 	wdefense = 7
 	wbalance = WBALANCE_SWIFT
+	snowflake = TRUE
 	sellprice = 100 // lets not make it too profitable
 	smeltresult = /obj/item/ingot/blacksteel
 
-/obj/item/rogueweapon/sword/capsabre/Initialize(mapload)
-	. = ..()
-	ADD_TRAIT(src, TRAIT_SNOWFLAKE_GEAR, INNATE_TRAIT)
+
 
 /obj/item/rogueweapon/sword/gold
 	name = "golden arming sword"
@@ -2599,6 +2613,7 @@
 	max_integrity = 350
 	max_blade_int = 350
 	sellprice = 150
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/decorated/blacksteel
 	name = "decorated blacksteel arming sword"
@@ -2609,6 +2624,7 @@
 	wdefense = 7
 	sellprice = 200
 	no_loot_taint = TRUE
+	snowflake = TRUE
 
 /obj/item/rogueweapon/sword/long/shotel
 	name = "steel shotel"

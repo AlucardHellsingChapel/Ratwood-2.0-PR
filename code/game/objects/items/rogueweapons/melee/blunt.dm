@@ -162,6 +162,7 @@
 	smeltresult = /obj/item/ingot/blacksteel
 	wdefense = 3
 	smelt_bar_num = 2
+	snowflake = TRUE
 
 /obj/item/rogueweapon/mace/steel/ancient
 	name = "ancient mace"
@@ -212,6 +213,7 @@
 	smelt_bar_num = 1
 	sellprice = 150
 	is_silver = TRUE
+	snowflake = TRUE
 
 /obj/item/rogueweapon/mace/steel/silver/decorated/ComponentInitialize()
 	AddComponent(\
@@ -235,6 +237,7 @@
 	minstr = 11
 	smeltresult = /obj/item/ingot/gold
 	unenchantable = TRUE
+	snowflake = TRUE
 
 /obj/item/rogueweapon/mace/gold/king
 	name = "royal golden mace"
@@ -242,6 +245,7 @@
 	icon_state = "goldmaceking"
 	max_integrity = 75
 	sellprice = 300
+	snowflake = TRUE
 
 /obj/item/rogueweapon/mace/woodclub
 	force = 15
@@ -379,6 +383,7 @@
 	resistance_flags = FIRE_PROOF
 	minstr = 7
 	wdefense = 5
+	snowflake = TRUE
 
 /obj/item/rogueweapon/mace/cudgel/getonmobprop(tag)
 	. = ..()
@@ -493,6 +498,7 @@
 	max_integrity = 900
 	smeltresult = /obj/item/ingot/steelholy
 	smelt_bar_num = 2
+	snowflake = TRUE
 
 /obj/item/rogueweapon/mace/goden/kanabo
 	name = "kanabo"
@@ -632,6 +638,7 @@
 	smeltresult = /obj/item/ingot/blacksteel
 	possible_item_intents = list(/datum/intent/mace/strike, /datum/intent/mace/smash, /datum/intent/mace/warhammer/pick, /datum/intent/mace/warhammer/stab)
 	special = /datum/special_intent/ground_smash
+	snowflake = TRUE
 
 
 /obj/item/rogueweapon/mace/warhammer/steel/silver
@@ -742,6 +749,7 @@
 	icon_state = "malumhammer"
 	is_silver = TRUE
 	minstr = 8//Handled by the unique interaction below. Inverted to start, since they spawn with it, and funny stuff can happen.
+	snowflake = TRUE
 
 /obj/item/rogueweapon/mace/maul/grand/malum/pickup(mob/living/user)
 	if(HAS_TRAIT(user, TRAIT_FORGEBLESSED))
@@ -774,6 +782,7 @@
 	wdefense_wbonus = 3//7
 	smelt_bar_num = 3//You'll break my heart.
 	max_integrity = 340
+	snowflake = TRUE
 
 /obj/item/rogueweapon/mace/maul/spiked
 	name = "spiked maul"
@@ -785,6 +794,7 @@
 	minstr = 10//+1STR from Grudgebearer Smith. It should be fine.
 	smelt_bar_num = 3//Please don't...
 	max_integrity = 320
+	snowflake = TRUE
 
 /datum/intent/mace/sweep
 	name = "sweeping strike"
