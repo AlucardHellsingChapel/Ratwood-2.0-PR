@@ -554,7 +554,6 @@
 	. = ..()
 	AddComponent(/datum/component/cursed_item, TRAIT_COMMIE, "TROPHY RACK")
 
-// attackby acts as the voice. It only speaks when a user manually clicks.
 /obj/item/storage/back/bladerack/attackby(obj/item/I, mob/living/user, params)
 	if(istype(I, /obj/item/rogueweapon))
 		if(!HAS_TRAIT(I, TRAIT_SNOWFLAKE_GEAR))
@@ -567,7 +566,6 @@
 				return TRUE
 	return ..()
 
-// StorageBlock acts as the shield. It silently blocks duplicates from the UI Grid and background checks.
 /obj/item/storage/back/bladerack/StorageBlock(obj/item/I, mob/user)
 	if(istype(I, /obj/item/rogueweapon))
 		if(!HAS_TRAIT(I, TRAIT_SNOWFLAKE_GEAR))

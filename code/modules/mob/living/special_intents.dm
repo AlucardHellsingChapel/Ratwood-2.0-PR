@@ -1203,7 +1203,7 @@ SPECIALS START HERE
 	delay = 0.5 SECONDS
 	fade_delay = 0.5 SECONDS
 	pre_icon_state = "trap"
-	post_icon_state = "" 
+	post_icon_state = "sweep_fx"
 	sfx_pre_delay = 'sound/combat/wooshes/bladed/wooshlarge (1).ogg'
 	sfx_post_delay = 'sound/combat/sidesweep_hit.ogg'
 	cooldown = 30 SECONDS
@@ -1216,29 +1216,12 @@ SPECIALS START HERE
 	. = ..()
 	howner.Immobilize(self_immob_dur)
 	to_chat(howner, span_warning("I ready the Fang for a swift cross-cleave!"))
-	
-	var/turf/sweet_spot = get_step(howner, howner.dir)
-	spawn_giant_slash(sweet_spot, FALSE)
-	addtimer(CALLBACK(src, PROC_REF(spawn_giant_slash), sweet_spot, TRUE), FANG_WAVE2)
-
-/datum/special_intent/dragons_fang_weak/proc/spawn_giant_slash(turf/T, is_crossed)
-	if(!T) return
-	var/obj/effect/temp_visual/special_intent/big_slash = new(T)
-	big_slash.icon_state = "sweep_fx"
-	big_slash.color = "#e50000"
-	big_slash.setDir(howner.dir)
-	
-	var/matrix/M = matrix(big_slash.transform)
-	M.Scale(3, 3) 
-	
-	// Clean rotational angles instead of messy axis flips fix the direction instantly
-	if(is_crossed)
-		M.Turn(90) // Sweeps the second slash across to form the clean X shape
-		
-	big_slash.transform = M
-	QDEL_IN(big_slash, fade_delay)
 
 /datum/special_intent/dragons_fang_weak/apply_hit(turf/T)
+	for(var/obj/effect/temp_visual/special_intent/fx in T)
+		if(fx.icon_state == post_icon_state)
+			fx.color = "#e50000" 
+
 	var/turf/front_turf = get_step(howner, howner.dir)
 
 	for(var/mob/living/L in get_hearers_in_view(0, T))
@@ -1264,7 +1247,7 @@ SPECIALS START HERE
 	delay = 1 SECONDS
 	fade_delay = 1 SECONDS
 	pre_icon_state = "trap"
-	post_icon_state = "" 
+	post_icon_state = "sweep_fx"
 	sfx_pre_delay = 'sound/combat/wooshes/bladed/wooshlarge (1).ogg'
 	sfx_post_delay = 'sound/combat/sidesweep_hit.ogg'
 	cooldown = 60 SECONDS
@@ -1277,28 +1260,12 @@ SPECIALS START HERE
 	. = ..()
 	howner.Immobilize(self_immob_dur)
 	to_chat(howner, span_warning("I ready the Fang for a devastating cross-cleave!"))
-	
-	var/turf/sweet_spot = get_step(howner, howner.dir)
-	spawn_giant_slash(sweet_spot, FALSE)
-	addtimer(CALLBACK(src, PROC_REF(spawn_giant_slash), sweet_spot, TRUE), FANG_WAVE2)
-
-/datum/special_intent/dragons_fang_strong/proc/spawn_giant_slash(turf/T, is_crossed)
-	if(!T) return
-	var/obj/effect/temp_visual/special_intent/big_slash = new(T)
-	big_slash.icon_state = "sweep_fx"
-	big_slash.color = "#e50000"
-	big_slash.setDir(howner.dir)
-	
-	var/matrix/M = matrix(big_slash.transform)
-	M.Scale(5, 5) 
-	
-	if(is_crossed)
-		M.Turn(90) // Sweeps the second slash across to form the clean X shape
-		
-	big_slash.transform = M
-	QDEL_IN(big_slash, fade_delay)
 
 /datum/special_intent/dragons_fang_strong/apply_hit(turf/T)
+	for(var/obj/effect/temp_visual/special_intent/fx in T)
+		if(fx.icon_state == post_icon_state)
+			fx.color = "#e50000" 
+
 	var/turf/front_turf = get_step(howner, howner.dir)
 
 	for(var/mob/living/L in get_hearers_in_view(0, T))
