@@ -92,13 +92,9 @@
 			H.equip_to_slot_or_del(new /obj/item/storage/belt/rogue/leather/knifebelt/black/psydon, SLOT_BELT, TRUE)
 			H.equip_to_slot_or_del(new /obj/item/rogueweapon/huntingknife/idagger/silver/stake/preblessed/psy, SLOT_BELT_L, TRUE)//Your ticket to fame, brother.
 			H.equip_to_slot_or_del(new /obj/item/gun/ballistic/revolver/rune/twilight_runelock/rifle, SLOT_BACK_L, TRUE)
-			var/pouches = list("Pharetra - Runed Spheres", "Pharetra - Blessed Silver Spheres")
-			var/pouch_choice = input(H, "CHOOSE YOUR MUNITIONS.", "TAKE UP PSYDON'S MISSILES.") as anything in pouches
-			switch(pouch_choice)
-				if("Pharetra - Runed Spheres")
-					H.equip_to_slot_or_del(new /obj/item/quiver/twilight_bullet/runicbag/runed/arbalist, SLOT_BELT_R, TRUE)
-				if("Pharetra - Blessed Silver Spheres")
-					H.equip_to_slot_or_del(new /obj/item/quiver/twilight_bullet/runicbag/blessed/arbalist, SLOT_BELT_R, TRUE)
+			H.equip_to_slot_or_del(new /obj/item/quiver/twilight_bullet/runicbag/arbalist, SLOT_BELT_R, TRUE)
+			H.equip_to_slot_or_del(new /obj/item/quiver/twilight_bullet/runicbag/arbalist/mark, SLOT_IN_BACKPACK, TRUE)//You get ONE.
+
 
 //Stake belt. Here because nothing else uses it. It's just a throwing knife belt, but for stake bolts.
 //A better way to carry them, since these are unobtanium.
@@ -149,29 +145,5 @@
 		stakes += K
 	update_icon()
 
-/obj/item/quiver/storage/belt/rogue/leather/arbalest_bullet
-	name = "entropic sphere belt"
-	desc = "Belt containg very specialised entropic spheres, whose runes are to energy hungry to be shot from anything less then a rifle."
-	component_type = /datum/component/storage/concrete/roguetown/belt/knife_belt
-	icon_state = "blackknife"
-	item_state = "blackknife"
-	var/max_storage = 6
-	var/selected_type = /obj/item/ammo_casing/caseless/bullet/lead/runelock // what the pouch is currently attuned to
-	var/list/linked_ammo_types = list() // types the casings report on firing
-	var/list/linked_casings = list()    // every live casing linked to this bag, in or out of it
-
-/obj/item/quiver/storage/belt/rogue/leather/arbalest_bullet/attackby(obj/A, loc, params)
-	if(A.type in typesof(/obj/item/ammo_casing/caseless/rogue/heavy_bolt/holy))
-		if(stakes.len < max_storage)
-			if(ismob(loc))
-				var/mob/M = loc
-				M.doUnEquip(A, TRUE, src, TRUE, silent = TRUE)
-			else
-				A.forceMove(src)
-			stakes += A
-			update_icon()
-			to_chat(usr, span_notice("I discreetly slip [A] into [src]."))
-		else
-			to_chat(loc, span_warning("Full!"))
-		return
-	..()
+	//name = "entropic sphere belt"
+	//desc = "Belt containg very specialised entropic spheres, whose runes are to energy hungry to be shot from anything less then a rifle."
