@@ -354,7 +354,7 @@
 	damage = 50
 	speed = 0.4 
 	icon_state = "musketball_runed"
-	max_range = 20 // be a sniper you alwys wished to be
+	max_range = 25 // be a sniper you alwys wished to be
 	range = 25
 	hitsound = 'sound/combat/hits/hi_bolt (2).ogg'
 	ammo_type = /obj/item/ammo_casing/caseless/bullet/lead/runelock/heavy
@@ -415,40 +415,64 @@
 		var/mob/living/carbon/human/L = target
 		L.apply_effect(/datum/status_effect/debuff/arbalest_hunt)
 
+/obj/effect/decal/cleanable/food/arbalest_trail
+	name = "silver dust"
+	desc = "A trail of silvery dust created by a marking sphere buried in some poor heretic."
+	icon_state = "flour" // dont laugh, we lack sprites
+	color = "#00dbd0"
+
 /atom/movable/screen/alert/status_effect/debuff/arbalest_hunt
 	name = "Hunters Mark"
-	desc = "This powder is killing my eyes and body. I barely can see and move..."
+	desc = "There is something burrowing inside me! The more I move the worse it becomes! I need to stand still and extract it (click the popup)."
 	icon = 'icons/mob/screen_alert.dmi'
 	icon_state = "embed"
 
+/atom/movable/screen/alert/status_effect/debuff/arbalest_hunt/handle_click(location, control, params)
+	if(!usr || !usr.client)
+		return FALSE
+	var/mob/user = usr
+	var/paramslist = params2list(params)
+	if(paramslist["shift"] && paramslist["left"]) // screen objects don't do the normal Click() stuff so we'll cheat
+		examine_ui(user)
+		return FALSE
+	var/mob/living/carbon/human/L = usr
+	if(!istype(L))
+		return
+	if(do_after(L, 8 SECONDS))	
+		L.remove_status_effect(/datum/status_effect/debuff/arbalest_hunt)
+
+
 /datum/status_effect/debuff/arbalest_hunt
-	id = "runed_poison"
+	id = "arbalest_hunt"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/arbalest_hunt
 	effectedstats = list(STATKEY_CON = -2, STATKEY_WIL = -2, STATKEY_SPD = -2)
 	duration = 5 MINUTES
+	var/damage = 0
+	var/scaling = 0.25
 
 /datum/status_effect/debuff/arbalest_hunt/on_apply()
 	. = ..()
-	register_move(owner)
+	RegisterSignal(owner, COMSIG_MOVABLE_MOVED, PROC_REF(handle_move_init))
 
 /datum/status_effect/debuff/arbalest_hunt/on_remove()
 	. = ..()
-	unregister_move(owner)
+	UnregisterSignal(owner, COMSIG_MOVABLE_MOVED)
 
-/datum/status_effect/debuff/arbalest_hunt/proc/handle_move(mob/living/carbon/human/H)
+/datum/status_effect/debuff/arbalest_hunt/proc/handle_move()
+	var/mob/living/carbon/human/H = owner
+	damage += scaling
+	H.adjust_blood_volume(-damage)
+	H.adjustBruteLoss(damage)
+	var/turf/T = get_turf(H)
+	if(istype(T))
+		var/obj/effect/decal/cleanable/food/arbalest_trail/a = new(T) // if somone knoews better way to spawn it, replace this
+		a = a // does nothign but disables the compiler warning
 
 /datum/status_effect/debuff/arbalest_hunt/proc/handle_move_init(datum/source)
 	SIGNAL_HANDLER
 	if(source != owner)
 		return FALSE
-	return handle_move(source)
-
-/datum/component/debuff/arbalest_hunt/proc/register_move(mob/living/carbon/human/H)
-	RegisterSignal(H, COMSIG_MOVABLE_MOVED, PROC_REF(handle_move_init))
-
-/datum/component/debuff/arbalest_hunt/proc/unregister_move(mob/living/carbon/human/H)
-	UnregisterSignal(H, COMSIG_MOVABLE_MOVED)
-
+	INVOKE_ASYNC(src, TYPE_PROC_REF(/datum/status_effect/debuff/arbalest_hunt, handle_move))
 
 /obj/item/quiver/twilight_bullet/runicbag
 	name = "pharetra"
