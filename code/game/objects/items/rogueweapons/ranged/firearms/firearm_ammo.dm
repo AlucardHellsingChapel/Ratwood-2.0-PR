@@ -465,8 +465,7 @@
 	H.adjustBruteLoss(damage)
 	var/turf/T = get_turf(H)
 	if(istype(T))
-		var/obj/effect/decal/cleanable/food/arbalest_trail/a = new(T) // if somone knoews better way to spawn it, replace this
-		a = a // does nothign but disables the compiler warning
+		new /obj/effect/decal/cleanable/food/arbalest_trail(turf)
 
 /datum/status_effect/debuff/arbalest_hunt/proc/handle_move_init(datum/source)
 	SIGNAL_HANDLER
