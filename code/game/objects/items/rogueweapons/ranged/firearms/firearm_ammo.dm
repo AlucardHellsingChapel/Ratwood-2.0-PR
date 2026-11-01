@@ -465,7 +465,7 @@
 	H.adjustBruteLoss(damage)
 	var/turf/T = get_turf(H)
 	if(istype(T))
-		new /obj/effect/decal/cleanable/food/arbalest_trail(turf)
+		new /obj/effect/decal/cleanable/food/arbalest_trail(T)
 
 /datum/status_effect/debuff/arbalest_hunt/proc/handle_move_init(datum/source)
 	SIGNAL_HANDLER
