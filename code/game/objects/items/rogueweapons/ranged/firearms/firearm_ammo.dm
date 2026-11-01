@@ -455,7 +455,12 @@
 	name = "silver dust"
 	desc = "A trail of silvery dust created by a marking sphere buried in some poor heretic."
 	icon_state = "flour" // dont laugh, we lack sprites
-	color = "#00dbd0"
+	color = "#afb1b1"
+	alpha = 100
+
+/obj/effect/decal/cleanable/food/arbalest_trail/Initialize(mapload)
+	. = ..()
+	addtimer(CALLBACK(src, PROC_REF(Destroy)), 10 MINUTES) // och look its self cleaning
 
 /atom/movable/screen/alert/status_effect/debuff/arbalest_hunt
 	name = "Hunters Mark"
@@ -484,7 +489,8 @@
 	effectedstats = list(STATKEY_SPD = -3)
 	duration = 5 MINUTES
 	var/damage = 0
-	var/scaling = 0.25
+	var/scaling = 0.15 // how much the damage is incresed for every tile moved
+	var/damage_cap = 50 // the maximum damage that can be done per step, 50 same as cut troath or heart
 
 /datum/status_effect/debuff/arbalest_hunt/on_apply()
 	. = ..()
@@ -497,6 +503,7 @@
 /datum/status_effect/debuff/arbalest_hunt/proc/handle_move()
 	var/mob/living/carbon/human/H = owner
 	damage += scaling
+	damage = min(damage, damage_cap)
 	H.adjust_blood_volume(-damage)
 	H.adjustBruteLoss(damage)
 	var/turf/T = get_turf(H)
