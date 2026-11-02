@@ -4,7 +4,7 @@
 	icon = 'icons/roguetown/rw_deadbodies.dmi'
 	icon_state = "base"
 	density = FALSE
-	var/looted = FALSE
+	var/body_looted = FALSE
 	var/list/loot_table
 	var/list/loot_table_lucky
 	var/list/pose_states
@@ -19,7 +19,7 @@
 		icon_state = pick(pose_states)
 
 /obj/structure/deadbody/attack_hand(mob/living/user)
-	if(looted)
+	if(body_looted)
 		to_chat(user, span_warning("There's nothing left worth taking."))
 		return
 	user.changeNext_move(CLICK_CD_INTENTCAP)
@@ -29,7 +29,7 @@
 	playsound(src, pick('sound/foley/equip/rummaging-01.ogg', 'sound/foley/equip/rummaging-02.ogg', 'sound/foley/equip/rummaging-03.ogg'), 50, FALSE)
 	if(user.STALUC < 10 && prob(40))
 		to_chat(user, span_warning("You come up empty. Nothing but dust and bad luck."))
-		looted = TRUE
+		body_looted = TRUE
 		user.visible_message(span_notice("[user] finishes searching [src]."), span_notice("You finish searching [src]."))
 		return
 	var/items_found = 1
@@ -47,7 +47,7 @@
 			to_chat(user, span_notice("A lucky find! You pull out [found]."))
 		else
 			to_chat(user, span_notice("You pull out [found]."))
-	looted = TRUE
+	body_looted = TRUE
 	user.visible_message(span_notice("[user] finishes searching [src]."), span_notice("You finish searching [src]."))
 
 // ---- SUBTYPES ----
@@ -209,25 +209,10 @@
 		"wizard_old", "wiza10", "wiza20", "wiza30", "wiza40",
 	)
 	loot_table = list(
-		/obj/item/book/granter/spell/blackstone/fetch                     = 15,
-		/obj/item/book/granter/spell/blackstone/fireball                  = 10,
-		/obj/item/book/granter/spell/blackstone/lightning                 = 8,
-		/obj/item/book/granter/spell/blackstone/bonechill                 = 8,
-		/obj/item/book/granter/spell/blackstone/frostbolt                 = 8,
-		/obj/item/book/granter/spell/blackstone/featherfall               = 6,
-		/obj/item/book/granter/spell/blackstone/forcewall_weak            = 6,
-		/obj/item/book/granter/spell/blackstone/invisibility              = 5,
-		/obj/item/book/granter/spell/blackstone/greaterfireball           = 3,
 		/obj/item/storage/belt/rogue/pouch/coins/mid                      = 20,
 		/obj/item/reagent_containers/glass/bottle/rogue/healthpot         = 15,
 	)
 	loot_table_lucky = list(
-		/obj/item/book/granter/spell/blackstone/greaterfireball           = 20,
-		/obj/item/book/granter/spell/blackstone/invisibility              = 15,
-		/obj/item/book/granter/spell/blackstone/lightning                 = 15,
-		/obj/item/book/granter/spell/blackstone/enlarge                   = 10,
-		/obj/item/book/granter/spell/blackstone/familiar                  = 8,
-		/obj/item/book/granter/spell/blackstone/fortitude                 = 10,
 		/obj/item/storage/belt/rogue/pouch/coins/rich                     = 15,
 		/obj/item/reagent_containers/glass/bottle/rogue/healthpot         = 10,
 	)
@@ -240,23 +225,12 @@
 		"necromancer_old", "necro10", "necro20", "necro30", "necro40",
 	)
 	loot_table = list(
-		/obj/item/book/granter/spell/blackstone/skeleton                  = 15,
-		/obj/item/book/granter/spell/blackstone/sicknessray               = 12,
-		/obj/item/book/granter/spell/blackstone/bonechill                 = 10,
-		/obj/item/book/granter/spell/blackstone/fetch                     = 8,
-		/obj/item/book/granter/spell/blackstone/invisibility              = 6,
 		/obj/item/natural/bone                                            = 20,
 		/obj/item/skull                                                   = 10,
 		/obj/item/storage/belt/rogue/pouch/coins/mid                      = 15,
 		/obj/item/reagent_containers/glass/bottle/rogue/healthpot         = 10,
 	)
 	loot_table_lucky = list(
-		/obj/item/book/granter/spell/blackstone/skeleton                  = 20,
-		/obj/item/book/granter/spell/blackstone/sicknessray               = 15,
-		/obj/item/book/granter/spell/blackstone/invisibility              = 15,
-		/obj/item/book/granter/spell/blackstone/bonechill                 = 10,
-		/obj/item/book/granter/spell/blackstone/familiar                  = 8,
-		/obj/item/skull                                                   = 20,
 		/obj/item/storage/belt/rogue/pouch/coins/rich                     = 15,
 	)
 
@@ -284,26 +258,26 @@
 	loot_table = list(
 		/obj/item/natural/bone                                            = 25,
 		/obj/item/skull                                                   = 15,
-		/obj/item/rogueweapon/sword/short/pashortsword                   = 15,
-		/obj/item/rogueweapon/sword/short/gladius/pagladius               = 10,
-		/obj/item/rogueweapon/spear/paalloy                               = 10,
-		/obj/item/rogueweapon/halberd/bardiche/paalloy                    = 6,
-		/obj/item/rogueweapon/greatsword/paalloy                          = 4,
-		/obj/item/rogueweapon/flail/sflail/paflail                        = 6,
-		/obj/item/clothing/suit/roguetown/armor/chainmail/hauberk/paalloy = 10,
-		/obj/item/clothing/under/roguetown/platelegs/paalloy              = 8,
-		/obj/item/clothing/wrists/roguetown/bracers/paalloy               = 8,
-		/obj/item/clothing/neck/roguetown/chaincoif/paalloy               = 8,
+		/obj/item/rogueweapon/sword/short/ancient                   = 15,
+		/obj/item/rogueweapon/sword/short/gladius/ancient               = 10,
+		/obj/item/rogueweapon/spear/ancient                               = 10,
+		/obj/item/rogueweapon/halberd/bardiche/ancient                    = 6,
+		/obj/item/rogueweapon/greatsword/ancient                          = 4,
+		/obj/item/rogueweapon/flail/sflail/ancient                        = 6,
+		/obj/item/clothing/suit/roguetown/armor/chainmail/hauberk/ancient/decrepit = 10,
+		/obj/item/clothing/under/roguetown/platelegs/ancient/decrepit             = 8,
+		/obj/item/clothing/wrists/roguetown/bracers/ancient/decrepit             = 8,
+		/obj/item/clothing/neck/roguetown/chaincoif/ancient/decrepit                = 8,
 	)
 	loot_table_lucky = list(
-		/obj/item/rogueweapon/greatsword/paalloy                          = 20,
-		/obj/item/rogueweapon/halberd/bardiche/paalloy                    = 18,
-		/obj/item/rogueweapon/spear/paalloy                               = 15,
-		/obj/item/rogueweapon/flail/sflail/paflail                        = 12,
-		/obj/item/clothing/suit/roguetown/armor/chainmail/hauberk/paalloy = 20,
-		/obj/item/clothing/under/roguetown/platelegs/paalloy              = 15,
-		/obj/item/clothing/wrists/roguetown/bracers/paalloy               = 15,
-		/obj/item/clothing/neck/roguetown/chaincoif/paalloy               = 15,
+		/obj/item/rogueweapon/greatsword/ancient                          = 20,
+		/obj/item/rogueweapon/halberd/bardiche/ancient                    = 18,
+		/obj/item/rogueweapon/spear/ancient                               = 15,
+		/obj/item/rogueweapon/flail/sflail/ancient                        = 12,
+		/obj/item/clothing/suit/roguetown/armor/chainmail/hauberk/ancient  = 20,
+		/obj/item/clothing/under/roguetown/platelegs/ancient              = 15,
+		/obj/item/clothing/wrists/roguetown/bracers/ancient                = 15,
+		/obj/item/clothing/neck/roguetown/chaincoif/ancient                = 15,
 	)
 
 /obj/structure/deadbody/rogue

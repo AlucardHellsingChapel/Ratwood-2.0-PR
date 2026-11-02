@@ -6,7 +6,7 @@
 	cmode_music = 'sound/music/combat_vaquero.ogg'
 	category_tags = list(CTAG_MERCENARY)
 	subclass_languages = list(/datum/language/etruscan)
-	traits_applied = list(TRAIT_DODGEEXPERT, TRAIT_DECEIVING_MEEKNESS, TRAIT_MEDIUMARMOR)
+	traits_applied = list(TRAIT_DODGEEXPERT, TRAIT_DECEIVING_MEEKNESS, TRAIT_MEDIUMARMOR, TRAIT_EQUESTRIAN)
 	subclass_stats = list(
 		STATKEY_SPD = 3,
 		STATKEY_INT = 2,
@@ -30,6 +30,8 @@
 		/datum/skill/misc/music = SKILL_LEVEL_EXPERT,
 	)
 
+	extra_context = "This class is restricted from using the Equestrian virtue."
+
 	virtue_restrictions = list(
 		/datum/virtue/utility/riding
 	)
@@ -41,7 +43,7 @@
 	shoes = /obj/item/clothing/shoes/roguetown/boots
 	neck = /obj/item/clothing/neck/roguetown/gorget
 	pants = /obj/item/clothing/under/roguetown/heavy_leather_pants
-	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt
+	shirt = /obj/item/clothing/suit/roguetown/shirt/freifechter
 	belt = /obj/item/storage/belt/rogue/leather
 	gloves = /obj/item/clothing/gloves/roguetown/fingerless_leather
 	wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
@@ -61,7 +63,8 @@
 					/obj/item/rogueweapon/scabbard/sheath = 1
 					)
 	var/datum/inspiration/I = new /datum/inspiration(H)
-	I.grant_inspiration(H, bard_tier = BARD_T1)
+	I.grant_inspiration(H, bard_tier = BARD_T2)
+	H.mind?.AddSpell(new /obj/effect/proc_holder/spell/invoked/mockery)
 	if(H.mind)
 		var/weapons = list("Accordion","Bagpipe", "Banjo","Drum","Flute","Guitar","Harmonica","Harp","Hurdy-Gurdy","Jaw Harp","Lute","Psyaltery","Shamisen","Trumpet","Viola","Vocal Talisman")
 		var/weapon_choice = input(H, "Choose your instrument.", "TAKE UP ARMS") as anything in weapons

@@ -528,6 +528,7 @@
 	var/list/cached_reagents = reagent_list
 	for(var/_reagent in cached_reagents)
 		var/datum/reagent/R = _reagent
+		var/temp_pain = 0
 		if(R.type == reagent)
 			if(my_atom && isliving(my_atom))
 				var/mob/living/M = my_atom
@@ -535,11 +536,15 @@
 					R.metabolizing = FALSE
 					R.on_mob_end_metabolize(M)
 				R.on_mob_delete(M)
+				temp_pain = R.pain
 			qdel(R)
 			reagent_list -= R
 			update_total()
 			if(my_atom)
 				my_atom.on_reagent_change(DEL_REAGENT)
+				if(temp_pain && iscarbon(my_atom))
+					var/mob/living/carbon/C = my_atom
+					C.update_chem_pain()
 	return 1
 
 /datum/reagents/proc/update_total()
@@ -708,7 +713,19 @@
 		var/amt = list_reagents[r_id]
 		add_reagent(r_id, amt, data)
 
-/datum/reagents/proc/remove_reagent(reagent, amount, safety)//Added a safety check for the trans_id_to
+/**
+ * Removes a specific reagent. can supress reactions if needed
+ * Arguments
+ *
+ * * [reagent_type][datum/reagent] - the type of reagent
+ * * amount - the volume to remove
+ * * include_subtypes - if TRUE will remove the specified amount from all subtypes of reagent_type as well
+ */
+/datum/reagents/proc/remove_reagent(datum/reagent/reagent_type, amount, safety)//Added a safety check for the trans_id_to
+	if(!ispath(reagent_type))
+		stack_trace("invalid reagent passed to remove reagent [reagent_type]")
+		return FALSE
+
 	if(isnull(amount))
 		amount = 0
 		. = FALSE
@@ -717,26 +734,30 @@
 	if(!isnum(amount))
 		return FALSE
 
-	if(amount < 0)
+	if(amount <= 0)
 		return FALSE
 
+	var/total_removed_amount = 0
+	var/remove_amount = 0
 	var/list/cached_reagents = reagent_list
+	for(var/datum/reagent/cached_reagent in cached_reagents)
+		if(cached_reagent.type != reagent_type)
+			continue
 
-	for(var/A in cached_reagents)
-		var/datum/reagent/R = A
-		if (R.type == reagent)
-			//clamp the removal amount to be between current reagent amount
-			//and zero, to prevent removing more than the holder has stored
-			amount = CLAMP(amount, 0, R.volume)
-			R.volume -= amount
-			update_total()
-			if(!safety)//So it does not handle reactions when it need not to
-				handle_reactions()
-			if(my_atom)
-				my_atom.on_reagent_change(REM_REAGENT)
-			return TRUE
+		//reduce the volume
+		remove_amount = min(cached_reagent.volume, amount)
+		cached_reagent.volume -= amount
 
-	return FALSE
+		total_removed_amount += remove_amount
+		if(!safety)//So it does not handle reactions when it need not to
+			handle_reactions()
+		if(my_atom)
+			my_atom.on_reagent_change(REM_REAGENT)
+
+	//update the holder & handle reactions
+	update_total()
+
+	return total_removed_amount
 
 /datum/reagents/proc/has_reagent(reagent, amount = -1, needs_metabolizing = FALSE)
 	var/list/cached_reagents = reagent_list
@@ -825,6 +846,53 @@
 /datum/reagents/proc/get_reagent(type)
 	var/list/cached_reagents = reagent_list
 	. = locate(type) in cached_reagents
+
+/datum/reagents/proc/generate_scent_message(minimum_percent=15)
+	// the lower the minimum percent, the more sensitive the message is.
+	var/list/out = list()
+	var/list/scents = list() //descriptor = strength
+	if(minimum_percent <= 100)
+		for(var/datum/reagent/R in reagent_list)
+			if(!R.taste_mult)
+				continue
+			if(istype(R, /datum/reagent/consumable/nutriment))
+				var/list/scent_data = R.data
+				for(var/scent in scent_data)
+					var/ratio = scent_data[scent]
+					var/amount = ratio * R.taste_mult * R.volume
+					if(scent in scents)
+						scents[scent] += amount
+					else
+						scents[scent] = amount
+			else
+				var/scent_desc
+				if (R.scent_description != "")
+					scent_desc = R.scent_description
+				else
+					scent_desc = R.taste_description
+				var/scent_amount = R.volume * R.taste_mult
+				if(scent_desc in scents)
+					scents[scent_desc] += scent_amount
+				else
+					scents[scent_desc] = scent_amount
+		//deal with percentages
+		// TODO it would be great if we could sort these from strong to weak
+		var/total_scent = counterlist_sum(scents)
+		if(total_scent > 0)
+			for(var/scent_desc in scents)
+				var/percent = scents[scent_desc]/total_scent * 100
+				if(percent < minimum_percent)
+					continue
+				var/intensity_desc = ""
+				if(percent > minimum_percent * 2 || percent == 100)
+					intensity_desc = ""
+				else if(percent > minimum_percent * 3)
+					intensity_desc = ""
+				if(intensity_desc != "")
+					out += "[intensity_desc] [scent_desc]"
+				else
+					out += "[scent_desc]"
+	return english_list(out, "something")
 
 /datum/reagents/proc/generate_taste_message(minimum_percent=15)
 	// the lower the minimum percent, the more sensitive the message is.

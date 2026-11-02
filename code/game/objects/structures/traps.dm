@@ -17,7 +17,7 @@
 	var/used_time = 14 // interaction time for disabling traps, scales down with trap skill
 
 
-	var/list/static/ignore_typecache
+	var/static/list/ignore_typecache
 	var/list/mob/immune_minds = list() //unused and a bit weird, helpful for making mobs immune to the traps without TRAIT_LIGHT_STEP
 
 	var/sparks = TRUE
@@ -160,6 +160,12 @@
 	time_between_triggers = 10
 	flare_message = span_warning("[src] snaps shut!")
 
+/obj/structure/trap/stun/hunter/Destroy()
+	if(stored_item && !QDELING(stored_item))
+		qdel(stored_item)
+	stored_item = null
+	return ..()
+
 /obj/structure/trap/stun/hunter/Crossed(atom/movable/AM)
 	caught = TRUE
 	. = ..()
@@ -203,7 +209,9 @@
 	forceMove(stored_trap)//moves item into trap
 
 /obj/item/bountytrap/Destroy()
-	qdel(stored_trap)
+	if(stored_trap && !QDELING(stored_trap))
+		qdel(stored_trap)
+	stored_trap = null
 	QDEL_NULL(spark_system)
 	. = ..()
 
@@ -261,7 +269,7 @@
 /obj/structure/trap/saw_blades/trap_effect(mob/living/L)
 	to_chat(L, span_danger("<B>A whirling blade erupts from beneath your feet!</B>"))
 	def_zone = pick(BODY_ZONE_L_LEG, BODY_ZONE_R_LEG)
-	L.apply_damage(trap_damage, BRUTE, def_zone, L.run_armor_check(def_zone, "stab", damage = trap_damage))
+	L.apply_damage(trap_damage, BRUTE, def_zone, L.run_armor_check(def_zone, "stab", armor_penetration = PEN_NONE, damage = trap_damage))
 	playsound(src, 'sound/gore/flesh_eat_01.ogg', 70, TRUE)
 	var/obj/structure/sawblade_trap/saw = new(get_turf(src))
 	last_trigger = 0 // override to keep slicing you every time you step onto the trap
@@ -356,7 +364,7 @@
 /obj/projectile/magic/frostbolt/wall_projectile
 	speed = 6
 	damage = 20
-	armor_penetration = 5
+	armor_penetration = PEN_NONE
 
 /obj/structure/trap/wall_projectile/acidsplash
 	name = "acid plate trap"
@@ -375,7 +383,7 @@
 /obj/structure/trap/rock_fall/trap_effect(mob/living/L)
 	to_chat(L, span_danger("<B>The ground above you shakes violently!</B>"))
 	def_zone = BODY_ZONE_HEAD
-	L.apply_damage(trap_damage, BRUTE, def_zone, L.run_armor_check(def_zone, "stab", damage = trap_damage))
+	L.apply_damage(trap_damage, BRUTE, def_zone, L.run_armor_check(def_zone, "stab", armor_penetration = PEN_NONE, damage = trap_damage))
 	playsound(src, 'sound/foley/smash_rock.ogg', 70, TRUE)
 	L.set_blurriness(10)
 	var/obj/structure/flora/rock/giant_rock = new(get_turf(src))

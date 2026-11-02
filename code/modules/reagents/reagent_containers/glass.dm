@@ -17,7 +17,7 @@
 	icon_state = "infill"
 	chargetime = 0
 	noaa = TRUE
-	candodge = FALSE
+	dodgeable_intent = FALSE
 	misscost = 0
 
 /datum/intent/pour
@@ -25,7 +25,7 @@
 	icon_state = "infeed"
 	chargetime = 0
 	noaa = TRUE
-	candodge = FALSE
+	dodgeable_intent = FALSE
 	misscost = 0
 
 /datum/intent/splash
@@ -33,7 +33,7 @@
 	icon_state = "insplash"
 	chargetime = 0
 	noaa = TRUE
-	candodge = FALSE
+	dodgeable_intent = FALSE
 	misscost = 0
 
 /obj/item/reagent_containers/glass/attack(mob/M, mob/user, obj/target)
@@ -331,7 +331,7 @@
 	dropshrink = 0.8
 	slot_flags = null
 	resistance_flags = NONE
-	armor = list("blunt" = 25, "slash" = 20, "stab" = 15, "piercing" = 0, "fire" = 75, "acid" = 50) //Weak melee protection, because you can wear it on your head
+	armor = ARMOR_BUCKET
 	slot_equipment_priority = list( \
 		SLOT_BACK, SLOT_RING,\
 		SLOT_PANTS, SLOT_ARMOR,\

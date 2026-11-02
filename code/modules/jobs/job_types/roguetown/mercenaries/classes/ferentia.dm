@@ -1,10 +1,10 @@
 /proc/ferentia_locality(mob/living/carbon/human/H)
-	var/is_local = input(H, "Are you a local?", "Ferentia Kingdom") as anything in list("I am from the Vale", "I am a foreigner")
+	var/is_local = input(H, "Are you a local?", "Ferentia Kingdom") as anything in list("I am from these lands", "I am a foreigner")
 	switch(is_local)
-		if("I am from the Vale")
+		if("I am from these lands")
 			REMOVE_TRAIT(H, TRAIT_OUTLANDER, JOB_TRAIT)
 		else
-			to_chat(H, span_notice("I have arrived at the Vale's mercenary guild after travelling from a different county within the Ferentian kingdom."))
+			to_chat(H, span_notice("I have arrived at this duchy's mercenary guild after travelling from a different county within the Ferentian kingdom."))
 
 
 /datum/advclass/mercenary/ferentia
@@ -62,8 +62,12 @@
 			"Bucket Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/bucket,
 			"Knight Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/knight,
 			"Visored Sallet"	= /obj/item/clothing/head/roguetown/helmet/sallet/visored,
+			"Snouted Visored Sallet"	= /obj/item/clothing/head/roguetown/helmet/sallet/visored/snouted,
 			"Armet"				= /obj/item/clothing/head/roguetown/helmet/heavy/knight/armet,
+			"Snouted Armet"	= /obj/item/clothing/head/roguetown/helmet/heavy/knight/armet/snouted,
 			"Hounskull Bascinet" = /obj/item/clothing/head/roguetown/helmet/bascinet/pigface/hounskull,
+			"Roundface Bascinet"	= /obj/item/clothing/head/roguetown/helmet/bascinet/pigface/roundface,
+			"Snouted Roundface Bascinet"	= /obj/item/clothing/head/roguetown/helmet/bascinet/pigface/roundface/snouted,
 			"Etruscan Bascinet" = /obj/item/clothing/head/roguetown/helmet/bascinet/etruscan,
 			"Slitted Kettle" = /obj/item/clothing/head/roguetown/helmet/heavy/knight/skettle,
 			"Froggemund Helmet"	= /obj/item/clothing/head/roguetown/helmet/heavy/frogmouth,
@@ -120,14 +124,14 @@
 	..()
 	to_chat(H, span_warning("Faceless and numerous, the mercenary guild is occupied by many of your ilk. Maille and polearms are as easily used by the unskilled as they are effective."))
 	if(H.mind)
-		var/weapons = list("Halberd", "Partizan", "Eagle's Beak", "Billhook")
+		var/weapons = list("Halberd", "Partizan", "Lucerne", "Billhook")
 		var/weapon_choice = input(H, "Choose your weapon.", "TAKE UP ARMS") as anything in weapons
 		switch(weapon_choice)
 			if("Halberd")
 				r_hand = /obj/item/rogueweapon/halberd
 			if("Partizan")
 				r_hand = /obj/item/rogueweapon/spear/partizan
-			if("Eagle's Beak")
+			if("Lucerne")
 				r_hand = /obj/item/rogueweapon/eaglebeak
 			if("Billhook")
 				r_hand =/obj/item/rogueweapon/spear/billhook
@@ -187,7 +191,7 @@
 		/datum/skill/combat/swords = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/combat/knives = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/reading = SKILL_LEVEL_NOVICE,
-		/datum/skill/misc/athletics = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/misc/athletics = SKILL_LEVEL_EXPERT,
 	)
 	extra_context = "This subclass gains Expert skill in their weapon of choice, be it swords or knives."
 
@@ -232,7 +236,7 @@
 	tutorial = "The mercenary guild is teeming with corn-fed brutes looking to make mammons off the only thing they're good at - while simple-minded describes you best, you possess brute strength and a heavy club. Sometimes that's all you need to solve problems in lyfe."
 	outfit = /datum/outfit/job/roguetown/mercenary/ferentia_thug
 	subclass_languages = list(/datum/language/thievescant)
-	traits_applied = list(TRAIT_MEDIUMARMOR, TRAIT_BASHDOORS, TRAIT_SEEPRICES_SHITTY, TRAIT_DRUNK_HEALING)
+	traits_applied = list(TRAIT_MEDIUMARMOR, TRAIT_BIGGUY, TRAIT_SEEPRICES_SHITTY, TRAIT_DRUNK_HEALING)
 	subclass_stats = list(
 		STATKEY_STR = 3,
 		STATKEY_CON = 3,
@@ -268,6 +272,18 @@
 			if("WHO NEEDS A CLUB? I HAVE MY HANDS!")
 				H.adjust_skillrank_up_to(/datum/skill/combat/unarmed, SKILL_LEVEL_EXPERT, TRUE)
 				ADD_TRAIT(H, TRAIT_CIVILIZEDBARBARIAN, TRAIT_GENERIC)
+		var/techniques = list("Dropkick - Pushback + Extra Damage", "Chokeslam - Stamina Damage", "Stunner - Dazed Debuff", "Headbutt - Vulnerable Debuff") // cool wrestling moves
+		var/technique_choice = input(H,"Choose your TECHNIQUE.", "TOSS THEM.") as anything in techniques
+		switch(technique_choice)
+			if("Dropkick - Pushback + Extra Damage")
+				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/dropkick)
+			if("Chokeslam - Stamina Damage")
+				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/chokeslam)
+			if("Stunner - Dazed Debuff")
+				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/stunner)
+			if("Headbutt - Vulnerable Debuff")
+				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/headbutt)
+
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
 	belt = /obj/item/storage/belt/rogue/leather
 	head = /obj/item/clothing/neck/roguetown/chaincoif/iron

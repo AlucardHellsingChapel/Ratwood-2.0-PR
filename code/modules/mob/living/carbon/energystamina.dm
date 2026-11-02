@@ -1,3 +1,11 @@
+/// Refreshes the stamina HUD bar. Overridden by mobs that have one.
+/mob/living/proc/update_stamina_hud()
+	return FALSE
+
+/// Refreshes the energy HUD bar. Overridden by mobs that have one.
+/mob/living/proc/update_energy_hud()
+	return FALSE
+
 /mob/living/proc/update_stamina() //update hud and regen after last_fatigued delay on taking
 	max_stamina = max_energy / 10
 
@@ -19,12 +27,18 @@
 			added = round(added * 0.5, 1)
 		if(HAS_TRAIT(src, TRAIT_MONK_ROBE))
 			added = round(added * 1.25, 1)
+		if(ishuman(src))
+			var/mob/living/carbon/human/H = src
+			if(H.has_status_effect(/datum/status_effect/debuff/sleepytime/t2))
+				added = round(added * 0.8, 1)
+			else if(H.has_status_effect(/datum/status_effect/debuff/sleepytime/t3))
+				added = round(added * 0.7, 1)
 		if(stamina >= 1)
 			stamina_add(added)
 		else
 			stamina = 0
 
-	update_health_hud()
+	update_stamina_hud()
 
 /mob/living/proc/update_energy()
 	var/athletics_skill = 0
@@ -50,17 +64,23 @@
 	if(m_intent == MOVE_INTENT_RUN && (mobility_flags & MOBILITY_STAND))
 		if(isnull(buckled))
 			mind && mind.add_sleep_experience(/datum/skill/misc/athletics, (STAINT*0.02))
+	if(added < 0 && HAS_TRAIT(src, TRAIT_GOLD_AFFINITY))
+		var/gold = 0
+		for(var/obj/item/I in get_equipped_items())
+			if(I.is_gold)
+				gold++
+		added *= 1 - (min(gold, 5) * 0.02)
 	energy += added
 	if(energy > max_energy)
 		energy = max_energy
-		update_health_hud()
+		update_energy_hud()
 		return FALSE
 	else
 		if(energy <= 0)
 			energy = 0
 			if(m_intent == MOVE_INTENT_RUN) //can't sprint at zero stamina
 				toggle_rogmove_intent(MOVE_INTENT_WALK)
-		update_health_hud()
+		update_energy_hud()
 		return TRUE
 
 /mob/proc/stamina_add(added as num)
@@ -100,10 +120,17 @@
 /mob/living/stamina_add(added as num, emote_override, force_emote = TRUE) //call update_stamina here and set last_fatigued, return false when not enough fatigue left
 	if(HAS_TRAIT(src, TRAIT_INFINITE_STAMINA))
 		return TRUE
-	if(HAS_TRAIT(src, TRAIT_FORTITUDE))
-		added = added * 0.5
+
+	var/true_added = added
+	if(HAS_TRAIT(src, TRAIT_FORTITUDE) && added > 0) // 2nd check is to halve stamina SPEND, not stamina GAIN
+		added = added * 0.7
 	if(added < 0 && HAS_TRAIT(src, TRAIT_FROZEN_STAMINA))
 		added = 0
+
+	if(mind && true_added > 0)
+		// the amount of athletics skill gained is proportional to how much stamina is used
+		// using a tenth of the bar gives 1 XP point of athletics skill, multiplied by your constitution divided by 10
+		mind.add_sleep_experience(/datum/skill/misc/athletics, (STACON / 10) * ((true_added / max_stamina) * 10), show_xp = m_intent == MOVE_INTENT_RUN)
 	if(bodytemperature > BODYTEMP_HEAT_LEVEL_ONE_MAX && added >=1)	//being max heat(level 2) makes you regen half as much stamina
 		added = round(added * 1.5, 1)
 	stamina = CLAMP(stamina+added, 0, max_stamina)
@@ -145,7 +172,7 @@
 
 	if(stamina >= max_stamina)
 		stamina = max_stamina
-		update_health_hud()
+		update_stamina_hud()
 		if(m_intent == MOVE_INTENT_RUN) //can't sprint at full fatigue
 			toggle_rogmove_intent(MOVE_INTENT_WALK, TRUE)
 		if(!emote_override)
@@ -166,7 +193,7 @@
 		if(energy <= 0)
 			addtimer(CALLBACK(src, PROC_REF(Knockdown), 30), 1 SECONDS)
 			var/area/rogue/our_area = get_area(src)
-			if(our_area.necra_area)
+			if(istype(our_area) && our_area.necra_area)
 				src.extract_from_deaths_edge()
 
 		addtimer(CALLBACK(src, PROC_REF(Immobilize), 30), 1 SECONDS)
@@ -181,7 +208,7 @@
 		return FALSE
 	else
 		last_fatigued = world.time
-		update_health_hud()
+		update_stamina_hud()
 		return TRUE
 
 /mob/living/carbon

@@ -1,6 +1,7 @@
 #define GARRISON_CROWN_COLOR "#C2A245"
 
 /obj/item/clothing/head/roguetown/crown/serpcrown
+	no_loot_taint = TRUE
 	name = "Crown of the Realm"
 	article = "the"
 	desc = "Heavy is the head that wears this."
@@ -23,16 +24,14 @@
 /obj/item/clothing/head/roguetown/crown/serpcrown/Initialize(mapload)
 	. = ..()
 	if(SSroguemachine.crown)
-		qdel(src)
+		return INITIALIZE_HINT_QDEL
 	else
 		SSroguemachine.crown = src
 		SSroguemachine.scomm_machines += src
 	become_hearing_sensitive()
 
 /obj/item/clothing/head/roguetown/crown/serpcrown/proc/anti_stall()
-	src.visible_message(span_warning("The Crown of the Vale crumbles to dust, the ashes spiriting away in the direction of the Keep."))
-	SSroguemachine.scomm_machines -= src
-	SSroguemachine.crown = null //Do not harddel.
+	src.visible_message(span_warning("The Crown of [SSmapping.map_adjustment.realm_name] crumbles to dust, the ashes spiriting away in the direction of the Keep."))
 	qdel(src) //Anti-stall
 
 /obj/item/clothing/head/roguetown/crown/serpcrown/attack_right(mob/living/carbon/human/user)
@@ -59,7 +58,7 @@
 
 			GLOB.broadcast_list += list(list(
 			"message"   = input_text,
-			"tag"		= "The Crown of the Vale",
+			"tag"		= "The Crown of [SSmapping.map_adjustment.realm_name]",
 			"timestamp" = station_time_timestamp("hh:mm:ss")
 			))
 
@@ -130,5 +129,7 @@
 		send_speech(message, hearrange, src, , spans, message_language=language)
 
 /obj/item/clothing/head/roguetown/crown/serpcrown/Destroy()
+	SSroguemachine.crown = null
+	SSroguemachine.scomm_machines -= src
 	lose_hearing_sensitivity()
 	return ..()

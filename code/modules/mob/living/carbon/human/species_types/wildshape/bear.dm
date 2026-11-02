@@ -55,10 +55,10 @@
 		TRAIT_BIGGUY,
 	)
 	inherent_biotypes = MOB_HUMANOID
-	armor = 5
 	no_equip = list(SLOT_SHIRT, SLOT_HEAD, SLOT_WEAR_MASK, SLOT_ARMOR, SLOT_GLOVES, SLOT_SHOES, SLOT_PANTS, SLOT_CLOAK, SLOT_BELT, SLOT_BACK_R, SLOT_BACK_L, SLOT_S_STORE)
 	nojumpsuit = 1
 	sexes = 1
+	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_MAGIC | MIRROR_PRIDE | RACE_SWAP | SLIME_EXTRACT
 	offset_features = list(OFFSET_HANDS = list(0,2), OFFSET_HANDS_F = list(0,2))
 	organs = list(
 		ORGAN_SLOT_BRAIN = /obj/item/organ/brain,
@@ -104,7 +104,6 @@
 	body_parts_covered = FULL_BODY
 	body_parts_inherent = FULL_BODY
 	armor = ARMOR_LEATHER //It's literally a bear, shouldn't be more than this
-	prevent_crits = list(BCLASS_CUT, BCLASS_BLUNT, BCLASS_TWIST)
 	blocksound = SOFTHIT
 	blade_dulling = DULLING_BASHCHOP
 	sewrepair = FALSE
@@ -120,8 +119,6 @@
 	animname = "cut"
 	hitsound = "genslash"
 	penfactor = 10
-	candodge = TRUE
-	canparry = TRUE
 	miss_text = "slashes the air!"
 	miss_sound = "bluntswoosh"
 	item_d_type = "slash"

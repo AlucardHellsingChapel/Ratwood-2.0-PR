@@ -1,6 +1,8 @@
 /obj/effect/proc_holder/spell/targeted/touch/orison
 	name = "Orison"
-	overlay_state = "thaumaturgy"
+	overlay_icon = 'icons/mob/actions/genericmiracles.dmi'
+	action_icon = 'icons/mob/actions/genericmiracles.dmi'
+	overlay_state = "orison"
 	desc = "The basic precept of holy magic orients around the power of prayer and soliciting a Divine Patron for a tiny sliver of Their might."
 	clothes_req = FALSE
 	drawmessage = "I calm my mind and prepare to draw upon an orison."
@@ -10,6 +12,7 @@
 	chargetime = 0
 	releasedrain = 5
 	miracle = TRUE
+	skipcharge = TRUE
 	devotion_cost = 5
 	chargedloop = /datum/looping_sound/invokegen
 	associated_skill = /datum/skill/magic/holy
@@ -168,7 +171,7 @@
 		// give us a buff that makes our next spoken thing really loud and also cause any linked, un-muted scom to shriek out the phrase at a 15% chance
 		var/cast_time = 50 - (holy_skill * 5)
 		user.visible_message(span_notice("[user] lowers [user.p_their()] head solemnly, whispered prayers spilling from [user.p_their()] lips..."), span_notice("O holy [user.patron.name], share unto me a sliver of your power..."))
-		
+
 		if (!user.has_status_effect(/datum/status_effect/thaumaturgy))
 			if (do_after(user, cast_time, target = user))
 				user.apply_status_effect(/datum/status_effect/thaumaturgy, holy_skill)
@@ -178,7 +181,7 @@
 			to_chat(user, span_notice("I'm already empowered with divine thaumaturgy!"))
 			return
 	else
-		// make a light source flicker, and others around it within a radius	
+		// make a light source flicker, and others around it within a radius
 		if (istype(thing, /obj/machinery/light) || istype(thing, /obj/item/flashlight))
 			for (var/obj/maybe_light in view(3 + holy_skill, thing))
 				if (istype(maybe_light, /obj/machinery/light))
@@ -192,7 +195,7 @@
 						user.devotion?.update_devotion(-1)
 
 			to_chat(user, span_notice("I direct the weight of my faith towards nearby flames, causing them to flicker!"))
-			
+
 			return thaumaturgy_devotion
 		else if (isturf(thing))
 
@@ -233,8 +236,8 @@
 		M.adjustFireLoss(1.5*REM)
 	else
 		// Heals internal damage very well like potions
-		if(M.blood_volume < BLOOD_VOLUME_NORMAL)
-			M.blood_volume = min(M.blood_volume+10, BLOOD_VOLUME_NORMAL)
+		if(M.get_blood_volume() < BLOOD_VOLUME_NORMAL)
+			M.set_blood_volume(min(M.get_blood_volume()+10, BLOOD_VOLUME_NORMAL))
 		M.adjustToxLoss(-3*REM, 0)
 		M.adjustOxyLoss(-3*REM, 0)
 		M.adjustOrganLoss(ORGAN_SLOT_BRAIN, -3*REM)
@@ -252,13 +255,13 @@
 /datum/reagent/water/blessed/reaction_mob(mob/living/M, method=TOUCH, reac_volume)
 	if (!istype(M))
 		return ..()
-	
+
 	if (method == TOUCH)
 		if (M.mob_biotypes & MOB_UNDEAD)
 			M.adjustFireLoss(2*reac_volume, 0)
 			M.visible_message(span_warning("[M] erupts into angry fizzling and hissing!"), span_warning("BLESSED WATER!!! IT BURNS!!!"))
 			M.emote("scream")
-	
+
 	return ..()
 
 /datum/reagent/water/cursed
@@ -272,8 +275,8 @@
 		M_hum = M
 	if((M.mob_biotypes & MOB_UNDEAD) || (M_hum.patron.undead_hater == FALSE))
 		// Heals internal damage very well like potions for undead/dark patrons
-		if(M.blood_volume < BLOOD_VOLUME_NORMAL)
-			M.blood_volume = min(M.blood_volume+10, BLOOD_VOLUME_NORMAL)
+		if(M.get_blood_volume() < BLOOD_VOLUME_NORMAL)
+			M.set_blood_volume(min(M.get_blood_volume()+10, BLOOD_VOLUME_NORMAL))
 		M.adjustToxLoss(-3*REM, 0)
 		M.adjustOxyLoss(-3*REM, 0)
 		M.adjustOrganLoss(ORGAN_SLOT_BRAIN, -3*REM)
@@ -281,8 +284,8 @@
 		// Does NOT heal brute or fire damage
 	else
 		// Heals less for divine worshippers, but still internal damage only
-		if(M.blood_volume < BLOOD_VOLUME_NORMAL)
-			M.blood_volume = min(M.blood_volume+5, BLOOD_VOLUME_NORMAL)
+		if(M.get_blood_volume() < BLOOD_VOLUME_NORMAL)
+			M.set_blood_volume(min(M.get_blood_volume()+5, BLOOD_VOLUME_NORMAL))
 		M.adjustToxLoss(-1.5*REM, 0)
 		M.adjustOxyLoss(-1.5*REM, 0)
 		M.adjustOrganLoss(ORGAN_SLOT_BRAIN, -1.5*REM)
@@ -290,74 +293,134 @@
 		// Does NOT heal brute or fire damage
 		M.stamina_add(1*REM)
 
+
+/datum/reagent/medicine/pestra
+	abstract_type = /datum/reagent/medicine/pestra
+	color = "#008145"
+	taste_description = "terrible bitterness"
+	taste_mult = 3
+	/// Brute and burn healed per tick, other damage heals more
+	var/heal = 1
+	var/other_heal = 3
+	var/wound_heal = 1.5
+	var/blood_heal = 10
+	/// Fraction of STAWIL * 10 dealt as pain to the unaccustomed
+	var/pain_mult = 2.5
+	var/heal_message = "Your wounds stitch together, as if under the hands of a competent surgeon."
+	var/pain_message = "Your flesh moves on its own volition causing pain!"
+
+/datum/reagent/medicine/pestra/on_mob_life(mob/living/carbon/M)
+	if(volume >= 60)
+		M.reagents.remove_reagent(type, 2) //No overhealing.
+	if(M.get_blood_volume() < BLOOD_VOLUME_NORMAL)
+		M.set_blood_volume(min(M.get_blood_volume() + blood_heal, BLOOD_VOLUME_NORMAL))
+	var/should_pain = M.heal_all_wounds(wound_heal)
+	if(M.getBruteLoss() > 0 || M.getFireLoss() > 0)
+		should_pain = TRUE
+		M.adjustBruteLoss(-heal * REM, FALSE)
+		M.adjustFireLoss(-heal * REM, FALSE)
+	M.adjustToxLoss(-other_heal * REM, FALSE)
+	M.adjustOxyLoss(-other_heal * REM, FALSE)
+	M.adjustOrganLoss(ORGAN_SLOT_BRAIN, -other_heal * REM)
+	M.adjustCloneLoss(-other_heal * REM, FALSE)
+	pain = 0
+	if(should_pain && !HAS_TRAIT(M, TRAIT_NOPAIN))
+		if(istype(M.patron, /datum/patron/divine/pestra) || M.get_skill_level(/datum/skill/misc/medicine) >= SKILL_LEVEL_EXPERT)
+			if(prob(3))
+				to_chat(M, span_green(heal_message))
+		else
+			pain = M.STAWIL * pain_mult
+			if(prob(3))
+				to_chat(M, span_infection(pain_message))
+	return ..()
+
+/datum/reagent/medicine/pestra/lesser
+	name = "Pestra's Medicine"
+	description = "A bitter green draught that knits flesh, painfully for those unused to it."
+
+/datum/reagent/medicine/pestra/greater
+	name = "Pestra's Sacred Medicine"
+	description = "A dark, bitter draught that knits even grievous wounds, at great pain to the unaccustomed."
+	color = "#002e18"
+	taste_description = "terrible bitterness and a hint of suffering"
+	taste_mult = 5
+	heal = 2
+	other_heal = 5
+	wound_heal = 3
+	blood_heal = 20
+	pain_mult = 5
+	heal_message = "Your wounds stitch together, as if under the hands of a master surgeon."
+	pain_message = "Your flesh shifts and writhes causing immense suffering!"
+
+
 /obj/item/melee/touch_attack/orison/proc/lay_hands(atom/thing, mob/living/carbon/human/user)
 	var/holy_skill = user.get_skill_level(attached_spell.associated_skill)
 	var/cast_time = 40 - (holy_skill * 4)
-	
+
 	if (!thing.Adjacent(user))
 		to_chat(user, span_info("I need to be next to [thing] to lay hands upon them!"))
 		return
-	
+
 	if (!isliving(thing))
 		to_chat(user, span_notice("I can only channel healing through living beings."))
 		return
-	
+
 	var/mob/living/target = thing
-	
+
 	if (target.stat == DEAD)
 		to_chat(user, span_warning("The dead are beyond my reach..."))
 		return
-	
+
 	if (target.has_status_effect(/datum/status_effect/buff/lay_hands))
 		to_chat(user, span_notice("[target] is already receiving the laying of hands."))
 		return
-	
+
 	user.visible_message(span_notice("[user] places [user.p_their()] hands upon [target], divine power beginning to gather..."), span_notice("I lay my hands upon [target], channeling [user.patron.name]'s restorative power..."))
-	
+
 	// Initial channel to establish the connection
 	if (do_after(user, cast_time, target = target))
 		// Healing power scales better with holy skill: 0.3 to 0.8
 		var/healing_power = clamp(0.3 + (holy_skill * 0.1), 0.3, 0.8)
 		// Devotion cost per tick scales down with skill: 3 to 1
 		var/devotion_per_tick = clamp(4 - holy_skill, 1, 20)
-		
+
 		user.visible_message(span_notice("Divine energy suffuses [target] as [user]'s channeling takes hold!"), span_notice("The connection is established - [user.patron.name]'s power flows through me into [target]."))
-		
+
 		// Continuous healing loop - keeps going as long as both stay still and adjacent
 		var/first_application = TRUE
 		var/tick_time = 50 - (holy_skill * 3) // Faster ticks for more skilled clerics
-		
+
 		while(do_after(user, tick_time, target = target))
 			// Check if we have enough devotion to continue
 			if (user.devotion?.devotion < devotion_per_tick)
 				to_chat(user, span_warning("My devotion is exhausted - I can no longer maintain the channeling!"))
 				break
-			
+
 			// Break if target dies
 			if (target.stat == DEAD)
 				to_chat(user, span_warning("[target] has passed beyond my healing touch..."))
 				break
-			
+
 			// Break if no longer adjacent
 			if (!target.Adjacent(user))
 				to_chat(user, span_warning("I am too far from [target] - the blessing fades!"))
 				break
-			
+
 			// Apply or refresh the healing effect
-			target.apply_status_effect(/datum/status_effect/buff/lay_hands, healing_power)
-			
+			target.apply_status_effect(/datum/status_effect/buff/lay_hands, healing_power, user.patron)
+
 			// Consume devotion for this healing cycle
 			user.devotion?.update_devotion(-devotion_per_tick)
-			
+
 			if (first_application)
 				to_chat(user, span_notice("I maintain my focus, channeling [user.patron.name]'s restorative power through my hands..."))
 				first_application = FALSE
-		
+
 		// When the loop ends (player moved or stopped)
 		user.visible_message(span_notice("[user] withdraws [user.p_their()] hands from [target], the divine energy fading."), span_notice("I release my concentration and the channeling ends."))
-		
+
 		return lay_hands_devotion
-	
+
 	return
 
 /obj/item/melee/touch_attack/orison/proc/create_water(atom/thing, mob/living/carbon/human/user)
@@ -370,7 +433,7 @@
 		if (thing.reagents.holder_full())
 			to_chat(user, span_warning("[thing] is full."))
 			return
-		
+
 		user.visible_message(span_info("[user] closes [user.p_their()] eyes in prayer and extends a hand over [thing] as water begins to stream from [user.p_their()] fingertips..."), span_notice("I utter forth a plea to [user.patron.name] for succour, and hold my hand out above [thing]..."))
 
 		var/holy_skill = user.get_skill_level(attached_spell.associated_skill)
@@ -385,6 +448,15 @@
 			var/list/water_contents = list(/datum/reagent/water/cursed = water_qty)
 			if(user.patron.undead_hater == TRUE)
 				water_contents = list(/datum/reagent/water/blessed = water_qty)
+			
+			if(istype(user.patron, /datum/patron/divine/pestra))
+				if(istype(user.rmb_intent, /datum/rmb_intent/weak)|| holy_skill < SKILL_LEVEL_APPRENTICE)
+					water_contents = list(/datum/reagent/water/blessed = water_qty)
+				else
+					if(holy_skill >= SKILL_LEVEL_MASTER)
+						water_contents = list(/datum/reagent/medicine/pestra/greater = water_qty)
+					else
+						water_contents = list(/datum/reagent/medicine/pestra/lesser = water_qty)
 
 			var/datum/reagents/reagents_to_add = new()
 			reagents_to_add.add_reagent_list(water_contents)
@@ -396,7 +468,7 @@
 
 			if (prob(80))
 				playsound(user, 'sound/items/fillcup.ogg', 55, TRUE)
-		
+
 		return min(50, fatigue_spent)
 	else if (istype(thing, /obj/item/natural/cloth))
 		// stupid little easter egg here: you can dampen a cloth to clean with it, because prestidigitation also lets you clean things. also a lot cheaper devotion-wise than filling a bucket
@@ -410,3 +482,6 @@
 		return water_moisten
 	else
 		to_chat(user, span_info("I'll need to find a container that can hold water."))
+
+/proc/get_god_name(datum/patron/to_check)
+	return to_check.name

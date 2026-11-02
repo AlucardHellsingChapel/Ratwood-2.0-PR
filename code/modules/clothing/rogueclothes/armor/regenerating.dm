@@ -7,6 +7,7 @@
 	desc = "Abstract parent. Contact developer if you see this."
 	icon_state = null
 	slot_flags = ITEM_SLOT_SHIRT|ITEM_SLOT_ARMOR
+	unenchantable = TRUE
 
 	/// Feedback messages
 	var/repairmsg_begin = "My armour begins to slowly mend its abuse.."
@@ -41,6 +42,7 @@
 	if(timeleft(reptimer))
 		to_chat(loc, span_notice(repairmsg_stop))
 	deltimer(reptimer)
+	reptimer = null
 	return
 
 /// Start repairing the armor
@@ -57,6 +59,7 @@
 	if(obj_integrity >= max_integrity)
 		to_chat(loc, span_notice(repairmsg_end))
 		deltimer(reptimer)
+		reptimer = null
 		return
 
 	if(!skip_message)
@@ -90,7 +93,7 @@
 	repairmsg_end = "My skin has become taut with newfound vigor!"
 
 /obj/item/clothing/suit/roguetown/armor/regenerating/skin/Initialize(mapload)
-	..()
+	. = ..()
 	ADD_TRAIT(src, TRAIT_NODROP, CURSED_ITEM_TRAIT)
 
 /obj/item/clothing/suit/roguetown/armor/regenerating/skin/dropped(mob/living/carbon/human/user)
@@ -106,18 +109,35 @@
 	I AM LIVING ON A FUCKING CORPSE. HE IS THE WORLD, AND THE WORLD IS ROTTING AWAY. \
 	HEAVEN CLOSED ITS GATES TO US, LONG AGO.' </br>'YET, HIS CHILDREN PERSIST; AND AS LONG AS THEY DO, SO MUST I. \
 	HAPPINESS MUST BE FOUGHT FOR.'"
-	armor = list("blunt" = 30, "slash" = 50, "stab" = 50, "piercing" = 20, "fire" = 0, "acid" = 0) //Custom value; padded gambeson's slash- and stab- armor.
-	prevent_crits = list(BCLASS_CUT, BCLASS_BLUNT)
+	armor = ARMOR_PADDED
 	repair_time = 20 SECONDS
-	max_integrity = 300
+	max_integrity = ARMOR_INT_CHEST_LIGHT_MASTER + 50//350
 
 /obj/item/clothing/suit/roguetown/armor/regenerating/skin/weak
 	name = "tough skin"
 	desc = "My skin has always been tough enough to stop most cuts and bruises, with time it will mend."
-	armor = list("blunt" = 30, "slash" = 50, "stab" = 50, "piercing" = 20, "fire" = 0, "acid" = 0)
+	armor = ARMOR_PADDED_BAD
 	max_integrity = 300
 	body_parts_covered = FULL_BODY
 	body_parts_inherent = FULL_BODY
 	combat_taggable = TRUE
 
+/obj/item/clothing/suit/roguetown/armor/regenerating/skin/chest/gladiator
+	name = "pit-hardened chest"//pit? hnnnnhhhffgggg
+	desc = "Are you not entertained?!"
+	body_parts_covered = COVERAGE_VEST
+	body_parts_inherent = COVERAGE_VEST
+	blocksound = SOFTHIT
+	armor = ARMOR_LEATHER
+	max_integrity = ARMOR_INT_CHEST_LIGHT_MASTER //defaults to a leather armor
+
+/obj/item/clothing/suit/roguetown/armor/regenerating/skin/body/gladiator
+	name = "pit-hardened skin"
+	desc = "Are you not entertained?!"
+	body_parts_covered = COVERAGE_FULL //everything but head and it's subzones (neck, skull, ears, eyes, nose, mouth)
+	body_parts_inherent = COVERAGE_FULL
+	armor = ARMOR_PADDED
+	max_integrity = ARMOR_INT_CHEST_LIGHT_MEDIUM //defaults to a gambeson
+
 #undef COMBAT_TAG_DURATION
+

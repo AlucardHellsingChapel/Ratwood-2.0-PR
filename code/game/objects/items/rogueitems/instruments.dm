@@ -4,7 +4,7 @@
 	extra_range = 10	// Increase sound range.
 	persistent_loop = TRUE
 	var/stress2give = /datum/stressevent/music
-	sound_group = null
+	sound_group = /datum/sound_group/instruments
 
 GLOBAL_LIST_EMPTY(instrument_band_lobbies)
 
@@ -144,23 +144,52 @@ GLOBAL_LIST_EMPTY(instrument_band_lobbies)
 			if(instrument.not_held)
 				holder.remove_status_effect(/datum/status_effect/buff/harpy_sing)
 
+/// Returns the singleton instruments sound group, cached after first lookup.
+/datum/looping_sound/instrument/proc/_get_sound_group()
+	RETURN_TYPE(/datum/sound_group/instruments)
+	var/static/datum/sound_group/instruments/cached
+	if(!cached)
+		for(var/datum/sound_group/g in GLOB.created_sound_groups)
+			if(istype(g, /datum/sound_group/instruments))
+				cached = g
+				break
+	return cached
+
+// attach_loop_to_all_clients() sends a vol=0 sound to every client before the
+// song has actually started, pre-populating their played_loops with a stale entry.
+// When the real play() fires, playsound_local finds them already in thingshearing
+// and only issues a volume update on the finished silent sound instead of
+// sending it fresh — so clients never hear it. Skip this entirely for instruments;
+// the initial playsound() in play() covers in-range clients, and the update_sounds()
+// rescan in SSsoundloopers covers late-joiners via GLOB.persistent_sound_loops.
+/datum/looping_sound/instrument/attach_loop_to_all_clients()
+	return
+
 /datum/looping_sound/instrument/New(_parent, start_immediately=FALSE, _direct=FALSE, _channel = 0)
 	. = ..(_parent, FALSE, _direct, _channel)
-	// Instruments can be widespread on the map. Reserve channels only while actively playing.
+	// Parent assigned a channel via round-robin; return it to the pool since
+	// channels are only held while actively playing, not while idle.
 	if(channel)
-		SSsounds.free_datum_channels(src)
+		_get_sound_group()?.return_channel(channel)
 		channel = null
 	if(start_immediately)
 		start()
+
+/datum/looping_sound/instrument/Destroy()
+	// If destroyed while actively playing, return the channel to the instruments
+	// pool rather than letting the base Destroy() leak it to SSsounds' general pool.
+	if(channel)
+		_get_sound_group()?.return_channel(channel)
+		channel = null
+	return ..()
 
 /datum/looping_sound/instrument/start(atom/on_behalf_of, sync_anchor)
 	if(sync_anchor)
 		starttime = sync_anchor
 	if(!channel)
-		channel = SSsounds.reserve_sound_channel(src)
+		channel = _get_sound_group()?.checkout_channel()
 		if(!channel)
-			var/atom/resolved_parent = parent?.resolve()
-			log_game("INSTRUMENT: Failed to reserve sound channel for [resolved_parent] - channels may be exhausted (reserve_high=[SSsounds.channel_reserve_high], random_min=[SSsounds.random_channels_min])")
+			log_game("INSTRUMENT: All [/datum/sound_group/instruments::channel_count] instrument channels in use simultaneously - [parent]")
 			return FALSE
 	..()
 	return TRUE
@@ -185,7 +214,8 @@ GLOBAL_LIST_EMPTY(instrument_band_lobbies)
 				SEND_SOUND(C, sound(null, repeat = 0, wait = 0, channel = stop_channel))
 			C.played_loops -= src
 		thingshearing = list()  // Clear AFTER parent and client loop are done.
-		SSsounds.free_datum_channels(src)
+		// Return the channel to the group pool so other instruments can use it.
+		_get_sound_group()?.return_channel(channel)
 		channel = null
 	else
 		. = ..(null_parent)
@@ -210,11 +240,14 @@ GLOBAL_LIST_EMPTY(instrument_band_lobbies)
 	var/playing = FALSE
 	grid_height = 64
 	grid_width = 32
+	dropshrink = 0.8//damn these things are sprited big
 
 	/// Instrument is in some other holder such as an organ or item.
 	var/not_held = FALSE
 	/// When TRUE, songs will loop (repeat) when they end. Off by default.
 	var/loop_enabled = FALSE
+
+	var/last_played // store the last played thing we have here to use in quick cmode toggle
 
 // Added null-guard on soundloop. During Initialize() the parent chain
 // may trigger equipped() before soundloop is assigned.
@@ -243,7 +276,7 @@ GLOBAL_LIST_EMPTY(instrument_band_lobbies)
 
 /obj/item/rogue/instrument/Destroy()
 	_remove_self_from_lobbies()
-	qdel(soundloop)
+	QDEL_NULL(soundloop)
 	. = ..()
 
 /obj/item/rogue/instrument/dropped(mob/living/user, silent)
@@ -275,8 +308,21 @@ GLOBAL_LIST_EMPTY(instrument_band_lobbies)
 			if(!owner_mob)
 				GLOB.instrument_band_lobbies -= lobby_id
 
+/obj/item/rogue/instrument/examine(mob/user)
+	. = ..()
+	if (ishuman(user))
+		var/mob/living/carbon/human/viewer_human = user
+		if (viewer_human.inspiration)
+			. += span_notice("You can quickly add and remove people from your audience by <b>middle-clicking</b> on them with this instrument in your hand.")
+			. += span_notice("If you try to play with combat mode active, you'll automatically play your last song.")
+
+
 /obj/item/rogue/instrument/attack_self(mob/living/user)
 	var/stressevent = /datum/stressevent/music
+	var/can_play_with_occupied_offhand = FALSE
+	if(ishuman(user))
+		var/mob/living/carbon/human/bard = user
+		can_play_with_occupied_offhand = bard.inspiration?.level >= BARD_T2
 	. = ..()
 	if(.)
 		return
@@ -302,6 +348,21 @@ GLOBAL_LIST_EMPTY(instrument_band_lobbies)
 		var/volume_label
 		var/loop_notice
 		var/volume_selection
+		if (user.cmode && last_played)
+			// quickly just play the last song we chose if we do this in combat
+			var/quickfile = song_list[last_played]
+			if(quickfile)
+				user.balloon_alert(user, "quick-playing last song! (combat)")
+				soundloop.set_mid_sounds(list(quickfile))
+				soundloop.volume = clamp(curvol, 10, 100)
+				soundloop.repeat_sound = loop_enabled
+				if(!soundloop.start(user))
+					to_chat(user, span_warning("Could not play - no sound channels available. Try again in a moment."))
+					return
+				playing = TRUE
+				user.apply_status_effect(/datum/status_effect/buff/playing_music, stressevent, note_color)
+				return
+			
 		while(TRUE)
 			loop_state = "Off"
 			if(loop_enabled)
@@ -347,7 +408,7 @@ GLOBAL_LIST_EMPTY(instrument_band_lobbies)
 					continue
 				break
 			
-			if(playing || !(src in user.held_items) && !(not_held) || user.get_inactive_held_item())
+			if(playing || !(src in user.held_items) && !(not_held) || user.get_inactive_held_item() && !can_play_with_occupied_offhand)
 				return
 				
 			if(choice == "Upload New Song" || choice == "upload")
@@ -359,7 +420,7 @@ GLOBAL_LIST_EMPTY(instrument_band_lobbies)
 
 				if(!infile)
 					return
-				if(playing || !(src in user.held_items) && !(not_held) || user.get_inactive_held_item())
+				if(playing || !(src in user.held_items) && !(not_held) || user.get_inactive_held_item() && !can_play_with_occupied_offhand)
 					return
 
 				var/filename = "[infile]"
@@ -380,6 +441,7 @@ GLOBAL_LIST_EMPTY(instrument_band_lobbies)
 					song_list[songname] = curfile
 				return
 			curfile = song_list[choice]
+			last_played = choice
 			if(!user || playing || !(src in user.held_items) && !(not_held))
 				return
 			note_color = "#7f7f7f"
@@ -405,14 +467,13 @@ GLOBAL_LIST_EMPTY(instrument_band_lobbies)
 			soundloop.stress2give = stressevent
 			if(!(src in user.held_items) && !(not_held))
 				return
-			if(user.get_inactive_held_item())
+			if(user.get_inactive_held_item() && !can_play_with_occupied_offhand)
 				playing = FALSE
 				soundloop.stop(user)
 				user.remove_status_effect(/datum/status_effect/buff/playing_music)
 				return
 			if(curfile)
-				soundloop.mid_sounds = list(curfile)
-				soundloop.cursound = null
+				soundloop.set_mid_sounds(list(curfile))
 				soundloop.volume = clamp(curvol, 10, 100)
 				soundloop.repeat_sound = loop_enabled
 				if(!soundloop.start(user))
@@ -589,8 +650,7 @@ GLOBAL_LIST_EMPTY(instrument_band_lobbies)
 				var/mob/living/band_mob = instrument_to_bandmate[band_instrument]
 				if(band_mob)
 					play_source = band_mob
-			band_instrument.soundloop.mid_sounds = list(band_instrument.curfile)
-			band_instrument.soundloop.cursound = null
+			band_instrument.soundloop.set_mid_sounds(list(band_instrument.curfile))
 			band_instrument.soundloop.volume = clamp(band_instrument.curvol, 10, 100)
 			band_instrument.soundloop.repeat_sound = band_instrument.loop_enabled
 			if(!band_instrument.soundloop.start(play_source, sync_anchor))
@@ -722,6 +782,35 @@ GLOBAL_LIST_EMPTY(instrument_band_lobbies)
 	"The Bloody Throne" = 'sound/music/instruments/hurdy (5).ogg',
 	"We Shall Sail Together" = 'sound/music/instruments/hurdy (6).ogg')
 
+/obj/item/rogue/instrument/ztratocaster
+	name = "ztratocaster"
+	desc = "A strange guitar-like instrument with two necks, and a body sharp enough to shred."
+	icon_state = "ztratocaster"
+	force = 15
+	force_wielded = 35
+	possible_item_intents = list(/datum/intent/axe/cut, /datum/intent/axe/chop, SPEAR_BASH)
+	gripped_intents = list(/datum/intent/axe/cut/long, /datum/intent/axe/chop/long, SPEAR_BASH)
+	associated_skill = /datum/skill/combat/axes
+	song_list = list("Laid To Rest" = 'sound/music/instruments/ztrato (1).ogg',
+	"Fulmen" = 'sound/music/instruments/ztrato (2).ogg',
+	"Painkiller" = 'sound/music/instruments/ztrato (3).ogg',
+	"Abyssor's Bane" = 'sound/music/instruments/ztrato (4).ogg')
+	blade_dulling = DULLING_BASHCHOP
+	w_class = WEIGHT_CLASS_HUGE
+	minstr = 8
+	max_blade_int = 300
+	anvilrepair = /datum/skill/craft/weaponsmithing
+	obj_flags = CAN_BE_HIT | PREVENTS_DESTRUCTION
+	integrity_failure = 0.2
+	smeltresult = null
+	wdefense = 6
+	wbalance = WBALANCE_HEAVY
+
+/obj/item/rogue/instrument/ztratocaster/Initialize(mapload)
+	. = ..()
+	soundloop.extra_range = 5 //stop blowing up my ears ser
+	AddComponent(/datum/component/cursed_item, TRAIT_CABAL, "INSTRUMENT")
+
 /obj/item/rogue/instrument/lute
 	name = "lute"
 	desc = "Its graceful curves were designed to weave joyful melodies."
@@ -747,7 +836,7 @@ GLOBAL_LIST_EMPTY(instrument_band_lobbies)
 	"Midyear Melancholy" = 'sound/music/instruments/psyaltery (3).ogg',
 	"Santa Psydonia" = 'sound/music/instruments/psyaltery (4).ogg',
 	"Le Venardine" = 'sound/music/instruments/psyaltery (5).ogg',
-	"Azurea Fair" = 'sound/music/instruments/psyaltery (6).ogg',
+	"Vespermill Fair" = 'sound/music/instruments/psyaltery (6).ogg',
 	"Amoroso" = 'sound/music/instruments/psyaltery (7).ogg',
 	"Lupian's Lullaby" = 'sound/music/instruments/psyaltery (8).ogg',
 	"White Wine Before Breakfast" = 'sound/music/instruments/psyaltery (9).ogg',

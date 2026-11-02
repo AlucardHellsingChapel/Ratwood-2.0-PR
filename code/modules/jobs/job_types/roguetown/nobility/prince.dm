@@ -61,6 +61,7 @@
 		/datum/skill/misc/athletics = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/riding = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/misc/reading = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/misc/hunting = SKILL_LEVEL_APPRENTICE,
 	)
 
 /datum/outfit/job/roguetown/heir/daring/pre_equip(mob/living/carbon/human/H)
@@ -75,11 +76,11 @@
 	shoes = /obj/item/clothing/shoes/roguetown/boots/nobleboot
 	belt = /obj/item/storage/belt/rogue/leather
 	l_hand = /obj/item/rogueweapon/sword/sabre
-	beltl = /obj/item/rogueweapon/scabbard/sword
+	beltl = /obj/item/rogueweapon/scabbard/sword/royal
 	beltr = /obj/item/storage/keyring/heir
 	neck = /obj/item/storage/belt/rogue/pouch/coins/rich
 	backr = /obj/item/storage/backpack/rogue/satchel
-	if(SSmapping.config.map_name == "Desert Town")
+	if(SSmapping.current_map.map_name == "Desert Town")
 		cloak = /obj/item/clothing/cloak/raincloak/amir
 		shoes = /obj/item/clothing/shoes/roguetown/gladiator
 		armor = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/zyb
@@ -100,8 +101,9 @@
 	name = "Introverted Bookworm"
 	tutorial = "Despite your standing, sociability is not your strong suit, and you have kept mostly to yourself and your books. This hardly makes you a favourite among the lords and ladies of the court, and an exit from your room is often met with amusement from nobility and servants alike. At least you're always welcome in the mage's tower."
 	outfit = /datum/outfit/job/roguetown/heir/bookworm
-	traits_applied = list(TRAIT_ARCYNE_T2, TRAIT_MAGEARMOR, TRAIT_GOODWRITER)
+	traits_applied = list(TRAIT_GOODWRITER, TRAIT_MAGEDEXTERITY) //As it turns out, Battlemage Princess DID become a prevalent problem.
 	category_tags = list(CTAG_HEIR)
+	virtue_restrictions = list(/datum/virtue/combat/tough_hide)
 	subclass_stats = list(
 		STATKEY_STR = -1,
 		STATKEY_INT = 2,
@@ -109,7 +111,7 @@
 		STATKEY_CON = -1,
 		STATKEY_LCK = 2,
 	)
-	subclass_spellpoints = 9
+	subclass_mage_aspects = list("mastery" = FALSE, "major" = 0, "minor" = 2, "utilities" = 4)
 	subclass_skills = list(
 		/datum/skill/misc/reading = SKILL_LEVEL_MASTER,
 		/datum/skill/magic/arcane = SKILL_LEVEL_NOVICE,
@@ -134,22 +136,19 @@
 	beltr = /obj/item/storage/keyring/heir
 	beltl = /obj/item/rogueweapon/huntingknife/idagger/steel/special
 	backr = /obj/item/storage/backpack/rogue/satchel
-	backl = /obj/item/rogueweapon/woodstaff/emerald/blacksteelstaff/royal
+	backl = /obj/item/rogueweapon/woodstaff/implement/greater/blacksteel
 	shoes = /obj/item/clothing/shoes/roguetown/boots/nobleboot
 	mask = /obj/item/clothing/mask/rogue/spectacles
 	neck = /obj/item/storage/belt/rogue/pouch/coins/rich
 	backpack_contents = list(
 		/obj/item/roguegem/amethyst = 1,
-		/obj/item/spellbook_unfinished/pre_arcyne = 1,
+		/obj/item/rogueweapon/spellbook = 1,
 		/obj/item/recipe_book/alchemy = 1,
 		/obj/item/recipe_book/magic = 1,
 		/obj/item/chalk = 1,
 		)
-	if(H.mind)
-		H.mind.AddSpell(new /obj/effect/proc_holder/spell/self/message) // so you can order a maid to bring you lunch from your library/room/the tower. Or just broadcast your fanfiction into someone's head aggressively.
-		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/arcynebolt) // So bookworms don't feel pressured to grab only spells for shenanigans / to ONLY take Arcane Potential. If battlemage princess becomes a problem, axe this.
 
-	if(SSmapping.config.map_name == "Desert Town")
+	if(SSmapping.current_map.map_name == "Desert Town")
 		cloak = /obj/item/clothing/cloak/raincloak/amir
 		shoes = /obj/item/clothing/shoes/roguetown/gladiator
 		if(should_wear_masc_clothes(H))
@@ -192,16 +191,23 @@
 		/datum/skill/misc/reading = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/craft/cooking = SKILL_LEVEL_NOVICE,
 		/datum/skill/craft/sewing = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/misc/hunting = SKILL_LEVEL_APPRENTICE,
+		/datum/skill/craft/tanning = SKILL_LEVEL_JOURNEYMAN,
 	)
 
 /datum/outfit/job/roguetown/heir/aristocrat/pre_equip(mob/living/carbon/human/H)
 	..()
 	head = /obj/item/clothing/head/roguetown/circlet
+	wrists = /obj/item/storage/keyring/heir
 	belt = /obj/item/storage/belt/rogue/leather
-	beltl = /obj/item/storage/keyring/heir
+	beltl = /obj/item/rogueweapon/huntingknife/scissors/steel
 	beltr = /obj/item/storage/belt/rogue/pouch/coins/rich
 	backr = /obj/item/storage/backpack/rogue/satchel
 	id = /obj/item/clothing/ring/signet
+	backpack_contents = list(
+		/obj/item/needle,
+		/obj/item/natural/bundle/fibers,
+	)
 	if(should_wear_masc_clothes(H))
 		pants = /obj/item/clothing/under/roguetown/tights
 		shirt = /obj/item/clothing/suit/roguetown/shirt/dress/royal/prince
@@ -213,7 +219,7 @@
 		armor = /obj/item/clothing/suit/roguetown/armor/silkcoat
 		shirt = /obj/item/clothing/suit/roguetown/shirt/dress/royal/princess
 		shoes = /obj/item/clothing/shoes/roguetown/shortboots
-	if(SSmapping.config.map_name == "Desert Town")
+	if(SSmapping.current_map.map_name == "Desert Town")
 		cloak = /obj/item/clothing/cloak/raincloak/amir
 		shoes = /obj/item/clothing/shoes/roguetown/gladiator
 		if(should_wear_masc_clothes(H))
@@ -251,17 +257,20 @@
 		/datum/skill/misc/reading = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/craft/cooking = SKILL_LEVEL_NOVICE,
 		/datum/skill/craft/sewing = SKILL_LEVEL_NOVICE,
+		/datum/skill/craft/tanning = SKILL_LEVEL_NOVICE,
 		/datum/skill/craft/alchemy = SKILL_LEVEL_APPRENTICE,
 	)
 
 /datum/outfit/job/roguetown/heir/inbred/pre_equip(mob/living/carbon/human/H)
 	..()
 	head = /obj/item/clothing/head/roguetown/circlet
+	neck = /obj/item/storage/belt/rogue/pouch/coins/rich
+	wrists = /obj/item/storage/keyring/heir
 	belt = /obj/item/storage/belt/rogue/leather
-	beltl = /obj/item/storage/keyring/heir
-	beltr = /obj/item/storage/belt/rogue/pouch/coins/rich
+	beltl = /obj/item/rogueweapon/huntingknife/idagger/steel
+	beltr = /obj/item/rogueweapon/scabbard/sheath/noble
 	backr = /obj/item/storage/backpack/rogue/satchel
-	id = /obj/item/clothing/ring/aalloy
+	id = /obj/item/clothing/ring/decrepit
 	backpack_contents = list(
 		/obj/item/reagent_containers/glass/bottle/rogue/berrypoison = 1,
 		/obj/item/reagent_containers/glass/bottle/rogue/strongstampoison = 1,
@@ -280,7 +289,7 @@
 		armor = /obj/item/clothing/suit/roguetown/shirt/dress/royal/princess
 		shirt = /obj/item/clothing/suit/roguetown/armor/leather/newkeep/heiress
 		shoes = /obj/item/clothing/shoes/roguetown/shortboots
-	if(SSmapping.config.map_name == "Desert Town")
+	if(SSmapping.current_map.map_name == "Desert Town")
 		cloak = /obj/item/clothing/cloak/raincloak/amir
 		shoes = /obj/item/clothing/shoes/roguetown/gladiator
 		if(should_wear_masc_clothes(H))
@@ -336,6 +345,7 @@
 	head = /obj/item/clothing/head/roguetown/circlet
 	mask = /obj/item/clothing/head/roguetown/roguehood/black
 	neck = /obj/item/storage/keyring/heir
+	wrists = /obj/item/lockpickring/mundane
 	belt = /obj/item/storage/belt/rogue/leather
 	beltl = /obj/item/quiver/sling/iron
 	beltr = /obj/item/gun/ballistic/revolver/grenadelauncher/sling
@@ -348,7 +358,7 @@
 	shoes = /obj/item/clothing/shoes/roguetown/boots/leather/reinforced/short
 	armor = /obj/item/clothing/suit/roguetown/armor/longcoat
 	cloak = /obj/item/clothing/cloak/shadowcloak
-	if(SSmapping.config.map_name == "Desert Town")
+	if(SSmapping.current_map.map_name == "Desert Town")
 		cloak = /obj/item/clothing/cloak/raincloak/amir
 		shoes = /obj/item/clothing/shoes/roguetown/gladiator
 		if(should_wear_masc_clothes(H))
@@ -366,7 +376,9 @@
 			head = /obj/item/clothing/head/roguetown/circlet
 	backpack_contents = list(
 		/obj/item/storage/belt/rogue/pouch/coins/rich = 1,
-		/obj/item/lockpickring/mundane = 1)
+		/obj/item/rogueweapon/scabbard/sheath/noble = 1,
+		/obj/item/rogueweapon/huntingknife/idagger/steel = 1,
+	)
 
 
 
@@ -443,9 +455,11 @@
 
 
 /datum/status_effect/buff/champion/on_creation()
-	spawn(5) // sob doesnt work without this??
-		examine_text = "<font color='yellow'>SUBJECTPRONOUN is the Champion Of [owner.mind.ward.real_name]!</font>"
+	addtimer(CALLBACK(src, PROC_REF(build_examine_text)), 5)
 	return ..()
+
+/datum/status_effect/buff/champion/proc/build_examine_text()
+	examine_text = "<font color='yellow'>SUBJECTPRONOUN is the Champion Of [owner.mind.ward.real_name]!</font>"
 
 /datum/status_effect/buff/champion/tick()
 	for (var/mob/living/carbon/H in view(5, owner))

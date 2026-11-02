@@ -1,7 +1,8 @@
 GLOBAL_LIST_INIT(character_accents, list("No accent",
 	"Dwarf accent",
 	"Dwarf Gibberish accent",
-	"Dark Elf accent",
+	"Otavan accent",
+	"Otavan accent(light)",
 	"Elf accent",
 	"Grenzelhoft accent",
 	"North Etruscan accent",
@@ -18,13 +19,21 @@ GLOBAL_LIST_INIT(character_accents, list("No accent",
 	"Slopes accent",
 	"Saut al-Atash accent",
 	"Posh accent",
-	"Valley accent",
+	"Gallant accent",
 	"Kazengun accent",
 	"Xinyi accent",
 	"Pui-Maen accent",
 	"Avar accent",
 	"Pirate accent",
 	"Low-Town accent"))
+
+GLOBAL_LIST_INIT(character_mannerisms, list(
+	"No mannerism",
+	"Nervous Stutter",
+	"Stutter",
+	"Heavy Stutter",
+	"Lisp",
+	"Hesitant"))
 
 // Global mapping of accent names to their font span lists
 GLOBAL_LIST_INIT(accent_spans, list(
@@ -36,3 +45,4 @@ GLOBAL_LIST_INIT(accent_spans, list(
 
 /mob/living/carbon/human
 	var/char_accent = "No accent"
+	var/char_mannerism = "No mannerism"

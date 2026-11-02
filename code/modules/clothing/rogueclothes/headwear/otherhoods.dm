@@ -11,7 +11,6 @@
 	dynamic_hair_suffix = ""
 	max_integrity = 80
 	armor = ARMOR_CLOTHING
-	prevent_crits = list(BCLASS_TWIST)
 	anvilrepair = null
 	blocksound = SOFTHIT
 	nudist_approved = TRUE
@@ -129,6 +128,7 @@
 	min_cold_protection_temperature = BODYTEMP_COLD_LEVEL_ONE_MAX
 	heat_protection = HEAD
 	max_heat_protection_temperature = BODYTEMP_HEAT_LEVEL_ONE_MAX
+	fiber_salvage = FALSE
 
 /obj/item/clothing/head/roguetown/jester
 	name = "jester's hat"
@@ -147,7 +147,7 @@
 /obj/item/clothing/head/roguetown/jester/update_icon()
 	cut_overlays()
 	if(get_detail_tag())
-		var/mutable_appearance/pic = mutable_appearance(icon(icon, "[icon_state][detail_tag]"))
+		var/mutable_appearance/pic = mutable_appearance(icon(icon, "[get_detail_state(icon_state)][detail_tag]"))
 		pic.appearance_flags = RESET_COLOR
 		if(get_detail_color())
 			pic.color = get_detail_color()
@@ -177,6 +177,7 @@
 		flags_inv &= ~HIDE_HEADTOP
 	else
 		flags_inv |= HIDE_HEADTOP
+	persist_inv_flags(HIDE_HEADTOP)
 	user.update_inv_head()
 	user.update_fov_angles()
 	user.update_vision_cone()

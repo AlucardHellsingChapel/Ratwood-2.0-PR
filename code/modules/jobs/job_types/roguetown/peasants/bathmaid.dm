@@ -25,7 +25,7 @@
 	advjob_examine = TRUE
 	cmode_music = 'sound/music/cmode/towner/combat_towner.ogg'
 	social_rank = SOCIAL_RANK_PEASANT
-	job_traits = list(TRAIT_EMPATH, TRAIT_GOODLOVER, TRAIT_HOMESTEAD_EXPERT)
+	job_traits = list(TRAIT_EMPATH, TRAIT_GOODLOVER, TRAIT_HOMESTEAD_EXPERT, TRAIT_BATHHOUSE_DANCER)
 	job_subclasses = list(
 		/datum/advclass/nightmaiden,
 		/datum/advclass/nightmaiden/concubine,
@@ -333,14 +333,4 @@
 
 /obj/item/soap/bath
 	name = "herbal soap"
-	desc = "A soap made from various herbs"
-	icon = 'icons/obj/items_and_weapons.dmi'
-	icon_state = "soap"
-	lefthand_file = 'icons/mob/inhands/equipment/custodial_lefthand.dmi'
-	righthand_file = 'icons/mob/inhands/equipment/custodial_righthand.dmi'
-	w_class = WEIGHT_CLASS_TINY
-	item_flags = NOBLUDGEON
-
-/obj/item/bath/soap/ComponentInitialize()
-	. = ..()
-	AddComponent(/datum/component/slippery, 80)
+	desc = "A soap made from various herbs."

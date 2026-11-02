@@ -181,6 +181,14 @@
 	desc = "I need a smoke. Gotta take the edge off."
 	icon_state = "smoker"
 
+/// CAFFIEND
+
+/datum/charflaw/addiction/caffiend
+	name = "Caffiend"
+	desc = "I can't start my day without a cup of tea or coffee."
+	time = 40 MINUTES
+	needsate_text = "I need a hot brew."
+
 /// GOD-FEARING
 
 /datum/charflaw/addiction/godfearing
@@ -259,4 +267,36 @@
 /atom/movable/screen/alert/status_effect/debuff/addiction/nympho
 	name = "Nymphomania"
 	desc = "I must make love. My loins burn with unsated desire."
+	icon_state = "nymphomaniac"
+
+/// For sex freaks. Manually raising their arousal prevents their vices from being sated. Try jerking off.
+/datum/status_effect/debuff/false_sensation
+	id = "false_sensation"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/false_sensation
+	effectedstats = null
+	duration = 2 MINUTES
+	status_type = STATUS_EFFECT_REFRESH
+
+/atom/movable/screen/alert/status_effect/debuff/false_sensation
+	name = "False Sensation"
+	desc = "My body is aflame, but it's not real. Only a real touch of passion will sate my urges."
+	icon_state = "debuff"
+
+/datum/charflaw/addiction/baothamarked
+	name = "Baothan Marked"
+	desc = "I've been branded by a Baothan mark."
+	time = 45 MINUTES
+	needsate_text = "My brand burns painfully."
+	sated_text = "The brand's glow lessens, relief washing over me..."
+	stress_event = /datum/stressevent/vice/baothamarked
+	debuff = /datum/status_effect/debuff/addiction/baothamarked
+
+/datum/status_effect/debuff/addiction/baothamarked
+	id = "addiction_baothamark"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/addiction/baothamarked
+	effectedstats = list(STATKEY_CON = -1, STATKEY_WIL = -1)
+
+/atom/movable/screen/alert/status_effect/debuff/addiction/baothamarked
+	name = "Baothan Mania"
+	desc = "That accursed rune. It burns brightly across my flesh, searing my loins with a painful desire for release."
 	icon_state = "nymphomaniac"

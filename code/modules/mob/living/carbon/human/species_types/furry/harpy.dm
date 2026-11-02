@@ -93,6 +93,8 @@
 		/datum/customizer/organ/penis/anthro,
 		/datum/customizer/organ/breasts/human,
 		/datum/customizer/organ/vagina/anthro,
+		/datum/customizer/bodypart_feature/pubes/feathered,
+		/datum/customizer/bodypart_feature/pits/feathered,
 		/datum/customizer/organ/snout/harpy,
 		/datum/customizer/organ/neck_feature/anthro,
 		)
@@ -108,6 +110,9 @@
 	body_markings = list(
 		/datum/body_marking/flushed_cheeks,
 		/datum/body_marking/eyeliner,
+		/datum/body_marking/tall_eyes,
+		/datum/body_marking/outer_tall_eyes,
+		/datum/body_marking/blank_face,
 		/datum/body_marking/tonage,
 		/datum/body_marking/socklonger,
 		/datum/body_marking/tips,
@@ -214,8 +219,7 @@
 	icon_state = null
 	body_parts_covered = FEET|LEGS
 	body_parts_inherent = FEET|LEGS
-	armor = list("blunt" = 90, "slash" = 90, "stab" = 50, "piercing" = 20, "fire" = 0, "acid" = 0)
-	prevent_crits = list(BCLASS_CUT, BCLASS_CHOP, BCLASS_STAB, BCLASS_BLUNT, BCLASS_TWIST)
+	armor = ARMOR_PADDED
 	blocksound = SOFTHIT
 	blade_dulling = DULLING_BASHCHOP
 	sewrepair = FALSE

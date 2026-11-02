@@ -61,7 +61,7 @@
 
 /datum/devotion/Destroy(force)
 	. = ..()
-	if (patron.type == /datum/patron/inhumen/zizo || patron.type == /datum/patron/divine/necra)
+	if (holder && istype(patron) && (patron.type == /datum/patron/inhumen/zizo || patron.type == /datum/patron/divine/necra))
 		REMOVE_TRAIT(holder, TRAIT_DEATHSIGHT, "devotion")
 	holder?.hud_used?.shutdown_bloodpool()
 	holder?.devotion = null
@@ -166,6 +166,8 @@
 						continue
 
 					var/obj/effect/proc_holder/spell/newspell = new spell_type
+					if(istype(patron, /datum/patron/divine/xylix) && newspell.miracle)
+						newspell.mute_allowed = TRUE
 					if(!silent)
 						to_chat(holder, span_boldnotice("I have unlocked a new spell: [newspell]"))
 					holder.mind.AddSpell(newspell, holder)
@@ -293,7 +295,7 @@
 
 /mob/living/carbon/human/proc/changevoice()
 	set name = "Change Second Voice (Can only use Once!)"
-	set category = "Memory"
+	set category = "IC"
 
 	var/newcolor = input(src, "Choose your character's SECOND voice color:", "VIRTUE","#a0a0a0") as color|null
 	if(newcolor)
@@ -305,7 +307,7 @@
 
 /mob/living/carbon/human/proc/swapvoice()
 	set name = "Swap Voice"
-	set category = "Memory"
+	set category = "IC"
 
 	if(!second_voice)
 		to_chat(src, span_info("I haven't decided on my second voice yet."))
@@ -321,7 +323,7 @@
 
 /mob/living/carbon/human/proc/toggleblindness()
 	set name = "Toggle Colorblindness"
-	set category = "Memory"
+	set category = "IC"
 
 	if(!get_client_color(/datum/client_colour/monochrome))
 		add_client_colour(/datum/client_colour/monochrome)
@@ -330,10 +332,24 @@
 
 /mob/living/carbon/human/proc/togglecombatawareness()
 	set name = "Toggle Combat Awareness"
-	set category = "Memory"
+	set category = "IC"
 
 	if(HAS_TRAIT(src, TRAIT_COMBAT_AWARE))
 		REMOVE_TRAIT(src, TRAIT_COMBAT_AWARE, TRAIT_VIRTUE)
 	else
 		ADD_TRAIT(src, TRAIT_COMBAT_AWARE, TRAIT_VIRTUE)
 	to_chat(src, "I will see [HAS_TRAIT(src, TRAIT_COMBAT_AWARE) ? "more" : "less"] combat information now.")
+
+GLOBAL_LIST_EMPTY(miracle_tiers)
+
+/proc/get_miracle_tier(miracle_type)
+	if(!length(GLOB.miracle_tiers))
+		for(var/patron_key in GLOB.patronlist)
+			var/datum/patron/patron = GLOB.patronlist[patron_key]
+			if(!islist(patron.miracles))
+				continue
+			for(var/mtype in patron.miracles)
+				var/tier = patron.miracles[mtype]
+				if(isnull(GLOB.miracle_tiers[mtype]) || tier < GLOB.miracle_tiers[mtype])
+					GLOB.miracle_tiers[mtype] = tier
+	return GLOB.miracle_tiers[miracle_type]

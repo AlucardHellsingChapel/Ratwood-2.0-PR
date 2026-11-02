@@ -24,6 +24,23 @@
 /obj/structure/flora/roguetree/attack_right(mob/user)
 	handle_special_items_retrieval(user, src)
 
+/obj/structure/flora/roguetree/attackby(obj/item/I, mob/living/user, params)
+	if(!isliving(user) || user.used_intent.blade_class != BCLASS_CHOP)
+		return ..()
+	var/mob/living/L = user
+	if(L.client && !L.client.prefs?.autowoodcut)
+		return ..()
+	if(user.doing)
+		return ..()
+	user.doing = FALSE
+	while(!QDELETED(src) && user.Adjacent(src))
+		if((L.energy > 0) && do_after(user, 1.5 SECONDS, TRUE, src))
+			if(QDELETED(src))
+				break
+			..()
+		else
+			break
+
 /obj/structure/flora/roguetree/attacked_by(obj/item/I, mob/living/user)
 	var/was_destroyed = obj_destroyed
 	. = ..()
@@ -107,6 +124,7 @@
 
 /obj/structure/flora/roguetree/evil/Destroy()
 	soundloop.stop()
+	QDEL_NULL(soundloop)
 	if(controller)
 		controller.endvines()
 		controller.tree = null
@@ -351,51 +369,15 @@
 	static_debris = list(/obj/item/grown/log/tree = 1)
 	climb_offset = 14
 	stump_type = FALSE
-	hidingspot = TRUE
-	/// So we can find them with fixed eye search
-	var/mob/living/hiddenguy = null
 
 /obj/structure/flora/roguetree/stump/log/Initialize(mapload)
 	. = ..()
 	icon_state = "log[rand(1,2)]"
 
-/obj/structure/flora/roguetree/stump/log/examine(mob/user)
-	. = ..()
-	. += span_info("Some structures can be used as hiding places. Toggle the 'SNEAK' button on your HUD, then click the structure to hide in it. You can stop hiding by clicking the structure again, or by moving out of it.")
-
-/obj/structure/flora/roguetree/stump/log/attack_hand(mob/user)
-	if(isliving(user))
-		if(user.m_intent == MOVE_INTENT_SNEAK)
-			hideinside(user)
-			return
-
-/obj/structure/flora/roguetree/stump/log/proc/hideinside(mob/living/user)
-	var/sneak_level = user.get_skill_level(/datum/skill/misc/sneaking) || 0
-	var/sneaktime = max(10, 50 - (sneak_level * 10)) // Hard caps at 1 second at Expert and above.
-	if(user.loc == src)
-		unhide(user)
-		return
-	if(occupied)
-		to_chat(user, span_warning("Someone is already hiding inside [src]!"))
-		return
-	if(!do_after(user, sneaktime, src))
-		return
-	user.forceMove(src)
-	occupied = TRUE
-	hiddenguy = user
-	to_chat(user, span_warning("I hide inside [src]!"))
-
-/obj/structure/flora/roguetree/stump/log/proc/unhide(mob/living/user)
-	var/turf/T = get_turf(src)
-	if(!T) return
-	user.forceMove(T)
-	occupied = FALSE
-	hiddenguy = null
-	to_chat(user, span_warning("I come out from inside [src]!"))
-
-/obj/structure/flora/roguetree/stump/log/relaymove(mob/user)
-	if(user.loc == src)
-		unhide(user)
+	AddComponent(/datum/component/hiding_spot, \
+		"Someone is already hiding inside %LOCATION!", \
+		"I hide inside %LOCATION!", \
+		"I come out from inside %LOCATION!")
 
 //newbushes
 
@@ -409,6 +391,15 @@
 	max_integrity = 2
 	blade_dulling = DULLING_CUT
 	debris = list(/obj/item/natural/fibers = 1)
+	plane = FLOOR_PLANE
+	var/list/bush_stuck = list()	// handles mobility impairment in-tile
+
+/obj/structure/flora/roguegrass/proc/release_bush_stuck(mob/living/L)	// Helps you get stuck in a feature for a bit. Usual slowdown is applied after you leave the tile, this is on the actual tile.
+	if(!L)
+		return
+
+	bush_stuck -= L
+	L.mobility_flags |= MOBILITY_MOVE
 
 /obj/structure/flora/roguegrass/spark_act()
 	fire_act()
@@ -427,7 +418,21 @@
 
 /obj/structure/flora/roguegrass/verdant/Initialize(mapload)
 	. = ..()
-	icon_state = "sparsegrass_[rand(1, 3)]"
+	if(prob(60))
+		icon_state = "sparsegrass_[rand(1, 3)]"
+	else
+		icon_state = "fullgrass_[rand(1, 3)]"
+
+/obj/structure/flora/roguegrass/reedbush
+	name = "reed bush"
+	icon = 'icons/obj/flora/ausflora.dmi'
+	icon_state = "reedbush_1"
+	max_integrity = 1
+	plane = GAME_PLANE_UPPER // the default for flora so it conceals things as intended
+
+/obj/structure/flora/roguegrass/reedbush/Initialize(mapload)
+	. = ..()
+	icon_state = "reedbush_[rand(1, 4)]"
 
 /obj/structure/flora/roguegrass/water
 	name = "grass"
@@ -443,9 +448,13 @@
 	max_integrity = 10
 	layer = 4.1
 	blade_dulling = DULLING_CUT
+	plane = GAME_PLANE_UPPER // the default for flora so it conceals things as intended
 
 /obj/structure/flora/roguegrass/water/update_icon()
 	dir = pick(GLOB.cardinals)
+
+/obj/structure/flora/roguegrass/water/reeds/update_icon()
+	dir = pick(GLOB.alldirs)
 
 /datum/component/roguegrass/Initialize()
 	RegisterSignal(parent, list(COMSIG_MOVABLE_CROSSED), PROC_REF(Crossed))
@@ -459,7 +468,7 @@
 			return
 		else
 			if(!(HAS_TRAIT(L, TRAIT_AZURENATIVE) && L.m_intent != MOVE_INTENT_RUN))
-				playsound(A.loc, "plantcross", 100, FALSE, -1)
+				playsound(A.loc, "plantcross", 80, FALSE, -1)
 			var/oldx = A.pixel_x
 			animate(A, pixel_x = oldx+1, time = 0.5)
 			animate(pixel_x = oldx-1, time = 0.5)
@@ -470,7 +479,7 @@
 
 /obj/structure/flora/roguegrass/bush
 	name = "bush"
-	desc = "A bush. It's crawling with spiders, but maybe there’s something useful inside..."
+	desc = "A bush. It's crawling with spiders, but maybe there's something useful inside..."
 	icon_state = "bush2"
 	layer = ABOVE_ALL_MOB_LAYER
 	var/res_replenish
@@ -480,14 +489,15 @@
 	climbable = FALSE
 	dir = SOUTH
 	debris = list(/obj/item/natural/fibers = 1, /obj/item/grown/log/tree/stick = 1, /obj/item/natural/thorn = 2)
+	plane = GAME_PLANE_UPPER // the default for flora so it conceals things as intended
 	var/list/looty = list()
 	var/bushtype
-	var/mob/living/hiddenguy = null
 
 /obj/structure/flora/roguegrass/bush/Initialize(mapload)
+	AddComponent(/datum/component/hiding_spot)
 	if(isnull(bushtype))
 		var/area/rogue/bush_area = get_area(src)
-		if(!bush_area.town_area)
+		if(!istype(bush_area) || !bush_area.town_area)
 			if(prob(88))
 				bushtype = pickweight(list(/obj/item/reagent_containers/food/snacks/grown/berries/rogue=5,
 						/obj/item/reagent_containers/food/snacks/grown/berries/rogue/poison=3,
@@ -508,18 +518,28 @@
 
 /obj/structure/flora/roguegrass/bush/Crossed(atom/movable/AM)
 	..()
-	if(isliving(AM))
-		var/mob/living/L = AM
-		if(L.m_intent == MOVE_INTENT_RUN && (L.mobility_flags & MOBILITY_STAND))
+
+	if(!isliving(AM))
+		return
+
+	var/mob/living/L = AM
+
+	if(L.mobility_flags & MOBILITY_STAND)
+		var/stuck_time = max(1, 18 - round(L.STASTR * 0.6))
+
+		bush_stuck[L] = TRUE
+		L.mobility_flags &= ~MOBILITY_MOVE
+
+		addtimer(CALLBACK(src, PROC_REF(release_bush_stuck), L), stuck_time)
+
+		if(L.m_intent == MOVE_INTENT_RUN || (L.buckled)) // running or riding brings injury since they sidestep the slowdown
 			if(!ishuman(L))
 				to_chat(L, span_warning("I'm cut on a thorn!"))
 				L.apply_damage(5, BRUTE)
-
 			else
 				var/mob/living/carbon/human/H = L
-				if(prob(20))
+				if(prob(25))
 					if(!HAS_TRAIT(src, TRAIT_PIERCEIMMUNE))
-//						H.throw_alert("embeddedobject", /atom/movable/screen/alert/embeddedobject)
 						var/obj/item/bodypart/BP = pick(H.bodyparts)
 						var/obj/item/natural/thorn/TH = new(src.loc)
 						BP.add_embedded_object(TH, silent = TRUE)
@@ -530,14 +550,33 @@
 					to_chat(H, span_warning("A thorn [pick("slices","cuts","nicks")] my [BP.name]."))
 					BP.receive_damage(10)
 
+
+/obj/structure/flora/roguegrass/bush/CanAStarPass(ID, travel_dir, caller)
+	if(ismovableatom(caller))
+		var/atom/movable/mover = caller
+		if(mover.pass_flags & PASSGRILLE)
+			return TRUE
+	if(travel_dir == dir)
+		return FALSE // just don't even try, not even if you can climb it
+	return ..()
+
+/obj/structure/flora/roguegrass/bush/CanPass(atom/movable/mover, turf/target)
+	..()
+	if(istype(mover) && (mover.pass_flags & PASSGRILLE))
+		return 1
+	if(isliving(mover) && bush_stuck[mover])
+		if(get_turf(mover) == loc && target != loc)
+			return FALSE
+	return 1
+
 /obj/structure/flora/roguegrass/bush/attack_hand(mob/user)
+	. = ..()
+	if(.)
+		return
 	if(isliving(user))
 		var/mob/living/L = user
 		user.changeNext_move(CLICK_CD_INTENTCAP)
 		playsound(src.loc, "plantcross", 50, FALSE, -1)
-		if(user.m_intent == MOVE_INTENT_SNEAK)
-			hideinside(user)
-			return
 		if(do_after(L, SEARCHTIME, target = src))
 			if(!looty.len && (world.time > res_replenish))
 				loot_replenish()
@@ -556,60 +595,10 @@
 			if(!looty.len)
 				to_chat(user, span_warning("Picked clean... I should try later."))
 
-/obj/structure/flora/roguegrass/bush/examine(mob/user)
-	. = ..()
-	. += span_info("Some structures can be used as hiding places. Toggle the 'SNEAK' button on your HUD, then click the structure to hide in it. You can stop hiding by clicking the structure again, or by moving out of it.")
-
-/obj/structure/flora/roguegrass/bush/proc/hideinside(mob/living/user)
-	var/sneak_level = user.get_skill_level(/datum/skill/misc/sneaking) || 0
-	var/sneaktime = max(10, 50 - (sneak_level * 10)) // Hard caps at 1 second at Expert and above.
-	if(user.loc == src)
-		unhide(user)
-		return
-	if(occupied)
-		to_chat(user, span_warning("Someone is already hiding in [src]!"))
-		return
-	if(!do_after(user, sneaktime, src))
-		return
-	user.forceMove(src)
-	occupied = TRUE
-	hiddenguy = user
-	to_chat(user, span_warning("I hide in [src]!"))
-
-/obj/structure/flora/roguegrass/bush/proc/unhide(mob/living/user)
-	var/turf/T = get_turf(src)
-	if(!T) return
-	user.forceMove(T)
-	occupied = FALSE
-	hiddenguy = null
-	to_chat(user, span_warning("I come out from [src]!"))
-
-/obj/structure/flora/roguegrass/bush/relaymove(mob/user)
-	if(user.loc == src)
-		unhide(user)
-
 /obj/structure/flora/roguegrass/bush/update_icon()
 	icon_state = "bush[rand(2, 4)]"
 
-/obj/structure/flora/roguegrass/bush/CanAStarPass(ID, travel_dir, caller)
-	if(occupied)
-		return FALSE
-	if(ismovableatom(caller))
-		var/atom/movable/mover = caller
-		if(mover.pass_flags & PASSGRILLE)
-			return TRUE
-	if(travel_dir == dir)
-		return FALSE // just don't even try, not even if you can climb it
-	return ..()
 
-/obj/structure/flora/roguegrass/bush/CanPass(atom/movable/mover, turf/target)
-	if(occupied)
-		return FALSE
-	if(istype(mover) && (mover.pass_flags & PASSGRILLE))
-		return 1
-	if(get_dir(loc, target) == dir)
-		return 0
-	return 1
 
 /obj/structure/flora/roguegrass/bush/westleach
 	name = "westleach bush"
@@ -630,7 +619,7 @@
 
 /obj/structure/flora/roguegrass/bush/wall
 	name = "great bush"
-	desc = "A bush. This one’s roots are thick enough to block the way."
+	desc = "A bush. This one's roots are thick enough to block the way."
 	opacity = TRUE
 	density = TRUE
 	climbable = FALSE
@@ -805,7 +794,72 @@
 
 /obj/structure/flora/roguegrass/thorn_bush/update_icon()
 	icon_state = "thornbush"
-//WIP
+
+/obj/structure/flora/roguegrass/thorn_bush/Crossed(atom/movable/AM)
+	..()
+	if(!isliving(AM))
+		return
+
+	var/mob/living/L = AM
+
+	// Small critters can zoom past.
+	if(L.mob_size <= MOB_SIZE_SMALL)
+		return
+
+	// Dense thorn bushes briefly tangle anything large enough to trigger them.
+	L.Immobilize(max(0, 36 - L.STASTR * 2))
+
+	// Non-carbon mobs just take basic thorn damage. Another size check since the previous doesnt catch damage for some reason.
+	if(!iscarbon(L))
+		to_chat(L, span_warning("I'm cut on a thorn!"))
+		L.apply_damage(5, BRUTE)
+		return
+
+	var/mob/living/carbon/human/H = L
+
+	// Dendor curse causes a guaranteed thorn embedding.
+	if(HAS_TRAIT(H, TRAIT_CURSE_DENDOR))
+		var/obj/item/bodypart/BP = pick(H.bodyparts)
+		var/obj/item/natural/thorn/TH = new(src.loc)
+		BP.add_embedded_object(TH, silent = TRUE)
+		BP.receive_damage(10)
+		to_chat(H, span_danger("\A [TH] impales my [BP.name]!"))
+		return
+
+	// Kneestinger immunity prevents the thorn effects unless cursed.
+	if(HAS_TRAIT(H, TRAIT_KNEESTINGER_IMMUNITY))
+		return
+	
+	// Riding movestop and extra damage since it sidesteps stun. Galloping through thorn bushes shouldnt be the play. Riding skill gives a chance to escape this fate
+	if(H.buckled)
+		var/obj/item/bodypart/BP = pick(H.bodyparts)
+		to_chat(H, span_warning("My [BP.name] snags on a thorn."))
+		BP.receive_damage(10)
+		var/riding_level = H.get_skill_level(/datum/skill/misc/riding)
+		if(HAS_TRAIT(H, TRAIT_STEPPE_RIDER))
+			riding_level += 3
+		if(prob(100 - (riding_level * 5)))
+			to_chat(H, span_danger("My mount goes mad with pain!"))
+			H.unbuckle_mob()
+			H.Paralyze(10)
+
+	// Chance to embed a thorn, reduced by LUCK.
+	if(prob(25 - H.STALUC))
+		if(HAS_TRAIT(H, TRAIT_PIERCEIMMUNE))
+			return
+
+		var/obj/item/bodypart/BP = pick(H.bodyparts)
+		var/obj/item/natural/thorn/TH = new(src.loc)
+		BP.add_embedded_object(TH, silent = TRUE)
+		BP.receive_damage(10)
+		to_chat(H, span_danger("\A [TH] impales my [BP.name]!"))
+		return
+
+	// Otherwise, just take a normal cut.
+	var/obj/item/bodypart/BP = pick(H.bodyparts)
+	to_chat(H, span_warning("A thorn [pick("slices", "cuts", "nicks")] my [BP.name]."))
+	BP.receive_damage(10)
+
 
 // fyrituis bush -- STONEKEEP PORT
 /obj/structure/flora/roguegrass/pyroclasticflowers
@@ -1055,6 +1109,7 @@
 	mush_animate = FALSE
 
 /obj/structure/flora/rogueshroom/unhappy/random
+	mush_light_power = 0 // don't try to make a light for us, we will just be deleted
 
 /obj/structure/flora/rogueshroom/unhappy/random/Initialize(mapload)
 	. = ..()
@@ -1067,10 +1122,10 @@
 	)
 	var/mushroom_type = pickweight(mushroom_types)
 	new mushroom_type(loc)
-	qdel(src)
+	return INITIALIZE_HINT_QDEL
 
-/obj/structure/flora/rogueshroom/unhappy/New(loc)
-	..()
+/obj/structure/flora/rogueshroom/unhappy/Initialize(mapload)
+	. = ..()
 	if(mush_light_power > 0)
 		set_light(mush_light_range, mush_light_range, mush_light_power, l_color = mush_light_color)
 
@@ -1098,8 +1153,8 @@
 	. = ..()
 	icon_state = "happymush[rand(1,5)]"
 
-/obj/structure/flora/rogueshroom/happy/New(loc)
-	..()
+/obj/structure/flora/rogueshroom/happy/Initialize(mapload)
+	. = ..()
 	set_light(3, 3, 3, l_color ="#5D3FD3")
 
 /obj/structure/flora/rogueshroom/unhappy/metal
@@ -1131,8 +1186,8 @@
 	desc = "A cluster of mushrooms native to the underdark."
 	icon_state = "mushroomclusterunhappy"
 
-/obj/structure/flora/mushroomcluster/New(loc)
-	..()
+/obj/structure/flora/mushroomcluster/Initialize(mapload)
+	. = ..()
 	set_light(1.5, 1.5, 1.5, l_color ="#5D3FD3")
 
 /obj/structure/flora/tinymushrooms
@@ -1184,12 +1239,15 @@
 	if(isliving(user) && user.mind)
 		user.mind.add_sleep_experience(/datum/skill/magic/druidic, 20)
 	return TRUE
-//A smattering of jungle-themed assets
+
+//A smattering of jungle-themed assets. The default artstyle of SS13 is far too bright so they all have a color to darken them down to more of a roguetown pallette
 //trees
+
+#define COLOR_JUNGLE			"#9bb6ae"
 
 /obj/structure/flora/roguetree/jungle//version with mechanics this time
 	name = "jungle tree"
-	color = "#a7b5a9"
+	color = COLOR_JUNGLE
 	// desc = "Scant, precious shade."
 	stump_type = /obj/structure/flora/roguetree/stump/palm
 	icon = 'icons/obj/flora/jungletrees.dmi'
@@ -1221,7 +1279,7 @@
 /obj/structure/flora/roguegrass/bush/jungle
 	name = "jungle bush"
 	desc = ""
-	color = "#b9c4bd"
+	color = COLOR_JUNGLE
 	icon = 'icons/obj/flora/jungleflora.dmi'
 	icon_state = "bushb"
 
@@ -1239,7 +1297,7 @@
 	desc = "Haha, im in danger."
 
 /obj/structure/flora/roguegrass/bush/jungle/large
-	color = "#a7b5a9"
+	color = COLOR_JUNGLE
 	icon = 'icons/obj/flora/largejungleflora.dmi'
 	icon_state = "bush"
 	pixel_x = -16
@@ -1260,7 +1318,7 @@
 /obj/structure/flora/roguegrass/jungle
 	name = "jungle grass"
 	desc = ""
-	color = "#a7b5a9"
+	color = COLOR_JUNGLE
 	icon = 'icons/obj/flora/jungleflora.dmi'
 	icon_state = "grassa"
 

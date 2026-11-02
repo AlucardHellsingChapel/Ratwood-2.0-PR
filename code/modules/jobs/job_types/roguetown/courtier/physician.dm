@@ -47,6 +47,7 @@
 	subclass_skills = list(
 		/datum/skill/misc/reading = SKILL_LEVEL_MASTER,
 		/datum/skill/combat/polearms = SKILL_LEVEL_JOURNEYMAN, //same tier as other yeomen
+		/datum/skill/combat/swords = SKILL_LEVEL_JOURNEYMAN, //to properly wield a caneblade
 		/datum/skill/combat/wrestling = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/craft/alchemy = SKILL_LEVEL_MASTER,
 		/datum/skill/misc/athletics = SKILL_LEVEL_JOURNEYMAN,
@@ -63,6 +64,30 @@
 	name = "Physician"
 	jobtype = /datum/job/roguetown/physician
 
+/datum/advclass/physician/post_equip(mob/living/carbon/human/H)
+	. = ..()
+	var/list/mask_options = list(
+		"Original plague mask" = /obj/item/clothing/mask/rogue/physician,
+		"Head physician's plague mask" = /obj/item/clothing/mask/rogue/physician/head,
+		"Both (head physician's mask equipped)" = "both",
+	)
+	var/mask_choice = input(H, "Choose your plague mask.", "HEAD PHYSICIAN") as null|anything in mask_options
+	if(!mask_choice)
+		return
+
+	var/mask_type = mask_options[mask_choice]
+	if(mask_choice == "Both (head physician's mask equipped)")
+		var/obj/item/clothing/mask/original_mask = new /obj/item/clothing/mask/rogue/physician(H)
+		var/obj/item/storage/satchel = H.get_item_by_slot(SLOT_BACK_L)
+		if(!satchel || !SEND_SIGNAL(satchel, COMSIG_TRY_STORAGE_INSERT, original_mask, null, TRUE, TRUE))
+			original_mask.forceMove(get_turf(H))
+		mask_type = /obj/item/clothing/mask/rogue/physician/head
+
+	var/obj/item/clothing/mask/old_mask = H.wear_mask
+	if(old_mask)
+		H.dropItemToGround(old_mask, TRUE)
+	H.equip_to_slot_or_del(new mask_type(H), SLOT_WEAR_MASK, TRUE)
+
 /datum/outfit/job/roguetown/physician/basic/pre_equip(mob/living/carbon/human/H)
 	..()
 	H.adjust_blindness(-3)
@@ -76,9 +101,9 @@
 	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
 	belt = /obj/item/storage/belt/rogue/leather/black
 	beltl = /obj/item/storage/belt/rogue/surgery_bag/full/physician
-	beltr = /obj/item/storage/keyring/physician
+	beltr = /obj/item/rogueweapon/scabbard/sheath/courtphysician
 	id = /obj/item/scomstone/bad
-	r_hand = /obj/item/rogueweapon/woodstaff/quarterstaff/
+	r_hand = /obj/item/rogueweapon/sword/rapier/courtphysician
 	backl = /obj/item/storage/backpack/rogue/satchel/black
 	backpack_contents = list(
 		/obj/item/reagent_containers/glass/bottle/rogue/healthpot = 2,
@@ -86,6 +111,7 @@
 		/obj/item/reagent_containers/glass/bottle/waterskin = 1,
 		/obj/item/recipe_book/alchemy = 1,
 		/obj/item/mini_flagpole/apothecary = 1,
+		/obj/item/storage/keyring/physician = 1,
 	)
 	if(H.mind)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/diagnose/secular)

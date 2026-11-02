@@ -75,6 +75,20 @@
 /mob/living/proc/can_do_sex()
 	return TRUE
 
+/// Shared helper to describe pits, load bearing code (worst proc in the codebase)
+/datum/sex_controller/proc/get_armpit_description(mob/living/carbon/human/described)
+	var/datum/bodypart_feature/pits/pit_hair = described?.get_bodypart_feature_of_slot(BODYPART_FEATURE_PITS)
+	switch(pit_hair?.accessory_type)
+		if(/datum/sprite_accessory/pits/trim)
+			return pick("trimmed armpit", "stubbly armpit", "prickly armpit")
+		if(/datum/sprite_accessory/pits/moderate)
+			return pick("fluffy pit", "wispy-haired armpit", "downy armpit")
+		if(/datum/sprite_accessory/pits/hairy)
+			return pick("hairy pit", "unshaved pit", "bushy armpit")
+		if(/datum/sprite_accessory/pits/extreme)
+			return pick("jungle-bushed pit", "unkempt pit", "overgrown armpit")
+	return "armpit"
+
 /datum/sex_controller/proc/make_sucking_noise()
 	if (!user || QDELETED(user) || !istype(user))
 		return
@@ -151,10 +165,6 @@
 	volume_layer *= speed // speed is always between 1-5 (SEX_SPEED_MIN-SEX_SPEED_MAX)
 	playsound(target, pick('sound/misc/mat/saliva (1).ogg','sound/misc/mat/saliva (2).ogg','sound/misc/mat/saliva (3).ogg'), volume_layer, TRUE, -2, ignore_walls = FALSE)
 
-/datum/sex_controller/proc/chastitycourse_noise(mob/living/carbon/human/action_target) // for actions that involve moving a chastity device. Chance increases with force and speed.
-	modular_chastitycourse_noise(action_target)
-	return
-
 /datum/sex_controller/proc/try_do_pain_scream(mob/living/carbon/human/action_target, pain_amt) // for spiked chastity and other high-pain actions, try to make the target scream in pain. Chance increases with pain amount and action force.
 	if(!action_target || QDELETED(action_target))
 		return
@@ -177,29 +187,20 @@
 		return
 	action_target.emote("scream", forced = TRUE)
 	
-/mob/living/carbon/human/proc/try_impregnate(mob/living/carbon/human/wife)
+/mob/living/carbon/human/proc/try_impregnate(mob/living/carbon/human/wife, orifice = SEX_PART_CUNT)
 	var/obj/item/organ/testicles/testes = getorganslot(ORGAN_SLOT_TESTICLES)
-	if(!testes)
+	if(!testes || !wife || !is_virile())
+		return
+	if(orifice & SEX_PART_TAIL_MAW)
+		var/obj/item/organ/tail/manticore/tail = get_manticore_tail(wife)
+		if(tail)
+			tail.impregnation_probability = roll_organ_impregnation(tail, tail.fertility, tail.impregnation_probability)
 		return
 	var/obj/item/organ/vagina/vag = wife.getorganslot(ORGAN_SLOT_VAGINA)
 	if(!vag && !HAS_TRAIT(wife, TRAIT_BAOTHA_FERTILITY_BOON))
 		return
-	if(!is_virile())
-		return
 	if(vag)
-		if(!wife.is_fertile())
-			return
-		var/prob_for_impreg = vag.impregnation_probability
-		if(wife.sexcon.knotted_status) // if they're knotted, increased by two factor for dramatic impact
-			prob_for_impreg =  min(prob_for_impreg * 2, IMPREG_PROB_MAX)
-		if(HAS_TRAIT(wife, TRAIT_BAOTHA_FERTILITY_BOON))
-			prob_for_impreg =  min(prob_for_impreg * 2, IMPREG_PROB_MAX) //if female has baotha boon increase chances
-		if(prob(prob_for_impreg))
-			if(vag.be_impregnated(src))
-				record_round_statistic(STATS_IMPREGNATIONS)
-			vag.impregnation_probability = IMPREG_PROB_DEFAULT // Reset on success
-		else
-			vag.impregnation_probability = min(prob_for_impreg + IMPREG_PROB_INCREMENT, IMPREG_PROB_MAX)
+		vag.impregnation_probability = roll_organ_impregnation(vag, wife.is_fertile(SEX_PART_CUNT), vag.impregnation_probability)
 	else
 		var/prob_for_impreg = wife.mpreg_chance
 		if(wife.sexcon.knotted_status)
@@ -211,8 +212,35 @@
 			to_chat(wife, span_love("I feel a strange surge of warmth inside me... Am I pregnant?.."))
 			wife.mpreg = TRUE
 			record_round_statistic(STATS_IMPREGNATIONS)
+			wife.start_impregnation_lactation()
 		else
 			wife.mpreg_chance = min(prob_for_impreg + IMPREG_PROB_INCREMENT, IMPREG_PROB_MAX)
+
+/// Both reproductive organs use the same math
+/mob/living/carbon/human/proc/roll_organ_impregnation(obj/item/organ/reproductive_organ, fertile, current_probability)
+	if(!fertile || !ishuman(reproductive_organ?.owner))
+		return current_probability
+	var/mob/living/carbon/human/receiver = reproductive_organ.owner
+	var/chance = current_probability
+	if(receiver.sexcon.knotted_status)
+		chance = min(chance * 2, IMPREG_PROB_MAX)
+	if(HAS_TRAIT(receiver, TRAIT_BAOTHA_FERTILITY_BOON))
+		chance = min(chance * 2, IMPREG_PROB_MAX)
+	if(prob(chance))
+		if(reproductive_organ.be_impregnated(src))
+			record_round_statistic(STATS_IMPREGNATIONS)
+			receiver.start_impregnation_lactation()
+		return IMPREG_PROB_DEFAULT
+	return min(chance + IMPREG_PROB_INCREMENT, IMPREG_PROB_MAX)
+
+/// Only affects breasts set to lactate after impregnation, and only the ones present right now
+/mob/living/carbon/human/proc/start_impregnation_lactation()
+	var/obj/item/organ/breasts/breasts = has_breasts()
+	if(!breasts?.lactates_on_impregnation)
+		return
+	breasts.lactates_on_impregnation = FALSE
+	breasts.lactating = TRUE
+	to_chat(src, span_love("My breasts feel tender and heavy..."))
 
 /mob/living/carbon/human/proc/get_highest_grab_state_on(mob/living/carbon/human/victim)
 	var/grabstate = null
@@ -223,6 +251,29 @@
 		if(grabstate == null || l_grab.grab_state > grabstate)
 			grabstate = l_grab.grab_state
 	return grabstate
+
+//Used only for the rub ears action currently, changes messaging/arousal if target has nonhuman ears
+/mob/living/carbon/human/proc/has_nonhuman_ears()
+	if(HAS_TRAIT(src, TRAIT_KEENEARS))
+		return TRUE
+
+	var/obj/item/organ/ears/ears = getorganslot(ORGAN_SLOT_EARS)
+	if(!ears)
+		return FALSE
+
+	if(!ears.accessory_type)
+		return iself(src) || ishalfelf(src) || isdarkelf(src) || iswoodelf(src) || isgoblinp(src) || istabaxi(src) || iskobold(src) || isvulp(src) || islupian(src)
+
+	if(!ispath(ears.accessory_type, /datum/sprite_accessory/ears))
+		return FALSE
+
+	return TRUE
+
+/mob/living/carbon/human/proc/get_chest_word()
+	var/obj/item/organ/breasts/chest = getorganslot(ORGAN_SLOT_BREASTS)
+	if(chest?.is_pecs())
+		return "pecs"
+	return "breasts"
 
 /datum/sex_controller/proc/Adjacent_Or_Closet(atom/neighbor)
 	if(istype(user.loc, /obj/structure/closet) || istype(user.loc, /obj/structure/handcart) || istype(neighbor.loc, /obj/structure/closet) || istype(neighbor.loc, /obj/structure/handcart)) // within container

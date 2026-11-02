@@ -33,6 +33,8 @@ GLOBAL_LIST_EMPTY(prayers)
 	var/list/mob_traits
 	/// Assoc list of miracles it grants. Type = Cleric_Tier
 	var/list/miracles = list()
+	/// Energy colors assigned to this patron. Used for miracle/lay on hands color (But not the light because any other light color is awful)
+	var/energy_color = "#c42424"
 	/// List of words that this god considers profane. (Master for all faiths. Inhumen have their own list.)
 	var/list/profane_words = list("zizo","matthios","graggar","baotha","cock","dick","fuck","shit","pussy","cuck","cunt","asshole","pintle")
 
@@ -40,12 +42,14 @@ GLOBAL_LIST_EMPTY(prayers)
 	var/list/traits_tier = list()
 
 	var/datum/storyteller/storyteller
+	/// Common titles of the god - used for prayers
+	var/list/titles = list()
 
 /datum/patron/proc/on_gain(mob/living/pious)
 	for(var/trait in mob_traits)
 		ADD_TRAIT(pious, trait, "[type]")
 	if(istype(src, /datum/patron/divine/xylix) || istype(src, /datum/patron/inhumen/matthios))
-		pious.grant_language(/datum/language/thievescant)
+		pious.grant_language(/datum/language/thievescant, source = "[type]")
 	if(istype(src, /datum/patron/divine/xylix))
 		pious.verbs += /mob/living/carbon/human/proc/emote_ffsalute
 	if (HAS_TRAIT(pious, TRAIT_CABAL))
@@ -55,7 +59,7 @@ GLOBAL_LIST_EMPTY(prayers)
 	if (HAS_TRAIT(pious, TRAIT_CABAL))
 		pious.faction -= "cabal"
 	if(istype(src, /datum/patron/divine/xylix) || istype(src, /datum/patron/inhumen/matthios))
-		pious.remove_language(/datum/language/thievescant)
+		pious.remove_language(/datum/language/thievescant, source = "[type]")
 	if(istype(src, /datum/patron/divine/xylix))
 		pious.verbs -= /mob/living/carbon/human/proc/emote_ffsalute
 	for(var/trait in mob_traits)

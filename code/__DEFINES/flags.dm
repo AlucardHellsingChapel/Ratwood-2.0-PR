@@ -46,16 +46,17 @@ GLOBAL_LIST_INIT(bitflags, list(1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 204
 #define ON_BORDER_1					(1<<8)
 /// Prevent clicking things below it on the same turf eg. doors/ fulltile windows
 #define PREVENT_CLICK_UNDER_1		(1<<9)
-#define HOLOGRAM_1					(1<<10)
+/// is a hologram, not a real object
+#define HOLOGRAM_1					(1<<9)
 /// TESLA_IGNORE grants immunity from being targeted by tesla-style electricity
-#define TESLA_IGNORE_1				(1<<11)
+#define TESLA_IGNORE_1				(1<<10)
 ///Whether /atom/Initialize() has already run for the object
-#define INITIALIZED_1				(1<<12)
+#define INITIALIZED_1				(1<<11)
 /// was this spawned by an admin? used for stat tracking stuff.
-#define ADMIN_SPAWNED_1			    (1<<13)
+#define ADMIN_SPAWNED_1			    (1<<12)
 /// should not get harmed if this gets caught by an explosion?
-#define PREVENT_CONTENTS_EXPLOSION_1 (1<<14)
-#define HOARDMASTER_SPAWNED_1		(1<<15)
+#define PREVENT_CONTENTS_EXPLOSION_1 (1<<13)
+#define HOARDMASTER_SPAWNED_1		(1<<14)
 // figure out if thing came from a hoardmaster
 
 //turf-only flags
@@ -156,3 +157,7 @@ GLOBAL_LIST_INIT(bitflags, list(1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 204
 #define COMPONENT_ITEM_BLOCK_UNEQUIP (1<<2)
 #define COMPONENT_CANCEL_EMOTE (1<<3)
 
+// walking noise related flags
+#define STEPNOISE_ALL (1<<0)
+#define STEPNOISE_HEELS (1<<1)
+#define STEPNOISE_NONE (1<<2)
