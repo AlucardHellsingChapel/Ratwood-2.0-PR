@@ -186,6 +186,9 @@
 			if(istype(A, /obj/item/ammo_casing/caseless/bullet/lead/runelock/heavy) && !heavy_load)
 				to_chat(user, span_warning("This is a heavy sphere, [name] runes cannot provide enough energy to fire it."))
 				return
+			if(!istype(A, /obj/item/ammo_casing/caseless/bullet/lead/runelock/heavy) && heavy_load)
+				to_chat(user, span_warning("This is a light sphere, [name] runes would overload it if you tried to fire it."))
+				return
 			..()
 		else
 			to_chat(user, span_warning("I need to charge the runelock first!"))
@@ -229,7 +232,6 @@
 		explosion(src, light_impact_range = 2, heavy_impact_range = 1, smoke = FALSE, soundin = 'sound/misc/explode/bomb.ogg')
 		qdel(src)
 		return
-	damfactor = get_supercharge_damage_factor()
 	for(var/obj/item/ammo_casing/CB in get_ammo_list(FALSE, TRUE))
 		var/obj/projectile/bullet/firearm/BB = CB.BB
 		if(BB)
@@ -238,7 +240,6 @@
 			BB.damage *= damfactor * get_per_damage_scaling(user)
 	cocked = FALSE
 	update_icon()
-	damfactor = standard_damagemod
 	var/shoot_dir = get_dir(src, target)
 	new /obj/effect/temp_visual/small_smoke/gunsmoke(get_step(user, shoot_dir), shoot_dir)
 	..()
@@ -312,8 +313,6 @@
 	reload_stamina_cost = 80
 	can_spin = FALSE // No twirling a rifle around your finger.
 	heavy_load = TRUE // the one gun that fires heavy bullets
-	supercharge_damagemod = 2 // 2 times damage factor if using non heavy ammo (borrowed from others?)
-
 
 /obj/item/gun/ballistic/revolver/rune/twilight_runelock/rifle/getonmobprop(tag)
 	. = ..()
