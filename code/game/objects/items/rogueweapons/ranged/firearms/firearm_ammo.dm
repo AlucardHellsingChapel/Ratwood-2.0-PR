@@ -40,6 +40,7 @@
 
 /obj/item/ammo_casing
 	var/obj/item/quiver/twilight_bullet/runicbag/linked_bag = null
+	var/obj/item/storage/belt/rogue/leather/entropy_sphere_belt/linked_belt = null
 	var/breech_loaded = FALSE
 
 /**
@@ -257,13 +258,18 @@
 /obj/item/ammo_casing/caseless/bullet/lead/runelock/Destroy()
 	if(linked_bag)
 		linked_bag.unlink_casing(src)
+	if(linked_belt)
+		linked_belt.unlink_casing(src)
 	linked_bag = null
+	linked_belt = null
 	return ..()
 
 /obj/item/ammo_casing/caseless/bullet/lead/runelock/ready_proj(atom/target, mob/living/user, quiet, zone_override = "", atom/fired_from)
 	. = ..()
 	if(linked_bag && length(linked_bag.linked_ammo_types) < linked_bag.max_storage)
 		linked_bag.linked_ammo_types += type
+	if(linked_belt && length(linked_belt.linked_ammo_types) < linked_belt.max_storage)
+		linked_belt.linked_ammo_types += type
 
 /obj/item/ammo_casing/caseless/bullet/lead/runelock/equipped(mob/living/user)
 	if(ishuman(user))
@@ -566,7 +572,7 @@
 	if(user.energy < recall_energy_cost)
 		to_chat(user, span_warning("The runes on the lock flicker and die. I don't have the energy to recall them."))
 		return
-	var/type_name = (selected_type == ammo_type2) ? "blessed" : "runed"
+	var/type_name = (selected_type == ammo_type2) ? "ammo_type_name2" : "ammo_type_name1"
 	to_chat(user, span_notice("The runes on the lock flare as I call the [type_name] spheres home..."))
 	if(!do_after(user, 15 SECONDS, src))
 		to_chat(user, span_warning("My concentration breaks, and the runes go dark."))
@@ -650,7 +656,7 @@
 	
 
 /obj/item/quiver/twilight_bullet/runicbag/attackby(obj/item/A, mob/user, params)
-	if(istype(A, ammo_type2) || istype(A, ammo_type1))
+	if((has_types && ispath(A, ammo_type2)) || istype(A, ammo_type1))
 		if(eatarrow(A, user))
 			to_chat(user, span_notice("You insert \the [A] into \the [src]."))
 		else
@@ -659,7 +665,7 @@
 	return ..()
 
 /obj/item/quiver/twilight_bullet/runicbag/eatarrow(obj/A, loc)
-	if(!istype(A, ammo_type2) && !istype(A, ammo_type1))
+	if((!has_types || !ispath(A, ammo_type2)) && !istype(A, ammo_type1))
 		return FALSE
 	if(arrows.len >= max_storage)
 		return FALSE
@@ -675,7 +681,7 @@
 	return TRUE
 
 /obj/item/quiver/twilight_bullet/runicbag/proc/summon_round(sphere_type)
-	if(!ispath(sphere_type, ammo_type1) && !ispath(sphere_type, ammo_type2))
+	if(!ispath(sphere_type, ammo_type1) && (!has_types || !ispath(sphere_type, ammo_type2)))
 		return FALSE
 	if(arrows.len >= max_storage)
 		return FALSE

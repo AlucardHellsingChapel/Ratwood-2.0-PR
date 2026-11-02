@@ -21,9 +21,6 @@
 /obj/item/gun/ballistic/revolver/rune/proc/can_quick_load(mob/user)
 	return TRUE
 
-/obj/item/gun/ballistic/revolver/rune/Initialize(mapload)
-	. = ..()
-
 /obj/item/gun/ballistic/revolver/rune/proc/get_per_damage_scaling(mob/living/user)
 	if(!user || !per_scales_damage)
 		return 1
