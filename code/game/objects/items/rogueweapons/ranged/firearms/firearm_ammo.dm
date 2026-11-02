@@ -417,6 +417,7 @@
 	blessed = TRUE
 
 /obj/projectile/bullet/firearm/lead/runelock/on_hit(atom/target, blocked = FALSE)
+	. = ..()
 	if(ishuman(target))
 		var/mob/living/carbon/human/L = target
 		L.stamina_add(50)
@@ -447,6 +448,7 @@
 	blessed = TRUE
 
 /obj/projectile/bullet/firearm/lead/runelock/heavy/tracker/on_hit(atom/target, blocked = FALSE)
+	. = ..()
 	if(ishuman(target))
 		var/mob/living/carbon/human/L = target
 		L.apply_status_effect(/datum/status_effect/debuff/arbalest_hunt)
