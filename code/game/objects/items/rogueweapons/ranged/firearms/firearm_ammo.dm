@@ -460,7 +460,11 @@
 
 /obj/effect/decal/cleanable/food/arbalest_trail/Initialize(mapload)
 	. = ..()
-	addtimer(CALLBACK(src, PROC_REF(Destroy)), 10 MINUTES) // och look its self cleaning
+	addtimer(CALLBACK(src, PROC_REF(self_cleaning)), 10 MINUTES) // och look its self cleaning
+
+/obj/effect/decal/cleanable/food/arbalest_trail/proc/self_cleaning()
+	qdel(src)
+	
 
 /atom/movable/screen/alert/status_effect/debuff/arbalest_hunt
 	name = "Hunters Mark"
@@ -479,7 +483,7 @@
 	var/mob/living/carbon/human/L = usr
 	if(!istype(L))
 		return
-	if(do_after(L, 8 SECONDS))	
+	if(do_after(L, 10 SECONDS))	
 		L.remove_status_effect(/datum/status_effect/debuff/arbalest_hunt)
 
 
