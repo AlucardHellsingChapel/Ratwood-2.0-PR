@@ -349,6 +349,14 @@
 /datum/status_effect/debuff/psypowder/heavy
 	duration = 30 SECONDS
 
+/obj/item/ammo_casing/caseless/bullet/lead/runelock/heavy
+	name = "heavy runed sphere"
+	desc = "You shoudnt be seeing this."
+	projectile_type = /obj/projectile/bullet/firearm/lead/runelock/heavy
+	caliber = "runed_sphere"
+	icon_state = "musketball_runed"
+	max_integrity = 0
+
 /obj/projectile/bullet/firearm/lead/runelock/heavy // only shot by the rifle
 	name = "heavy runed sphere"
 	desc = "You shoudnt be seeing this."
@@ -377,12 +385,6 @@
 	blessed = TRUE
 	armor_penetration = PEN_NONE
 	ammo_type = /obj/item/ammo_casing/caseless/bullet/lead/runelock/heavy/blessed
-
-/obj/item/ammo_casing/caseless/bullet/lead/runelock/heavy/runed
-	name = "heavy runed sphere"
-	desc = "A small, perfectly round metal sphere covered in Psydonite runes. Lethal at high velocity."
-	projectile_type = /obj/projectile/bullet/firearm/lead/runelock/heavy/runed
-	icon_state = "musketball_runed"
 
 /obj/projectile/bullet/firearm/lead/runelock/heavy/runed
 	name = "heavy runed sphere"
@@ -432,7 +434,7 @@
 			L.devotion.update_devotion(-500) // half of T4 clerics
 		if(L.get_bloodpool())
 			L.adjust_bloodpool(-500) // half a normal vampire vita
-		to_chat(L, span_danger("You feel your energy rapidly drain away!"))
+		to_chat(L, span_danger("You feel as if you somehow became lesser!"))
 		
 
 /obj/item/ammo_casing/caseless/bullet/lead/runelock/heavy/tracker
