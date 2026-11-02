@@ -219,7 +219,7 @@
 	for(var/obj/item/ammo_casing/C as anything in linked_casings - arrows)
 		if(summoned >= affordable || arrows.len >= max_storage)
 			break
-		if(istype(C.loc, /obj/item/gun))
+		if(recursive_loc_check(C.loc, /obj/item/gun))
 			continue
 		qdel(C)
 		if(summon_round(ammo_type))
