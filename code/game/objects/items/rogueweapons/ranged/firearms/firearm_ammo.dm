@@ -346,7 +346,7 @@
 /obj/projectile/bullet/firearm/lead/runelock/heavy // only shot by the rifle
 	name = "heavy runed sphere"
 	desc = "You shoudnt be seeing this."
-	damage = 50
+	damage = 100
 	speed = 0.4 // a bit faster
 	icon_state = "musketball_runed"
 	max_range = 25 // be a sniper you alwys wished to be
@@ -365,7 +365,7 @@
 /obj/projectile/bullet/firearm/lead/runelock/heavy/blessed
 	name = "heavy blessed runed sphere"
 	desc = "A large, perfectly round sphere crafted from pure silver. These munitions are forged by the finest Otavan smiths and blessed personally by the Grandmaster. The expanded runework nessesites firing it from a rifle."
-	damage = 120 // 240 with the rifle mod
+	damage = 240
 	icon_state = "musketball_blessed"
 	silver = TRUE
 	blessed = TRUE
@@ -387,7 +387,7 @@
 /obj/projectile/bullet/firearm/lead/runelock/heavy/runed
 	name = "heavy runed sphere"
 	desc = "A large, perfectly round metal sphere covered in Psydonite runes. Lethal at high velocity."
-	damage = 45 // 90 with the rifle mod
+	damage = 90
 	icon_state = "musketball_runed"
 	armor_penetration = PEN_BSTEEL
 	ammo_type = /obj/item/ammo_casing/caseless/bullet/lead/runelock/heavy/runed
@@ -408,7 +408,7 @@
 /obj/projectile/bullet/firearm/lead/runelock/heavy/entropy
 	name = "entrophy sphere"
 	desc = "You feel lesser for even gazing at this."
-	damage = 60 // 120 with the rifle mod
+	damage = 120
 	icon_state = "musketball_blessed"
 	hitsound = 'sound/combat/hits/hi_bolt (2).ogg'
 	ammo_type = /obj/item/ammo_casing/caseless/bullet/lead/runelock/heavy/entropy
@@ -439,7 +439,7 @@
 /obj/projectile/bullet/firearm/lead/runelock/heavy/tracker
 	name = "mark"
 	desc = "You can't escape the hunters mark."
-	damage = 40 // 80 with the rifle mod
+	damage = 80
 	icon_state = "musketball_silver"
 	hitsound = 'sound/combat/hits/hi_bolt (2).ogg'
 	ammo_type = /obj/item/ammo_casing/caseless/bullet/lead/runelock/heavy/tracker
