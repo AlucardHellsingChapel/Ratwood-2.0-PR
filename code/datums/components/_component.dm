@@ -359,24 +359,18 @@
  */
 /datum/proc/GetExactComponent(datum/component/c_type)
 	RETURN_TYPE(c_type)
-	if(initial(c_type.dupe_mode) == COMPONENT_DUPE_ALLOWED || initial(c_type.dupe_mode) == COMPONENT_DUPE_SELECTIVE)
+	var/initial_type_mode = initial(c_type.dupe_mode)
+	if(initial_type_mode == COMPONENT_DUPE_ALLOWED || initial_type_mode == COMPONENT_DUPE_SELECTIVE)
 		stack_trace("GetComponent was called to get a component of which multiple copies could be on an object. This can easily break and should be changed. Type: \[[c_type]\]")
-	var/list/dc = datum_components
-	if(!dc)
+	var/list/all_components = datum_components
+	if(!all_components)
 		return null
-	var/component_entry = dc[c_type]
-	var/datum/component/C = null
-	if(islist(component_entry))
-		var/list/component_list = component_entry
-		if(length(component_list))
-			C = component_list[1]
-	else if(istype(component_entry, /datum/component))
-		C = component_entry
-	if(C)
-		if(C.type == c_type)
-			return C
+	var/datum/component/potential_component
+	if(length(all_components))
+		potential_component = all_components[c_type]
+	if(potential_component?.type == c_type)
+		return potential_component
 	return null
-
 
 /**
  * Get all components of a given type that are attached to this datum
@@ -547,8 +541,3 @@
  */
 /datum/component/ui_host()
 	return parent
-
-/// Registers multiple signals to the same proc.
-/datum/proc/RegisterSignals(datum/target, list/signal_types, proctype, override = FALSE)
-	for(var/signal_type in signal_types)
-		RegisterSignal(target, signal_type, proctype, override)

@@ -26,7 +26,6 @@
 #define POLL_IGNORE_DEATHKNIGHT_TARGET      "deathknight_target"
 #define POLL_IGNORE_DEATHKNIGHT             "deathknight"
 #define POLL_IGNORE_VL_SERVANT              "vl_servant"
-#define POLL_IGNORE_NOTORIOUS_BOUNTY			"notorious_bounty"
 
 GLOBAL_LIST_INIT(poll_ignore_desc, list(
 	POLL_IGNORE_SENTIENCE_POTION = "Sentience potion",
@@ -51,8 +50,7 @@ GLOBAL_LIST_INIT(poll_ignore_desc, list(
 	POLL_IGNORE_ACADEMY_WIZARD = "Academy Wizard Defender",
 	POLL_IGNORE_NECROMANCER_SKELETON = "Necromancer Skeleton",
 	POLL_IGNORE_MAGE_SUMMON = "Mage Summon",
-	POLL_IGNORE_VL_SERVANT = "Vampire Summon",
-	POLL_IGNORE_NOTORIOUS_BOUNTY = "Notorious Bounty Target"
+	POLL_IGNORE_VL_SERVANT = "Vampire Summon"
 ))
 GLOBAL_LIST_INIT(poll_ignore, init_poll_ignore())
 

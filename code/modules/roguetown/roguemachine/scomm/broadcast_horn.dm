@@ -43,7 +43,8 @@
 		return
 	if(!listening)
 		return
-	if(!(get_turf(speaker) in get_adjacent_turfs(src)))
+	var/turf/step_turf = get_step(get_turf(src), src.dir)
+	if(get_turf(speaker) != step_turf)
 		return
 	var/mob/living/carbon/human/H = speaker
 	var/usedcolor = H.voice_color
@@ -175,7 +176,6 @@
 
 /obj/structure/broadcast_horn/Destroy()
 	lose_hearing_sensitivity()
-	SSroguemachine.broadcaster_machines -= src
 	return ..()
 
 #undef TOWNER_BROADCAST_COST

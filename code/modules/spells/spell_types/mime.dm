@@ -6,8 +6,8 @@
 	summon_type = list(/obj/effect/forcefield/mime)
 	invocation_type = "emote"
 	invocation_emote_self = "<span class='notice'>I form a wall in front of myself.</span>"
-	summon_lifespan = 5 SECONDS
-	recharge_time = 10 SECONDS
+	summon_lifespan = 300
+	recharge_time = 300
 	clothes_req = FALSE
 	antimagic_allowed = TRUE
 	range = 0
@@ -28,18 +28,6 @@
 	invocation(usr) // force invocation because invocation() only gets called on a specific spell (not aoe_turf)
 	..()
 
-/obj/effect/proc_holder/spell/aoe_turf/conjure/mime_wall/cast(list/targets, mob/user = usr)
-	var/turf/center_turf = get_step(user, user.dir)
-	var/list/spawn_turfs = list(get_step(center_turf, turn(user.dir, 90)), center_turf, get_step(center_turf, turn(user.dir, -90)))
-	for(var/turf/spawn_turf as anything in spawn_turfs)
-		if(!istype(spawn_turf))
-			continue
-		if(!isclosedturf(spawn_turf) && !locate(/obj/effect/forcefield/mime) in spawn_turf)
-			var/obj/effect/forcefield/mime/mime_forcefield = new /obj/effect/forcefield/mime(spawn_turf)
-			if(summon_lifespan)
-				QDEL_IN(mime_forcefield, summon_lifespan)
-	return TRUE
-
 /obj/effect/proc_holder/spell/aoe_turf/conjure/mime_chair
 	name = "Invisible Chair"
 	desc = ""
@@ -47,9 +35,9 @@
 	panel = "Mime"
 	summon_type = list(/obj/structure/chair/mime)
 	invocation_type = "emote"
-	invocation_emote_self = "<span class='notice'>I conjure an invisible chair.</span>"
-	summon_lifespan = 30 SECONDS
-	recharge_time = 20 SECONDS
+	invocation_emote_self = "<span class='notice'>I conjure an invisible chair and sit down.</span>"
+	summon_lifespan = 250
+	recharge_time = 300
 	clothes_req = FALSE
 	antimagic_allowed = TRUE
 	range = 0
@@ -64,7 +52,7 @@
 		if(!HAS_TRAIT(usr, TRAIT_PERMAMUTE))
 			to_chat(usr, span_warning("I am not a mute!"))
 			return
-		invocations = list("pulls out an invisible chair.")
+		invocations = list("pulls out an invisible chair and sits down.")
 	else
 		invocation_type ="none"
 	invocation(usr)
@@ -76,16 +64,7 @@
 	for (var/obj/structure/chair/A in T)
 		if (is_type_in_list(A, summon_type))
 			A.setDir(user.dir)
-
-
-/obj/item/chair/mime
-	name = "invisible chair"
-	desc = ""
-	item_state = null
-	lefthand_file = null
-	righthand_file = null
-	alpha = 15
-	origin_type = /obj/structure/chair/mime
+			A.buckle_mob(user)
 
 
 /obj/effect/proc_holder/spell/targeted/mime/speak

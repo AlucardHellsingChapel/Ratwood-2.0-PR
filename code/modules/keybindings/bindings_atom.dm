@@ -24,7 +24,8 @@
 	if((movement_dir & EAST) && (movement_dir & WEST))
 		movement_dir &= ~(EAST|WEST)
 
-	movement_dir = user.camera_relative_dir(movement_dir)
+	if(user.dir != NORTH && movement_dir) //If we're not moving, don't compensate, as byond will auto-fill dir otherwise
+		movement_dir = turn(movement_dir, -dir2angle(user.dir)) //By doing this we ensure that our input direction is offset by the client (camera) direction
 
 	//Completely block movement. Useful so you can use keybinds that overlap with WASD
 	if(user.movement_blocked)
@@ -38,13 +39,6 @@
 		return !!movement_dir //true if there was actually any player input
 
 	return FALSE
-
-/// Offsets an input direction by the client (camera) direction. NONE is passed through, as byond would auto-fill dir otherwise.
-/client/proc/camera_relative_dir(direction)
-	SHOULD_BE_PURE(TRUE)
-	if(dir == NORTH || !direction)
-		return direction
-	return turn(direction, -dir2angle(dir))
 
 /client/proc/calculate_move_dir()
 	var/movement_dir = NONE

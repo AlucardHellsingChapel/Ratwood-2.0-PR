@@ -129,13 +129,11 @@
 		to_chat(src, span_danger("I am tipped over by [M]!"))
 		Paralyze(60, ignore_canstun = TRUE)
 		icon_state = "[initial(icon_state)]_tip"
-		addtimer(CALLBACK(src, PROC_REF(untip_check), M), 60)
+		spawn(60)
+			if(!stat && M)
+				icon_state = icon_living
 	else
 		..()
-
-/mob/living/simple_animal/hostile/retaliate/rogue/cow/proc/untip_check(mob/M)
-	if(!stat && M)
-		icon_state = icon_living
 
 /mob/living/simple_animal/hostile/retaliate/rogue/bull
 	icon = 'icons/roguetown/mob/monster/cow.dmi'
@@ -262,5 +260,9 @@
 	STASPD = 5
 	adult_growth = /mob/living/simple_animal/hostile/retaliate/rogue/bull
 
+/mob/living/simple_animal/hostile/retaliate/rogue/cow/test/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/ai_retaliate)
+	ai_controller.set_blackboard_key(BB_BASIC_FOODS, food_type)
 
 

@@ -10,7 +10,6 @@
 	resistance_flags = FLAMMABLE
 	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
 	sellprice = 8
-	dropshrink = 0.9
 
 /obj/item/natural/cured/essence
 	name = "essence of wilderness"
@@ -21,7 +20,6 @@
 	sellprice = 20
 	grid_height = 32
 	grid_width = 32
-	dropshrink = 0.6
 
 /obj/item/natural/fur
 	name = "fur"
@@ -33,6 +31,7 @@
 	resistance_flags = FLAMMABLE
 	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
 	color = "#5c5243"
+	sellprice = 18
 
 /obj/item/natural/fur/goat
 	desc = "from a gote."
@@ -75,7 +74,7 @@
 	icon_state = "wool2"
 	color = "#cecac4"
 
-/obj/item/natural/fur/raccoon
+/obj/item/natural/fur/raccoon	
 	desc = "from a raccoon."
 	icon_state = "pelt_raccoon"
 	color = null
@@ -91,6 +90,7 @@
 	resistance_flags = FIRE_PROOF
 	force = 0
 	throwforce = 0
+	sellprice = 10
 	var/storage_type = /datum/component/storage/concrete/roguetown/saddle
 
 /obj/item/natural/saddle/Initialize(mapload)
@@ -118,7 +118,6 @@
 	var/can_saddle = FALSE
 	var/obj/item/ssaddle
 	var/simple_detect_bonus = 0 // A flat percentage bonus to our ability to detect sneaking people only. Use in lieu of giving mobs huge STAPER bonuses if you want them to be observant.
-	var/list/broken_parts
 
 /obj/item/natural/bone
 	name = "bone"
@@ -139,6 +138,7 @@
 	name = "cured leather"
 	icon_state = "leather"
 	desc = "A hide piece that has been cured and may now be worked."
+	sellprice = 7
 	bundletype = /obj/item/natural/bundle/curred_hide
 
 /obj/item/natural/bundle/curred_hide
@@ -153,7 +153,6 @@
 	icon1step = 5
 	icon2 = "leatherroll2"
 	icon2step = 10
-	dropshrink = 0.9
 
 /obj/item/natural/cured/essence
 	name = "essence of wilderness"

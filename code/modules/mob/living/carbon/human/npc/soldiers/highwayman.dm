@@ -6,14 +6,11 @@ GLOBAL_LIST_INIT(highwayman_aggro, world.file2list("strings/rt/highwaymanaggroli
 	mode = NPC_AI_IDLE
 	faction = list("viking", "station")
 	ambushable = FALSE
-	dodgetime = 3 SECONDS
+	dodgetime = 30
 	flee_in_pain = TRUE
 	d_intent = INTENT_PARRY
 	possible_rmb_intents = list()
 	var/is_silent = FALSE /// Determines whether or not we will scream our funny lines at people.
-
-	//We're slightly smarter bandits than the peasant militia. 
-	smart_combatant = TRUE
 
 
 /mob/living/carbon/human/species/human/northern/highwayman/ambush

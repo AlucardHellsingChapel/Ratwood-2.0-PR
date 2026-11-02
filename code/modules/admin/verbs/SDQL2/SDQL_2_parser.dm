@@ -25,7 +25,7 @@
 //
 //	assignments			:	assignment [',' assignments]
 //	assignment			:	<variable name> '=' expression
-//	variable			:	<variable name> | variable '.' variable | variable '[' <list index> ']' [more list indexes] | '{' <ref as hex number> '}' | '(' expression ')' | call_function
+//	variable			:	<variable name> | variable '.' variable | variable '[' <list index> ']' | '{' <ref as hex number> '}' | '(' expression ')' | call_function
 //
 //	bool_expression		:	expression comparitor expression  [bool_operator bool_expression]
 //	expression			:	( unary_expression | '(' expression ')' | value ) [binary_operator expression]
@@ -340,7 +340,7 @@
 	return i
 
 
-//variable:	<variable name> | variable '.' variable | variable '[' <list index> ']' [more list indexes] | '{' <ref as hex number> '}' | '(' expression ')' | call_function
+//variable:	<variable name> | variable '.' variable | variable '[' <list index> ']' | '{' <ref as hex number> '}' | '(' expression ')' | call_function
 /datum/SDQL_parser/proc/variable(i, list/node)
 	var/list/L = list(token(i))
 	node[++node.len] = L
@@ -362,31 +362,30 @@
 
 		L[++L.len] = sub_expression
 
-	var/indexed = FALSE
-	while(TRUE)
-		if(token(i + 1) == "\[")
-			var/list/index_expression = list()
-			i = expression(i + 2, index_expression)
-			if(token(i) != "]")
-				return parse_error("Missing ] at the end of list access.")
+	if(token(i + 1) == ".")
+		L += "."
+		i = variable(i + 2, L)
 
-			L += "\["
-			L[++L.len] = index_expression
-			indexed = TRUE
-			continue
+	else if (token(i + 1) == "(") // OH BOY PROC
+		var/list/arguments = list()
+		i = call_function(i, null, arguments)
+		L += ":"
+		L[++L.len] = arguments
 
-		if(token(i + 1) == ".")
-			L += "."
-			return variable(i + 2, L)
+	else if (token(i + 1) == "\[")
+		var/list/expression = list()
+		i = expression(i + 2, expression)
+		if (token(i) != "]")
+			parse_error("Missing ] at the end of list access.")
 
-		if(!indexed && token(i + 1) == "(") // OH BOY PROC
-			var/list/arguments = list()
-			i = call_function(i, null, arguments)
-			L += ":"
-			L[++L.len] = arguments
-			return i
+		L += "\["
+		L[++L.len] = expression
+		i++
 
-		return i + 1
+	else
+		i++
+
+	return i
 
 
 //object_type:	<type path>

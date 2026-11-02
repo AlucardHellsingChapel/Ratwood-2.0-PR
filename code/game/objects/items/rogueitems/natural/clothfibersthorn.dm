@@ -157,7 +157,6 @@
 	bundletype = /obj/item/natural/bundle/cloth
 	sellprice = 4
 	detail_tag = "_soaked"
-	dropshrink = 0.9
 	var/wet = 0
 	/// Effectiveness when used as a bandage, how much it'll lower the bloodloss, bloodloss will get multiplied by this.
 	var/bandage_effectiveness = 0.5
@@ -439,7 +438,6 @@
 	icon2step = 10
 	grid_width = 32
 	grid_height = 32
-	dropshrink = 0.9
 
 /obj/item/natural/bundle/stick
 	name = "bundle of sticks"
@@ -526,7 +524,7 @@
 /obj/item/natural/bundle/bone/rdm
 
 /obj/item/natural/bundle/bone/rdm/Initialize(mapload)
-	. = ..()
+	..()
 	amount = rand(2,6)
 /*/obj/item/natural/bone/attackby(obj/item/I, mob/living/user, params)
 	var/mob/living/carbon/human/H = user

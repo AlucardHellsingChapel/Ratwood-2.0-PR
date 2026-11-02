@@ -659,7 +659,7 @@
 /area/rogue/under/tomb)
 "wf" = (
 /obj/structure/bars/grille,
-/turf/closed/void,
+/turf/closed,
 /area/rogue/under/tomb)
 "wA" = (
 /obj/structure/bars/grille,

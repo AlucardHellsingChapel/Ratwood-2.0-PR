@@ -57,7 +57,9 @@
 	opacity = FALSE
 	if (isnull(slide_direction))
 		animate(src, transform = matrix().Scale(1, 0.1), pixel_y = -14, time = 5)
-		addtimer(CALLBACK(src, PROC_REF(finish_opening), FALSE), 6)
+		spawn(6)
+			in_motion = FALSE
+			is_closed = FALSE
 	else
 		layer = layer - 0.01
 		var/target_x = pixel_x
@@ -72,24 +74,11 @@
 			if(WEST)
 				target_x -= slide_distance
 		animate(src, pixel_x = target_x, pixel_y = target_y, time = 5)
-		addtimer(CALLBACK(src, PROC_REF(finish_opening), TRUE), 6)
+		spawn(6)
+			in_motion = FALSE
+			is_closed = FALSE
+			update_icon()
 
-
-/obj/structure/falsewall/proc/finish_opening(do_update_icon)
-	in_motion = FALSE
-	is_closed = FALSE
-	if(do_update_icon)
-		update_icon()
-
-/obj/structure/falsewall/proc/finish_closing(restore_layer)
-	density = TRUE
-	opacity = TRUE
-	if(restore_layer)
-		layer = original_layer
-	in_motion = FALSE
-	is_closed = TRUE
-	if(restore_layer)
-		update_icon()
 
 /obj/structure/falsewall/proc/close()
 	if(QDELETED(src) || in_motion || is_closed)
@@ -97,10 +86,20 @@
 	in_motion = TRUE
 	if(isnull(slide_direction))
 		animate(src, transform = matrix().Scale(1, 1), pixel_y = 0, time = 5)
-		addtimer(CALLBACK(src, PROC_REF(finish_closing), FALSE), 6)
+		spawn(6)
+			density = TRUE
+			opacity = TRUE
+			in_motion = FALSE
+			is_closed = TRUE
 	else
 		animate(src, pixel_x = 0, pixel_y = 0, time = 5)
-		addtimer(CALLBACK(src, PROC_REF(finish_closing), TRUE), 6)
+		spawn(6)
+			density = TRUE
+			opacity = TRUE
+			layer = original_layer
+			in_motion = FALSE
+			is_closed = TRUE
+			update_icon()
 
 
 /obj/structure/falsewall/Hear(message, atom/movable/speaker, message_language, raw_message, radio_freq, list/spans, message_mode)

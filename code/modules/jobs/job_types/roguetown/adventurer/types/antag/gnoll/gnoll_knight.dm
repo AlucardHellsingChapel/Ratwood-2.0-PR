@@ -21,12 +21,8 @@
 		/datum/skill/combat/unarmed = SKILL_LEVEL_EXPERT,
 		/datum/skill/misc/athletics = SKILL_LEVEL_EXPERT,
 		/datum/skill/misc/climbing = SKILL_LEVEL_EXPERT,
-		/datum/skill/misc/sneaking = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/misc/tracking = SKILL_LEVEL_LEGENDARY,
-		/datum/skill/craft/crafting = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/misc/hunting = SKILL_LEVEL_JOURNEYMAN,
-		/datum/skill/labor/butchering = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/craft/cooking = SKILL_LEVEL_NOVICE,
+		/datum/skill/craft/crafting = SKILL_LEVEL_NOVICE
 	)
 	cmode_music = 'sound/music/combat_graggar.ogg'
 
@@ -35,12 +31,11 @@
 		H.set_species(/datum/species/gnoll)
 		H.skin_armor = new /obj/item/clothing/suit/roguetown/armor/regenerating/skin/gnoll_armor/knight(H)
 		neck = /obj/item/storage/belt/rogue/pouch/healing
-		backr = /obj/item/storage/backpack/rogue/satchel/gnoll
 		don_pelt(H)
 
 /obj/item/clothing/suit/roguetown/armor/regenerating/skin/gnoll_armor/knight
 	icon_state = "knight"
-	max_integrity = 1000
+	max_integrity = 800
 	armor = ARMOR_GNOLL_STRONG
 	// Stronger, so it repairs more slowly.
 	repair_time = 32 SECONDS

@@ -44,6 +44,9 @@
 	opacity = TRUE
 	update_icon()
 
+/obj/structure/roguetent/attack_paw(mob/living/user)
+	attack_hand(user)
+
 /obj/structure/roguetent/attack_hand(mob/living/user)
 	. = ..()
 	if(.)

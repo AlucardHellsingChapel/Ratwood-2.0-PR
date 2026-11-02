@@ -55,7 +55,6 @@
 	armor = /obj/item/clothing/suit/roguetown/armor/leather/hide
 	id = /obj/item/mattcoin
 	H.adjust_blindness(-3)
-	H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/appraise/free)
 	var/weapons = list("The Brigand (Axes, Maces & Whips/Flails)","Common Soldiery (Polearms & Swords)", "The Nefarious Dusthead (Knives, Climbing & Athletics)")
 	if(H.mind)
 		var/weapon_choice = input(H, "Choose your expert-level proficiencies.", "HOW DOTH THOU WALK THROUGH LYFE, BRIGAND?") as anything in weapons
@@ -90,4 +89,4 @@
 	for(var/datum/bounty/b in GLOB.head_bounties)
 		if(b.target == H.real_name || b.target_hidden == H.real_name)
 			H.change_stat(STATKEY_STR, 1)
-			H.change_stat(STATKEY_CON, 1)
+			H.change_stat(STATKEY_SPD, 1)

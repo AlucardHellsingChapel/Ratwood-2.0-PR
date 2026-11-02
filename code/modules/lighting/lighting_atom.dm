@@ -113,8 +113,10 @@
 	var/turf/T = loc
 	. = ..()
 	if (opacity && istype(T))
-		T.opaque_atom_count--
-		T.reconsider_lights()
+		var/old_has_opaque_atom = T.has_opaque_atom
+		T.recalc_atom_opacity()
+		if (old_has_opaque_atom != T.has_opaque_atom)
+			T.reconsider_lights()
 
 // Should always be used to change the opacity of an atom.
 // It notifies (potentially) affected light sources so they can update (if needed).
@@ -127,13 +129,22 @@
 	if (!isturf(T))
 		return
 
-	if (new_opacity)
-		T.opaque_atom_count++
+	if (new_opacity == TRUE)
+		T.has_opaque_atom = TRUE
+		T.reconsider_lights()
 	else
-		T.opaque_atom_count--
-	T.reconsider_lights()
+		var/old_has_opaque_atom = T.has_opaque_atom
+		T.recalc_atom_opacity()
+		if (old_has_opaque_atom != T.has_opaque_atom)
+			T.reconsider_lights()
 
-// No /atom/movable/Moved override here, that's handled by a signal now.
+/atom/movable/Moved(atom/OldLoc, Dir)
+	. = ..()
+	var/datum/light_source/L
+	var/thing
+	for (thing in light_sources) // Cycle through the light sources on this atom and tell them to update.
+		L = thing
+		L.source_atom.update_light()
 
 /atom/vv_edit_var(var_name, var_value)
 	switch (var_name)

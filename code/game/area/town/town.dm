@@ -16,7 +16,6 @@
 	converted_type = /area/rogue/indoors/shelter/town
 	first_time_text = "THE CITY OF ROTWOOD VALE"
 	town_area = TRUE
-	warden_area = FALSE
 	deathsight_message = "the city of Rotwood Vale and all its bustling souls"
 
 /area/rogue/outdoors/town/graveyard
@@ -31,12 +30,6 @@
 	name = "outdoors rockhill"
 	first_time_text = "The Town of Rockhill"
 	deathsight_message = "the city of Rockhill and all its bustling souls"
-
-/area/rogue/outdoors/town/church
-	name = "outdoors church district"
-	first_time_text = "Old Church District"
-	deathsight_message = "sanctified ruins near the bustling city"
-	// holy_area = TRUE //ravox decrees it most honorable to not benefit from you +2 to everything buffs while duelling in the duel pit
 
 /area/rogue/indoors/shelter/town
 	icon_state = "town"
@@ -61,7 +54,6 @@
 	droning_sound = 'sound/music/area/towngen.ogg'
 	droning_sound_dusk = 'sound/music/area/septimus.ogg'
 	droning_sound_night = 'sound/music/area/sleeping.ogg'
-	town_area = TRUE
 
 /area/rogue/outdoors/exposed/town/keep
 	name = "Keep"
@@ -423,25 +415,3 @@
 // 	droning_sound = 'sound/music/area/dwarf.ogg'
 // 	droning_sound_dusk = null
 // 	droning_sound_night = null
-
-/area/rogue/outdoors/town/outskirts
-	name = "city outskirts"
-	warden_area = TRUE
-	deathsight_message = "civilisation, clinging to one side of a wall like moss"
-
-/area/rogue/indoors/town/engineerworkshop
-	name = "The Engineer's Workshop"
-	icon_state = "dwarfin"
-	droning_sound = 'sound/music/area/harbor.ogg'
-	droning_sound_dusk = null
-	droning_sound_night = null
-	first_time_text = "VALE ENGINEERS WORKSHOP"
-
-/area/rogue/indoors/town/tailor
-	name = "Tailor's Shop"
-	icon_state = "town"
-	droning_sound = 'sound/music/area/towngen.ogg'
-	droning_sound_dusk = 'sound/music/area/septimus.ogg'
-	droning_sound_night = 'sound/music/area/sleeping.ogg'
-	deathsight_message = "A shop with fine fabrics and sewn garments."
-	first_time_text = "VALE TAILOR'S SHOP"

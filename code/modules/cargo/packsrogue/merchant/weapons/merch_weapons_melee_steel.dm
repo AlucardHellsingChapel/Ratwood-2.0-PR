@@ -24,7 +24,7 @@
 	name = "Steel Knuckle"
 	cost = 40 // 1 Steel Ingot
 	contains = list(
-					/obj/item/clothing/gloves/roguetown/knuckles
+					/obj/item/rogueweapon/knuckles
 				)
 
 /datum/supply_pack/rogue/steel_weapons/rapier
@@ -97,13 +97,6 @@
 	cost = 70 // 2 Steel Ingot
 	contains = list(
 					/obj/item/rogueweapon/sword/long,
-				)
-
-/datum/supply_pack/rogue/steel_weapons/broadsword
-	name = "Broadsword"
-	cost = 70 // 2 Steel Ingot
-	contains = list(
-					/obj/item/rogueweapon/sword/long/broadsword/steel,
 				)
 
 /datum/supply_pack/rogue/steel_weapons/kriegmesser
@@ -184,7 +177,7 @@
 				)
 
 /datum/supply_pack/rogue/steel_weapons/eaglebeak
-	name = "Lucerne"
+	name = "Eagle's Beak"
 	cost = 75 // 2 Steel Ingot, 1 Small Log
 	contains = list(
 					/obj/item/rogueweapon/eaglebeak,
@@ -196,11 +189,6 @@
 	contains = list(
 					/obj/item/rogueweapon/mace/goden/steel,
 				)
-
-/datum/supply_pack/rogue/steel_weapons/greatflail
-	name = "Greatflail"
-	cost = 80 // 2 Steel Ingot, 1 Small Log, 1 Chain
-	contains = list(/obj/item/rogueweapon/flail/peasantwarflail/steel)
 
 /datum/supply_pack/rogue/steel_weapons/partizan
 	name = "Partizan"

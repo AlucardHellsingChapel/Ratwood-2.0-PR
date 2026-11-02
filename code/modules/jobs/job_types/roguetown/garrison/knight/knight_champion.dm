@@ -28,16 +28,11 @@
 		/datum/skill/misc/sneaking = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/reading = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/tracking = SKILL_LEVEL_APPRENTICE,
-		/datum/skill/misc/hunting = SKILL_LEVEL_APPRENTICE,
 	)
-
-	extra_context = "This class is restricted from using the Equestrian virtue."
 
 	virtue_restrictions = list(
 		/datum/virtue/utility/riding
 	)
-	subclass_stashed_items = list("Caparison (Saiga)" = /obj/item/caparison, "Caparison (Fogbeast)" = /obj/item/caparison/fogbeast)
-	extra_context = "This subclass receives a caparison in its stash. Use the Saiga or Fogbeast version depending on your mount."
 
 /datum/outfit/job/roguetown/knight/irregularknight/pre_equip(mob/living/carbon/human/H)
 	..()
@@ -46,7 +41,7 @@
 
 	H.adjust_blindness(-3)
 	if(H.mind)
-		var/weapons = list("Rapier + Longbow","Estoc + Recurve Bow","Sabre + Buckler","Whip + Crossbow","Urumi + Buckler")
+		var/weapons = list("Rapier + Longbow","Estoc + Recurve Bow","Sabre + Buckler","Whip + Crossbow")
 		var/armor_options = list("Light Coat", "Light Brigandine", "Medium Cuirass")
 		var/weapon_choice = input(H, "Choose your weapon.", "TAKE UP ARMS") as anything in weapons
 		var/armor_choice = input(H, "Choose your armor.", "TAKE UP ARMS") as anything in armor_options
@@ -54,7 +49,7 @@
 		switch(weapon_choice)
 			if("Rapier + Longbow")
 				r_hand = /obj/item/rogueweapon/sword/rapier
-				beltl = /obj/item/rogueweapon/scabbard/sword/royal
+				beltl = /obj/item/rogueweapon/scabbard/sword
 				backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow/longbow
 				beltr = /obj/item/quiver/arrows
 				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
@@ -67,7 +62,7 @@
 				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
 
 			if("Sabre + Buckler")
-				beltl = /obj/item/rogueweapon/scabbard/sword/royal
+				beltl = /obj/item/rogueweapon/scabbard/sword
 				r_hand = /obj/item/rogueweapon/sword/sabre
 				backl = /obj/item/rogueweapon/shield/buckler
 				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
@@ -76,11 +71,6 @@
 				beltl = /obj/item/rogueweapon/whip
 				backl = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow
 				beltr = /obj/item/quiver/bolts
-				H.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, SKILL_LEVEL_MASTER, TRUE)
-
-			if("Urumi + Buckler")
-				r_hand = /obj/item/rogueweapon/whip/urumi
-				backl = /obj/item/rogueweapon/shield/buckler
 				H.adjust_skillrank_up_to(/datum/skill/combat/whipsflails, SKILL_LEVEL_MASTER, TRUE)
 
 		switch(armor_choice)
@@ -99,20 +89,16 @@
 
 		var/helmets = list(
 			"Pigface Bascinet" 	= /obj/item/clothing/head/roguetown/helmet/bascinet/pigface,
-			"Savoyard Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/guard,
+			"Guard Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/guard,
 			"Barred Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/sheriff,
 			"Bucket Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/bucket,
 			"Knight Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/knight,
 			"Visored Sallet"	= /obj/item/clothing/head/roguetown/helmet/sallet/visored,
-			"Snouted Visored Sallet"	= /obj/item/clothing/head/roguetown/helmet/sallet/visored/snouted,
 			"Armet"				= /obj/item/clothing/head/roguetown/helmet/heavy/knight/armet,
-			"Snouted Armet"	= /obj/item/clothing/head/roguetown/helmet/heavy/knight/armet/snouted,
 			"Hounskull Bascinet" = /obj/item/clothing/head/roguetown/helmet/bascinet/pigface/hounskull,
-			"Roundface Bascinet"	= /obj/item/clothing/head/roguetown/helmet/bascinet/pigface/roundface,
-			"Snouted Roundface Bascinet"	= /obj/item/clothing/head/roguetown/helmet/bascinet/pigface/roundface/snouted,
 			"Etruscan Bascinet" = /obj/item/clothing/head/roguetown/helmet/bascinet/etruscan,
 			"Slitted Kettle" = /obj/item/clothing/head/roguetown/helmet/heavy/knight/skettle,
-			"Froggemund Helmet" = /obj/item/clothing/head/roguetown/helmet/heavy/frogmouth,
+			"Froggemund Helmet"	= /obj/item/clothing/head/roguetown/helmet/heavy/frogmouth,
 			"None"
 		)
 
@@ -122,7 +108,7 @@
 	backpack_contents = list(
 		/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1,
 		/obj/item/rope/chain = 1,
-		/obj/item/rogueweapon/scabbard/sheath/royal = 1
+		/obj/item/rogueweapon/scabbard/sheath = 1
 	)
 	
 	if (H.mind)

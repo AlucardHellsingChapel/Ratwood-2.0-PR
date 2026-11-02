@@ -66,10 +66,8 @@ export const NoWarningParameter = new Juke.Parameter({
 export const DmMapsIncludeTarget = new Juke.Target({
   executes: async () => {
     const folders = [
-      ...Juke.glob("_maps/dungeon_generator/**/*.dmm"),
-      ...Juke.glob("_maps/map_files/otherz/**/*.dmm"),
+      ...Juke.glob("_maps/map_files/**/*.dmm"),
       ...Juke.glob("_maps/map_files/templates/**/*.dmm"),
-      ...Juke.glob("_maps/templates/**/*.dmm"),
     ];
     const content =
       folders
@@ -100,13 +98,7 @@ export const DmTarget = new Juke.Target({
     "tgui/public/tgui.html",
     "modular/**",
     "modular_azurepeak/**",
-    "modular_causticcove/**",
-    "modular_deserttown/**",
     "modular_hearthstone/**",
-    "modular_helmsguard/**",
-    "modular_rmh/**",
-    "modular_stonehedge/**",
-    "modular_twilight_axis/**",
     `${DME_NAME}.dme`,
     NamedVersionFile,
   ],

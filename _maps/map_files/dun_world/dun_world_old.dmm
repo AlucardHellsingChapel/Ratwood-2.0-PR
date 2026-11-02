@@ -364,7 +364,7 @@
 /area/rogue/indoors)
 "afl" = (
 /obj/structure/table/wood/poor,
-/obj/item/clothing/ring/decrepit,
+/obj/item/clothing/ring/aalloy,
 /turf/open/floor/rogue/ruinedwood/turned,
 /area/rogue/indoors/town)
 "afn" = (
@@ -3665,7 +3665,7 @@
 	pixel_x = -3;
 	pixel_y = 11
 	},
-/obj/item/roguecoin/gilbranze/pile,
+/obj/item/roguecoin/aalloy/pile,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/cave/his_vault)
 "aZX" = (
@@ -4611,7 +4611,7 @@
 	icon_state = "cobbleedge-sread"
 	},
 /obj/machinery/light/rogue/hearth,
-/obj/item/reagent_containers/glass/bucket/pot/decrepit,
+/obj/item/reagent_containers/glass/bucket/pot/aalloy,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/cave/his_vault)
 "bng" = (
@@ -5207,8 +5207,8 @@
 "bvp" = (
 /obj/machinery/light/rogue/wallfire/candle/off/l,
 /obj/structure/mannequin,
-/obj/item/clothing/under/roguetown/chainlegs/kilt/ancient/decrepit,
-/obj/item/clothing/suit/roguetown/armor/plate/ancient/decrepit,
+/obj/item/clothing/under/roguetown/chainlegs/kilt/aalloy,
+/obj/item/clothing/suit/roguetown/armor/plate/aalloy,
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/cave/his_vault)
 "bvz" = (
@@ -9292,7 +9292,7 @@
 /area/rogue/under/cave/fishmandungeon)
 "cxy" = (
 /obj/structure/chair/stool/rogue,
-/obj/item/fishingrod/decrepit,
+/obj/item/fishingrod/aalloy,
 /turf/open/floor/rogue/cobble,
 /area/rogue/outdoors/mountains/decap/stepbelow)
 "cxA" = (
@@ -10842,7 +10842,7 @@
 /area/rogue/outdoors/town/roofs)
 "cSi" = (
 /obj/structure/table/church/m,
-/obj/item/rogueweapon/pitchfork/decrepit{
+/obj/item/rogueweapon/pitchfork/aalloy{
 	name = "trident"
 	},
 /turf/open/floor/rogue/churchmarble,
@@ -11898,7 +11898,7 @@
 /area/rogue/outdoors/mountains)
 "dhq" = (
 /obj/structure/table/vtable/v2,
-/obj/item/rogueweapon/woodstaff/implement/grand,
+/obj/item/rogueweapon/woodstaff/diamond,
 /turf/open/floor/rogue/churchbrick,
 /area/rogue/under/cave/mazedungeon)
 "dhz" = (
@@ -12051,7 +12051,7 @@
 /turf/open/floor/carpet/royalblack,
 /area/rogue/indoors/town/dwarfin)
 "djc" = (
-/obj/structure/fluff/walldeco/mercenaryflag{
+/obj/structure/fluff/walldeco/sparrowflag{
 	pixel_y = -32
 	},
 /turf/open/floor/rogue/wood,
@@ -13401,7 +13401,7 @@
 /obj/item/natural/bundle/bone/full,
 /obj/item/natural/bundle/bone/full,
 /obj/effect/spawner/lootdrop/general_loot_low,
-/obj/item/roguecoin/gilbranze/pile,
+/obj/item/roguecoin/aalloy/pile,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/cave/his_vault/four)
 "dzF" = (
@@ -14802,7 +14802,7 @@
 /obj/structure/table/wood/long_table/right,
 /obj/item/recipe_book/sewing,
 /obj/item/recipe_book/leatherworking,
-/turf/closed/void,
+/turf/closed,
 /area/rogue/indoors/town)
 "dRN" = (
 /obj/structure/fluff/walldeco/chains{
@@ -16200,7 +16200,7 @@
 /area/rogue/indoors/town/physician)
 "elm" = (
 /obj/structure/rack/rogue,
-/obj/item/rogueweapon/greatsword/ancient/decrepit,
+/obj/item/rogueweapon/greatsword/aalloy,
 /obj/effect/spawner/lootdrop/roguetown/dungeon/spells,
 /turf/open/floor/rogue/concrete,
 /area/rogue/under/cave/goblinfort)
@@ -16709,7 +16709,7 @@
 /turf/open/water/cleanshallow,
 /area/rogue/outdoors/mountains/decap)
 "erQ" = (
-/obj/item/clothing/suit/roguetown/armor/plate/ancient/decrepit,
+/obj/item/clothing/suit/roguetown/armor/plate/aalloy,
 /turf/open/floor/rogue/woodturned,
 /area/rogue/under/cave/scarymaze)
 "esa" = (
@@ -19567,7 +19567,7 @@
 /area/rogue/indoors/town)
 "fdn" = (
 /obj/structure/table/church/m/alt,
-/obj/item/clothing/neck/roguetown/psicross/decrepit{
+/obj/item/clothing/neck/roguetown/psicross/aalloy{
 	pixel_y = 9
 	},
 /obj/structure/fluff/walldeco/painting/queen{
@@ -20947,8 +20947,8 @@
 	icon_state = "cobbleedge-w"
 	},
 /obj/structure/table/wood/large_table/south_east,
-/obj/item/roguecoin/gilbranze/pile,
-/obj/item/roguecoin/gilbranze,
+/obj/item/roguecoin/aalloy/pile,
+/obj/item/roguecoin/aalloy,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/cave/his_vault)
 "fuE" = (
@@ -21539,7 +21539,8 @@
 	lockid = "baroness"
 	},
 /obj/item/roguegem/ruby,
-/obj/item/rogueweapon/woodstaff/implement/grand/riddle,
+/obj/item/book/granter/spell/blackstone/frostbolt,
+/obj/item/rogueweapon/woodstaff/riddle_of_steel,
 /obj/item/storage/belt/rogue/pouch/coins/rich,
 /turf/open/floor/rogue/wood/herringbone,
 /area/rogue/outdoors/mountains/decap/gunduzirak/bossarena)
@@ -21591,7 +21592,7 @@
 /area/rogue/indoors/town/tavern)
 "fDP" = (
 /obj/structure/fluff/railing/border/north,
-/obj/item/roguecoin/gilbranze/pile,
+/obj/item/roguecoin/aalloy/pile,
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/outdoors/mountains/decap)
 "fDU" = (
@@ -21872,8 +21873,8 @@
 /area/rogue/indoors/town)
 "fID" = (
 /obj/structure/closet/crate/chest/old_crate,
-/obj/item/clothing/gloves/roguetown/plate/ancient/decrepit,
-/obj/item/clothing/neck/roguetown/gorget/steel/ancient/decrepit,
+/obj/item/clothing/gloves/roguetown/plate/aalloy,
+/obj/item/clothing/neck/roguetown/gorget/aalloy,
 /turf/open/floor/rogue/metal{
 	icon_state = "plating2"
 	},
@@ -22682,7 +22683,7 @@
 /area/rogue/indoors/town/shop)
 "fUM" = (
 /obj/structure/table/wood/large_table/north_east,
-/obj/item/roguecoin/gilbranze/pile,
+/obj/item/roguecoin/aalloy/pile,
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/cave/his_vault)
 "fUO" = (
@@ -22983,7 +22984,7 @@
 /area/rogue/under/cave/his_vault)
 "fYs" = (
 /obj/structure/table/wood/large_table/north_east,
-/obj/item/cooking/platter/decrepit,
+/obj/item/cooking/platter/aalloy,
 /obj/item/reagent_containers/food/snacks/rogue/meat/steak,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/shelter/mountains/decap)
@@ -24041,8 +24042,8 @@
 /area/rogue/indoors/cave)
 "gkV" = (
 /obj/structure/mannequin,
-/obj/item/clothing/head/roguetown/helmet/heavy/ancient/decrepit,
-/obj/item/clothing/under/roguetown/platelegs/ancient/decrepit,
+/obj/item/clothing/head/roguetown/helmet/heavy/aalloy,
+/obj/item/clothing/under/roguetown/platelegs/aalloy,
 /obj/structure/fluff/railing/corner,
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/cave/his_vault)
@@ -24801,7 +24802,7 @@
 "gvm" = (
 /obj/structure/table/wood/poor,
 /obj/structure/fluff/walldeco/wantedposter,
-/obj/item/reagent_containers/glass/bowl/decrepit,
+/obj/item/reagent_containers/glass/bowl/aalloy,
 /obj/effect/spawner/lootdrop/potion_vitals,
 /turf/open/floor/rogue/wood,
 /area/rogue/indoors/shelter/mountains/decap)
@@ -25184,8 +25185,8 @@
 /area/rogue/under/cavewet/bogcaves/north)
 "gAW" = (
 /obj/structure/mannequin,
-/obj/item/clothing/suit/roguetown/armor/plate/half/ancient/decrepit,
-/obj/item/clothing/mask/rogue/facemask/ancient/decrepit,
+/obj/item/clothing/suit/roguetown/armor/plate/half/aalloy,
+/obj/item/clothing/mask/rogue/facemask/aalloy,
 /obj/structure/fluff/railing/corner/north_east,
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/cave/his_vault)
@@ -28708,8 +28709,8 @@
 	},
 /obj/structure/flora/roguegrass,
 /obj/structure/mannequin,
-/obj/item/clothing/under/roguetown/platelegs/ancient/decrepit,
-/obj/item/clothing/head/roguetown/helmet/heavy/guard/ancient/decrepit,
+/obj/item/clothing/under/roguetown/platelegs/aalloy,
+/obj/item/clothing/head/roguetown/helmet/heavy/guard/aalloy,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/cave/his_vault)
 "hvR" = (
@@ -31091,7 +31092,7 @@
 /area/rogue/indoors/town/manor)
 "idb" = (
 /obj/structure/ritualcircle/zizo,
-/obj/item/clothing/neck/roguetown/psicross/inhumen/ancient,
+/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/outdoors/mountains/decap/stepbelow)
 "idc" = (
@@ -31873,7 +31874,7 @@
 /turf/open/floor/rogue/dirt/road,
 /area/rogue/indoors/shelter/woods)
 "imU" = (
-/obj/item/rogueweapon/spellbook,
+/obj/item/spellbook_unfinished,
 /turf/open/floor/rogue/church,
 /area/rogue/under/town/sewer)
 "imY" = (
@@ -33670,7 +33671,7 @@
 /area/rogue/under/cave/goblinfort)
 "iIQ" = (
 /obj/structure/table/wood/long_table/right,
-/obj/item/reagent_containers/glass/cup/decrepitgob,
+/obj/item/reagent_containers/glass/cup/aalloygob,
 /turf/open/floor/rogue/tile/bfloorz,
 /area/rogue/indoors/shelter/mountains/decap)
 "iIR" = (
@@ -34075,7 +34076,7 @@
 /obj/item/natural/bundle/bone/full,
 /obj/item/natural/bundle/bone/full,
 /obj/effect/spawner/lootdrop/general_loot_low,
-/obj/item/roguecoin/gilbranze/pile,
+/obj/item/roguecoin/aalloy/pile,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/under/cave/his_vault/four)
 "iNT" = (
@@ -34430,7 +34431,7 @@
 "iSi" = (
 /obj/effect/decal/cleanable/blood,
 /obj/structure/mannequin,
-/obj/item/clothing/suit/roguetown/armor/plate/half/ancient/decrepit,
+/obj/item/clothing/suit/roguetown/armor/plate/half/aalloy,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/cave/his_vault)
 "iSm" = (
@@ -36746,7 +36747,7 @@
 /obj/item/natural/bundle/bone/full,
 /obj/item/natural/bundle/bone/full,
 /obj/effect/spawner/lootdrop/general_loot_low,
-/obj/item/roguecoin/gilbranze/pile,
+/obj/item/roguecoin/aalloy/pile,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/cave/his_vault/four)
 "jwF" = (
@@ -37457,9 +37458,9 @@
 /area/rogue/outdoors/mountains/decap)
 "jGC" = (
 /obj/structure/table/wood/poor/alt,
-/obj/item/roguecoin/gilbranze/pile,
+/obj/item/roguecoin/aalloy/pile,
 /obj/item/rogueweapon/greatsword/bsword/psy,
-/obj/item/roguecoin/gilbranze/pile,
+/obj/item/roguecoin/aalloy/pile,
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/cave/his_vault)
 "jGD" = (
@@ -41295,7 +41296,7 @@
 /turf/open/floor/rogue/cobble,
 /area/rogue/indoors/shelter)
 "kDx" = (
-/obj/item/roguestatue/decrepit,
+/obj/item/roguestatue/aalloy,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/under/cave)
 "kDy" = (
@@ -42268,9 +42269,9 @@
 	},
 /obj/machinery/light/rogue/wallfire/candle/off,
 /obj/structure/mannequin,
-/obj/item/clothing/head/roguetown/helmet/heavy/ancient/decrepit,
-/obj/item/clothing/neck/roguetown/gorget/steel/ancient/decrepit,
-/obj/item/clothing/under/roguetown/chainlegs/kilt/ancient/decrepit,
+/obj/item/clothing/head/roguetown/helmet/heavy/aalloy,
+/obj/item/clothing/neck/roguetown/gorget/aalloy,
+/obj/item/clothing/under/roguetown/chainlegs/kilt/aalloy,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/cave/his_vault)
 "kPN" = (
@@ -42515,7 +42516,7 @@
 /area/rogue/indoors)
 "kSX" = (
 /obj/structure/bookcase,
-/obj/item/rogueweapon/spellbook,
+/obj/item/book/spellbook,
 /turf/open/floor/rogue/blocks,
 /area/rogue/under/cave/mazedungeon)
 "kTb" = (
@@ -42952,7 +42953,7 @@
 	pixel_x = 7
 	},
 /obj/structure/table/church/m,
-/obj/item/clothing/ring/decrepit,
+/obj/item/clothing/ring/aalloy,
 /turf/open/floor/rogue/cobblerock,
 /area/rogue/under/cave/his_vault)
 "kYH" = (
@@ -45067,7 +45068,7 @@
 	},
 /obj/effect/spawner/lootdrop/roguetown/dungeon/misc,
 /obj/effect/spawner/lootdrop/roguetown/dungeon/misc,
-/obj/item/clothing/ring/decrepit,
+/obj/item/clothing/ring/aalloy,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/cave/his_vault)
 "lzc" = (
@@ -46368,7 +46369,7 @@
 	dir = 1;
 	icon_state = "borderfall"
 	},
-/obj/item/clothing/neck/roguetown/psicross/inhumen/ancient,
+/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy,
 /turf/open/floor/rogue/concrete,
 /area/rogue/indoors/shelter/mountains/decap)
 "lPG" = (
@@ -46401,7 +46402,7 @@
 	pixel_x = 6;
 	pixel_y = 12
 	},
-/obj/item/reagent_containers/glass/cup/decrepitmug,
+/obj/item/reagent_containers/glass/cup/aalloymug,
 /turf/open/floor/rogue/concrete,
 /area/rogue/indoors/shelter/mountains/decap)
 "lPX" = (
@@ -48437,8 +48438,8 @@
 	icon_state = "cobbleedge-w"
 	},
 /obj/structure/table/wood/large_table/north_east,
-/obj/item/roguecoin/gilbranze/pile,
-/obj/item/roguecoin/gilbranze/pile,
+/obj/item/roguecoin/aalloy/pile,
+/obj/item/roguecoin/aalloy/pile,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/cave/his_vault)
 "mqo" = (
@@ -52379,7 +52380,7 @@
 	pixel_x = 6;
 	pixel_y = 12
 	},
-/obj/item/reagent_containers/glass/cup/decrepitmug,
+/obj/item/reagent_containers/glass/cup/aalloymug,
 /turf/open/floor/rogue/concrete,
 /area/rogue/under/cave/orcdungeon)
 "nqS" = (
@@ -53970,7 +53971,7 @@
 /obj/item/natural/bundle/bone/full,
 /obj/item/natural/bundle/bone/full,
 /obj/effect/spawner/lootdrop/general_loot_low,
-/obj/item/roguecoin/gilbranze,
+/obj/item/roguecoin/aalloy,
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/cave/his_vault/four)
 "nNd" = (
@@ -54673,7 +54674,7 @@
 /turf/closed/wall/mineral/rogue/wooddark,
 /area/rogue/indoors/town/garrison)
 "nWB" = (
-/obj/item/reagent_containers/glass/bucket/pot/decrepit,
+/obj/item/reagent_containers/glass/bucket/pot/aalloy,
 /obj/effect/decal/mossy,
 /turf/open/floor/rogue/grasscold,
 /area/rogue/outdoors/mountains/decap)
@@ -56299,7 +56300,7 @@
 /turf/open/floor/rogue/tile,
 /area/rogue/indoors/shelter/mountains/decap)
 "orD" = (
-/obj/item/roguecoin/gilbranze,
+/obj/item/roguecoin/aalloy,
 /turf/open/water/pond,
 /area/rogue/under/cave/his_vault)
 "orE" = (
@@ -56377,7 +56378,7 @@
 	},
 /obj/structure/spider/stickyweb/mirespider,
 /obj/structure/table/church/m,
-/obj/item/roguecoin/gilbranze/pile,
+/obj/item/roguecoin/aalloy/pile,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/cave/his_vault)
 "osI" = (
@@ -57227,7 +57228,7 @@
 /area/rogue/under/town/basement/keep)
 "oDx" = (
 /obj/structure/table/wood/large_table/north_east,
-/obj/item/cooking/platter/decrepit,
+/obj/item/cooking/platter/aalloy,
 /obj/item/reagent_containers/food/snacks/rogue/meat/steak,
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/cave/orcdungeon)
@@ -60057,8 +60058,8 @@
 "pns" = (
 /obj/structure/closet/crate/roguecloset/inn,
 /obj/item/tablecloth/silk,
-/obj/item/clothing/neck/roguetown/psicross/inhumen/ancient,
-/obj/item/clothing/shoes/roguetown/boots/armor/ancient/decrepit,
+/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy,
+/obj/item/clothing/shoes/roguetown/boots/aalloy,
 /turf/open/floor/rogue/twig,
 /area/rogue/indoors/shelter/mountains/decap)
 "pnw" = (
@@ -62468,7 +62469,7 @@
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/under/cave/dragonden)
 "pTa" = (
-/obj/item/clothing/neck/roguetown/psicross/inhumen/ancient,
+/obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/outdoors/mountains/decap/stepbelow)
 "pTc" = (
@@ -64521,6 +64522,7 @@
 "qvs" = (
 /obj/structure/closet/crate/coffin,
 /obj/item/reagent_containers/glass/bottle/rogue/manapot,
+/obj/item/book/granter/spell/blackstone/sicknessray,
 /turf/open/floor/rogue/churchmarble,
 /area/rogue/under/cave/scarymaze)
 "qvy" = (
@@ -66150,7 +66152,7 @@
 /area/rogue/indoors/town/manor)
 "qPo" = (
 /obj/structure/table/wood/fancy/black,
-/obj/item/rogueweapon/spellbook,
+/obj/item/spellbook_unfinished/pre_arcyne,
 /turf/open/floor/rogue/ruinedwood/spiral,
 /area/rogue/under/cave/mazedungeon)
 "qPr" = (
@@ -68011,8 +68013,8 @@
 /turf/open/floor/rogue/blocks,
 /area/rogue/outdoors/woods/north)
 "roT" = (
-/obj/item/roguecoin/gilbranze,
-/obj/item/roguecoin/gilbranze,
+/obj/item/roguecoin/aalloy,
+/obj/item/roguecoin/aalloy,
 /turf/open/water/pond,
 /area/rogue/under/cave/his_vault)
 "roX" = (
@@ -68099,8 +68101,8 @@
 /area/rogue/under/cave/goblinfort)
 "rpZ" = (
 /obj/structure/mannequin,
-/obj/item/clothing/suit/roguetown/armor/plate/ancient/decrepit,
-/obj/item/clothing/head/roguetown/helmet/heavy/ancient/decrepit,
+/obj/item/clothing/suit/roguetown/armor/plate/aalloy,
+/obj/item/clothing/head/roguetown/helmet/heavy/aalloy,
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/cave/his_vault)
 "rqa" = (
@@ -68153,7 +68155,7 @@
 "rqX" = (
 /obj/machinery/light/rogue/hearth,
 /obj/machinery/light/rogue/oven/south,
-/obj/item/reagent_containers/glass/bucket/pot/decrepit,
+/obj/item/reagent_containers/glass/bucket/pot/aalloy,
 /turf/open/floor/rogue/cobble,
 /area/rogue/indoors/shelter/woods)
 "rqY" = (
@@ -72789,7 +72791,7 @@
 /area/rogue/outdoors/town)
 "syE" = (
 /obj/structure/table/wood/long_table/mid/alt,
-/obj/item/reagent_containers/glass/cup/decrepitmug,
+/obj/item/reagent_containers/glass/cup/aalloymug,
 /turf/open/floor/rogue/concrete,
 /area/rogue/indoors/shelter/mountains/decap)
 "syJ" = (
@@ -74976,8 +74978,8 @@
 "tdA" = (
 /obj/structure/closet/crate/roguecloset/inn,
 /obj/effect/spawner/lootdrop/roguetown/dungeon/clothing,
-/obj/item/clothing/suit/roguetown/armor/plate/half/ancient/decrepit,
-/obj/item/clothing/under/roguetown/chainlegs/kilt/ancient/decrepit,
+/obj/item/clothing/suit/roguetown/armor/plate/half/aalloy,
+/obj/item/clothing/under/roguetown/chainlegs/kilt/aalloy,
 /turf/open/floor/rogue/concrete,
 /area/rogue/under/cave/goblinfort)
 "tdC" = (
@@ -77706,7 +77708,7 @@
 /area/rogue/outdoors/woods/south)
 "tMk" = (
 /obj/structure/table/wood/large_table/north_east,
-/obj/item/cooking/platter/decrepit,
+/obj/item/cooking/platter/aalloy,
 /turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/shelter/mountains/decap)
 "tMH" = (
@@ -77989,7 +77991,7 @@
 /area/rogue/druidsgrove)
 "tQO" = (
 /obj/structure/table/church/end,
-/obj/item/clothing/neck/roguetown/psicross/decrepit{
+/obj/item/clothing/neck/roguetown/psicross/aalloy{
 	pixel_y = 9
 	},
 /turf/open/floor/rogue/cobble/mossy,
@@ -78103,6 +78105,8 @@
 	locked = 1;
 	lockid = "lich"
 	},
+/obj/item/book/granter/spell/blackstone/skeleton,
+/obj/item/book/granter/spell/blackstone/bonechill,
 /obj/effect/spawner/lootdrop/roguetown/dungeon/spells,
 /obj/effect/spawner/lootdrop/roguetown/dungeon/spells,
 /turf/open/floor/rogue/carpet/lord/right,
@@ -79555,7 +79559,7 @@
 /area/rogue/indoors/town)
 "ukn" = (
 /obj/machinery/light/rogue/hearth,
-/obj/item/cooking/pan/decrepit,
+/obj/item/cooking/pan/aalloy,
 /obj/machinery/light/rogue/wallfire/candle/off/r,
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/cave/his_vault)
@@ -80011,7 +80015,7 @@
 /area/rogue/indoors/town/bath)
 "upP" = (
 /obj/machinery/light/rogue/hearth,
-/obj/item/reagent_containers/glass/bucket/pot/decrepit,
+/obj/item/reagent_containers/glass/bucket/pot/aalloy,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/indoors/shelter)
 "upS" = (
@@ -82177,8 +82181,8 @@
 /obj/item/reagent_containers/glass/bowl/silver{
 	pixel_y = 9
 	},
-/obj/item/roguecoin/gilbranze/pile,
-/obj/item/roguecoin/gilbranze/pile,
+/obj/item/roguecoin/aalloy/pile,
+/obj/item/roguecoin/aalloy/pile,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/cave/his_vault)
 "uRQ" = (
@@ -83089,9 +83093,9 @@
 /area/rogue/under/cave/licharena)
 "ven" = (
 /obj/structure/mannequin,
-/obj/item/clothing/suit/roguetown/armor/plate/ancient/decrepit,
-/obj/item/clothing/under/roguetown/platelegs/ancient/decrepit,
-/obj/item/clothing/head/roguetown/helmet/heavy/ancient/decrepit,
+/obj/item/clothing/suit/roguetown/armor/plate/aalloy,
+/obj/item/clothing/under/roguetown/platelegs/aalloy,
+/obj/item/clothing/head/roguetown/helmet/heavy/aalloy,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/under/cave/his_vault)
 "ver" = (
@@ -88751,7 +88755,7 @@
 	pixel_y = -5
 	},
 /obj/structure/table/church/m,
-/obj/item/roguestatue/decrepit{
+/obj/item/roguestatue/aalloy{
 	pixel_y = 16
 	},
 /turf/open/floor/rogue/cobblerock,
@@ -89344,9 +89348,9 @@
 	icon_state = "cobbleedge-n"
 	},
 /obj/structure/table/church/end,
-/obj/item/roguecoin/gilbranze/pile,
-/obj/item/roguecoin/gilbranze/pile,
-/obj/item/roguecoin/gilbranze/pile,
+/obj/item/roguecoin/aalloy/pile,
+/obj/item/roguecoin/aalloy/pile,
+/obj/item/roguecoin/aalloy/pile,
 /turf/open/floor/rogue/cobblerock,
 /area/rogue/under/cave/his_vault)
 "wIz" = (
@@ -92257,11 +92261,11 @@
 /area/rogue/indoors/shelter/mountains/decap)
 "xwc" = (
 /obj/structure/mannequin,
-/obj/item/clothing/suit/roguetown/armor/plate/half/ancient/decrepit,
-/obj/item/clothing/shoes/roguetown/boots/armor/ancient/decrepit,
-/obj/item/clothing/neck/roguetown/gorget/steel/ancient/decrepit,
-/obj/item/clothing/head/roguetown/helmet/heavy/guard/ancient/decrepit,
-/obj/item/clothing/gloves/roguetown/plate/ancient/decrepit,
+/obj/item/clothing/suit/roguetown/armor/plate/half/aalloy,
+/obj/item/clothing/shoes/roguetown/boots/aalloy,
+/obj/item/clothing/neck/roguetown/gorget/aalloy,
+/obj/item/clothing/head/roguetown/helmet/heavy/guard/aalloy,
+/obj/item/clothing/gloves/roguetown/plate/aalloy,
 /obj/machinery/light/rogue/wallfire/candle/off/r,
 /turf/open/floor/rogue/cobble,
 /area/rogue/under/cave/his_vault)
@@ -93361,8 +93365,8 @@
 /area/rogue/indoors/town/tavern)
 "xKi" = (
 /obj/effect/landmark/chest_or_mimic/loot_chest,
-/obj/item/clothing/ring/decrepit,
-/obj/item/clothing/ring/decrepit,
+/obj/item/clothing/ring/aalloy,
+/obj/item/clothing/ring/aalloy,
 /turf/open/floor/rogue/cobble/mossy,
 /area/rogue/outdoors/bog/north)
 "xKj" = (
@@ -94045,7 +94049,7 @@
 	pixel_y = 31
 	},
 /obj/structure/table/church/m,
-/obj/item/clothing/neck/roguetown/psicross/decrepit{
+/obj/item/clothing/neck/roguetown/psicross/aalloy{
 	pixel_y = 9
 	},
 /turf/open/floor/rogue/cobble/mossy,

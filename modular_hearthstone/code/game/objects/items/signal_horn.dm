@@ -10,7 +10,6 @@
 	w_class = WEIGHT_CLASS_NORMAL
 	grid_height = 32
 	grid_width = 64
-	dropshrink = 0.9
 
 /obj/item/signal_horn/examine()
 	. = ..()
@@ -59,7 +58,9 @@
 			playsound(src, 'modular_hearthstone/sound/items/signalhorn.ogg', 100, TRUE)
 
 	for(var/mob/living/player in GLOB.player_list)
-		if(player.stat == DEAD || isbrain(player))
+		if(player.stat == DEAD)
+			continue
+		if(isbrain(player))
 			continue
 
 		var/turf/origin_turf = get_turf(src)

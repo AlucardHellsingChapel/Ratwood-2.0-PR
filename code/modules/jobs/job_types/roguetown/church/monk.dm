@@ -19,7 +19,7 @@
 	round_contrib_points = 5
 	social_rank = SOCIAL_RANK_MINOR_NOBLE
 	//No nobility for you, being a member of the clergy means you gave UP your nobility. It says this in many of the church tutorial texts.
-	quirk_restrictions = list(/datum/quirk/noble)
+	virtue_restrictions = list(/datum/virtue/utility/noble)
 	job_traits = list(TRAIT_RITUALIST, TRAIT_HOMESTEAD_EXPERT)
 	advclass_cat_rolls = list(CTAG_ACOLYTE = 2)
 	job_subclasses = list(
@@ -85,7 +85,9 @@
 		H.real_name = "[title] [prev_real_name]"
 		H.name = "[title] [prev_name]"
 
-		addtimer(CALLBACK(src, PROC_REF(_delayed_path_choice), H), 50)
+		spawn(50)
+			if(H && H.client)
+				_delayed_path_choice(H)
 
 /datum/advclass/acolyte
 	name = "Acolyte"
@@ -101,6 +103,7 @@
 	subclass_skills = list(
 		/datum/skill/combat/wrestling = SKILL_LEVEL_EXPERT,
 		/datum/skill/combat/unarmed = SKILL_LEVEL_EXPERT,
+		/datum/skill/combat/staves = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/combat/polearms = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/medicine = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/craft/alchemy = SKILL_LEVEL_APPRENTICE,
@@ -209,9 +212,6 @@
 			H.cmode_music = 'sound/music/combat_jester.ogg'
 			var/datum/inspiration/I = new /datum/inspiration(H)
 			I.grant_inspiration(H, bard_tier = BARD_T2)
-			if(H.mind && HAS_TRAIT(H, TRAIT_PERMAMUTE))
-				H.mind.AddSpell(new /obj/effect/proc_holder/spell/aoe_turf/conjure/mime_wall)
-				H.mind.AddSpell(new /obj/effect/proc_holder/spell/aoe_turf/conjure/mime_chair)
 		else
 			head = /obj/item/clothing/head/roguetown/roguehood/astrata
 			neck = /obj/item/clothing/neck/roguetown/psicross/astrata
@@ -233,7 +233,9 @@
 		H.adjust_skillrank(/datum/skill/misc/reading, 3, TRUE) // Really good at reading... does this really do anything? No. BUT it's soulful.
 		H.adjust_skillrank(/datum/skill/craft/alchemy, 2, TRUE)
 		H.adjust_skillrank(/datum/skill/magic/arcane, 2, TRUE) // for their arcane spells, very little CDR and cast speed.
-		H.mind?.AddSpell(new /datum/action/cooldown/spell/touch/prestidigitation)
+		if(H.mind)
+			H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/touch/prestidigitation)
+		ADD_TRAIT(H, TRAIT_ARCYNE_T1, TRAIT_GENERIC) // So that they can take arcyne potential and not break.
 	if(H.patron?.type == /datum/patron/divine/abyssor) // The Sea and Weather - probably would be good at fishing
 		H.adjust_skillrank(/datum/skill/labor/fishing, 3, TRUE)
 		H.adjust_skillrank(/datum/skill/misc/swimming, 3, TRUE)
@@ -242,14 +244,13 @@
 		ADD_TRAIT(H, TRAIT_NOSTINK, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_SOUL_EXAMINE, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_GRAVEROBBER, TRAIT_GENERIC)
-		H.adjust_skillrank_up_to(/datum/skill/combat/polearms, 3, TRUE)//For the stave. Beat back the dead. +1 from base, like Ravox.
+		H.adjust_skillrank_up_to(/datum/skill/combat/staves, 3, TRUE)//For the stave. Beat back the dead. +1 from base, like Ravox.
 		H.adjust_skillrank_up_to(/datum/skill/combat/maces, 2, TRUE)//Or the shovel, I guess... loser...
 		H.cmode_music = 'sound/music/cmode/church/combat_necra.ogg'
 	if(H.patron?.type == /datum/patron/divine/pestra) // Medicine and Healing - better surgeons and alchemists
 		H.adjust_skillrank_up_to(/datum/skill/misc/medicine, 4, TRUE)
 		H.adjust_skillrank(/datum/skill/craft/alchemy, 1, TRUE)
 		ADD_TRAIT(H, TRAIT_NOSTINK, TRAIT_GENERIC)
-		ADD_TRAIT(H, TRAIT_MEDICINE_EXPERT, TRAIT_GENERIC)
 	if(H.patron?.type == /datum/patron/divine/eora) // Beauty and Love - beautiful and can read people pretty well.
 		ADD_TRAIT(H, TRAIT_BEAUTIFUL, TRAIT_GENERIC)
 		ADD_TRAIT(H, TRAIT_EMPATH, TRAIT_GENERIC)
@@ -266,7 +267,7 @@
 		H.adjust_skillrank(/datum/skill/craft/smelting, 2, TRUE)
 	if(H.patron?.type == /datum/patron/divine/ravox) // Justice and Honor - athletics and probably a bit better at handling the horrors of war
 		H.adjust_skillrank_up_to(/datum/skill/misc/athletics, 3, TRUE) //Who even plays Ravoxian acolyte? Whatever, this isn't a huge buff.
-		H.adjust_skillrank_up_to(/datum/skill/combat/polearms, 3, TRUE) //On par with an Adventuring Monk. Seems quite fitting.
+		H.adjust_skillrank_up_to(/datum/skill/combat/staves, 3, TRUE) //On par with an Adventuring Monk. Seems quite fitting.
 		ADD_TRAIT(H, TRAIT_STEELHEARTED, TRAIT_GENERIC)
 	if(H.patron?.type == /datum/patron/divine/xylix)  // Trickery and Inspiration - muxic and rogueish skills
 		H.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)

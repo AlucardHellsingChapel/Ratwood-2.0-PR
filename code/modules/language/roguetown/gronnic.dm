@@ -1,6 +1,6 @@
 /datum/language/gronnic
 	name = "Gronnic"
-	desc = "(Spoken with ,n) The harsh tongue of the Northern Highlands."
+	desc = "The harsh tongue of the Northern Highlands."
 	speech_verb = "remarks"
 	ask_verb = "inquires"
 	exclaim_verb = "asserts"

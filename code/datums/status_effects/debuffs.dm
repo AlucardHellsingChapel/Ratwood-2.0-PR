@@ -90,7 +90,7 @@
 		SSdroning.kill_droning(owner.client)
 		SSdroning.kill_loop(owner.client)
 		SSdroning.kill_rain(owner.client)
-		owner.clear_typing_indicator("fell asleep")
+		owner.clear_typing_indicator()
 		if(iscarbon(owner)) //to avoid repeated istypes
 			carbon_owner = owner
 		if(ishuman(owner))
@@ -122,8 +122,7 @@
 			break //Only count the first bedsheet
 		if(health_ratio > 0.8)
 			owner.adjustToxLoss(healing * 0.5, FALSE, TRUE)
-		if(owner.getStaminaLoss()) //How often do we even get staminaloss in this codebase?
-			owner.adjustStaminaLoss(healing, FALSE, TRUE)
+		owner.adjustStaminaLoss(healing)
 	if(human_owner && human_owner.drunkenness)
 		human_owner.drunkenness *= 0.997 //reduce drunkenness by 0.3% per tick, 6% per 2 seconds
 	if(prob(20))
@@ -192,11 +191,11 @@
 	alert_type = /atom/movable/screen/alert/status_effect/strandling
 
 /datum/status_effect/strandling/on_apply()
-	ADD_TRAIT(owner, TRAIT_MAGIC_CHOKE, TRAIT_STATUS_EFFECT(id))
+	ADD_TRAIT(owner, TRAIT_MAGIC_CHOKE, "dumbmoron")
 	return ..()
 
 /datum/status_effect/strandling/on_remove()
-	REMOVE_TRAIT(owner, TRAIT_MAGIC_CHOKE, TRAIT_STATUS_EFFECT(id))
+	REMOVE_TRAIT(owner, TRAIT_MAGIC_CHOKE, "dumbmoron")
 	return ..()
 
 /atom/movable/screen/alert/status_effect/strandling
@@ -205,7 +204,7 @@
 	icon_state = "his_grace"
 	alerttooltipstyle = "hisgrace"
 
-/atom/movable/screen/alert/status_effect/strandling/handle_click(location, control, params)
+/atom/movable/screen/alert/status_effect/strandling/Click(location, control, params)
 	. = ..()
 	to_chat(mob_viewer, "<span class='notice'>I attempt to remove the durathread strand from around my neck.</span>")
 	if(do_after(mob_viewer, 35, null, mob_viewer))
@@ -221,11 +220,11 @@
 	. = ..()
 
 /datum/status_effect/pacify/on_apply()
-	ADD_TRAIT(owner, TRAIT_PACIFISM, TRAIT_STATUS_EFFECT(id))
+	ADD_TRAIT(owner, TRAIT_PACIFISM, "status_effect")
 	return ..()
 
 /datum/status_effect/pacify/on_remove()
-	REMOVE_TRAIT(owner, TRAIT_PACIFISM, TRAIT_STATUS_EFFECT(id))
+	REMOVE_TRAIT(owner, TRAIT_PACIFISM, "status_effect")
 
 //OTHER DEBUFFS
 /datum/status_effect/pacify
@@ -241,11 +240,11 @@
 	. = ..()
 
 /datum/status_effect/pacify/on_apply()
-	ADD_TRAIT(owner, TRAIT_PACIFISM, TRAIT_STATUS_EFFECT(id))
+	ADD_TRAIT(owner, TRAIT_PACIFISM, "status_effect")
 	return ..()
 
 /datum/status_effect/pacify/on_remove()
-	REMOVE_TRAIT(owner, TRAIT_PACIFISM, TRAIT_STATUS_EFFECT(id))
+	REMOVE_TRAIT(owner, TRAIT_PACIFISM, "status_effect")
 
 /datum/status_effect/stacking/saw_bleed
 	id = "saw_bleed"
@@ -293,17 +292,16 @@
 	alert_type = null
 
 /datum/status_effect/gonbolaPacify/on_apply()
-	ADD_TRAIT(owner, TRAIT_PACIFISM, TRAIT_STATUS_EFFECT(id))
-	ADD_TRAIT(owner, TRAIT_MUTE, TRAIT_STATUS_EFFECT(id))
-	ADD_TRAIT(owner, TRAIT_JOLLY, TRAIT_STATUS_EFFECT(id))
+	ADD_TRAIT(owner, TRAIT_PACIFISM, "gonbolaPacify")
+	ADD_TRAIT(owner, TRAIT_MUTE, "gonbolaMute")
+	ADD_TRAIT(owner, TRAIT_JOLLY, "gonbolaJolly")
 	to_chat(owner, "<span class='notice'>I suddenly feel at peace and feel no need to make any sudden or rash actions...</span>")
 	return ..()
 
 /datum/status_effect/gonbolaPacify/on_remove()
-	. = ..()
-	REMOVE_TRAIT(owner, TRAIT_PACIFISM, TRAIT_STATUS_EFFECT(id))
-	REMOVE_TRAIT(owner, TRAIT_MUTE, TRAIT_STATUS_EFFECT(id))
-	REMOVE_TRAIT(owner, TRAIT_JOLLY, TRAIT_STATUS_EFFECT(id))
+	REMOVE_TRAIT(owner, TRAIT_PACIFISM, "gonbolaPacify")
+	REMOVE_TRAIT(owner, TRAIT_MUTE, "gonbolaMute")
+	REMOVE_TRAIT(owner, TRAIT_JOLLY, "gonbolaJolly")
 
 /datum/status_effect/trance
 	id = "trance"
@@ -328,7 +326,7 @@
 	if(!iscarbon(owner))
 		return FALSE
 	RegisterSignal(owner, COMSIG_MOVABLE_HEAR, PROC_REF(hypnotize))
-	ADD_TRAIT(owner, TRAIT_MUTE, TRAIT_STATUS_EFFECT(id))
+	ADD_TRAIT(owner, TRAIT_MUTE, "trance")
 	owner.add_client_colour(/datum/client_colour/monochrome/trance)
 	owner.visible_message("[stun ? "<span class='warning'>[owner] stands still as [owner.p_their()] eyes seem to focus on a distant point.</span>" : ""]", \
 	"<span class='warning'>[pick("You feel my thoughts slow down...", "You suddenly feel extremely dizzy...", "You feel like you're in the middle of a dream...","You feel incredibly relaxed...")]</span>")
@@ -341,7 +339,7 @@
 
 /datum/status_effect/trance/on_remove()
 	UnregisterSignal(owner, COMSIG_MOVABLE_HEAR)
-	REMOVE_TRAIT(owner, TRAIT_MUTE, TRAIT_STATUS_EFFECT(id))
+	REMOVE_TRAIT(owner, TRAIT_MUTE, "trance")
 	owner.dizziness = 0
 	owner.remove_client_colour(/datum/client_colour/monochrome/trance)
 	to_chat(owner, "<span class='warning'>I snap out of my trance!</span>")
@@ -603,27 +601,11 @@
 	desc = "I used it. I must wait."
 	icon_state = "strikecd"
 
-/datum/status_effect/debuff/bindcd
-	id = "bindcd"
-	alert_type = /atom/movable/screen/alert/status_effect/debuff/bindcd
-	duration = 15 SECONDS
-
-/datum/status_effect/debuff/bindcd/on_creation(mob/living/new_owner, new_dur)
-	if(new_dur)
-		duration = new_dur
-	return ..()
-
-/atom/movable/screen/alert/status_effect/debuff/bindcd
-	name = "Bind Cooldown"
-	desc = "Can't expect the magic to work every time."
-	icon_state = "bindcd"
-
 //---- Special CD
 /datum/status_effect/debuff/specialcd
 	id = "specialcd"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/specialcd
 	duration = 30 SECONDS
-	status_type = STATUS_EFFECT_UNIQUE
 
 /datum/status_effect/debuff/specialcd/on_creation(mob/living/new_owner, new_dur)
 	if(new_dur)
@@ -631,7 +613,7 @@
 	return ..()
 
 /atom/movable/screen/alert/status_effect/debuff/specialcd
-	name = "Special Manoeuvre Cooldown"
+	name = "Precise Strike Cooldown"
 	desc = "I used it. I must wait."
 	icon_state = "strikecd"
 
@@ -649,8 +631,6 @@
 	status_type = STATUS_EFFECT_REFRESH
 	alert_type = /atom/movable/screen/alert/status_effect/mishap_langloss
 	var/datum/language/removed_language
-	/// Sources that had granted the language before we took it, restored identically on expiry.
-	var/list/removed_sources
 
 /datum/status_effect/debuff/mishap_langloss/on_apply()
 	. = ..()
@@ -671,16 +651,13 @@
 
 		// If we haven't selected a language by this point there's probably no language to select
 		if (removed_language)
-			var/list/sources = holder.languages[removed_language]
-			removed_sources = sources?.Copy()
-			owner.remove_language(removed_language, source = LANGUAGE_SOURCE_ALL)
+			owner.remove_language(removed_language)
 
 
 /datum/status_effect/debuff/mishap_langloss/on_remove()
 	..()
 	if (removed_language)
-		for (var/source in (removed_sources || list(LANGUAGE_SOURCE_GENERIC)))
-			owner.grant_language(removed_language, source = source)
+		owner.grant_language(removed_language)
 
 
 // Reduces intelligence by 20 (!!) and removes all languages except Aphasia for the duration.
@@ -705,7 +682,7 @@
 	old_languages = owner_language_holder.copy()
 	owner_language_holder.remove_all_languages()
 	owner.language_holder.grant_language(/datum/language/aphasia)
-	ADD_TRAIT(owner, TRAIT_SPELLCOCKBLOCK, TRAIT_STATUS_EFFECT(id))
+	ADD_TRAIT(owner, TRAIT_SPELLCOCKBLOCK, id)
 
 /datum/status_effect/debuff/mishap_feeblemind/tick()
 	..()
@@ -716,7 +693,7 @@
 	..()
 	owner_language_holder.remove_language(/datum/language/aphasia)
 	owner_language_holder.copy_known_languages_from(old_languages)
-	REMOVE_TRAIT(owner, TRAIT_SPELLCOCKBLOCK, TRAIT_STATUS_EFFECT(id))
+	REMOVE_TRAIT(owner, TRAIT_SPELLCOCKBLOCK, id)
 
 // Functions as Nimrod, but a bit worse, for the duration, and enforces simple speech.
 /atom/movable/screen/alert/status_effect/mishap_dimwitted
@@ -733,11 +710,11 @@
 
 /datum/status_effect/debuff/mishap_dimwitted/on_apply()
 	. = ..()
-	ADD_TRAIT(owner, TRAIT_SIMPLESPEECH, TRAIT_STATUS_EFFECT(id))
+	ADD_TRAIT(owner, TRAIT_SIMPLESPEECH, id)
 
 /datum/status_effect/debuff/mishap_dimwitted/on_remove()
 	..()
-	REMOVE_TRAIT(owner, TRAIT_SIMPLESPEECH, TRAIT_STATUS_EFFECT(id))
+	REMOVE_TRAIT(owner, TRAIT_SIMPLESPEECH, id)
 
 // Reduces some stats, applies a high overlay, increases slurring by 10 and keeps slurring at a minimum of 10.
 /atom/movable/screen/alert/status_effect/mishap_arcane_high
@@ -755,7 +732,7 @@
 /datum/status_effect/debuff/mishap_arcane_high/on_apply()
 	. = ..()
 	owner.slurring += 10
-	ADD_TRAIT(owner, TRAIT_DRUQK, TRAIT_STATUS_EFFECT(id))
+	ADD_TRAIT(owner, TRAIT_DRUQK, id)
 	owner.overlay_fullscreen("arcane_high", /atom/movable/screen/fullscreen/druqks)
 	if (owner.client)
 		SSdroning.area_entered(get_area(owner), owner.client)
@@ -769,7 +746,7 @@
 /datum/status_effect/debuff/mishap_arcane_high/on_remove()
 	..()
 	owner.slurring = max(owner.slurring - 10, 0)
-	REMOVE_TRAIT(owner, TRAIT_DRUQK, TRAIT_STATUS_EFFECT(id))
+	REMOVE_TRAIT(owner, TRAIT_DRUQK, id)
 	owner.clear_fullscreen("arcane_high")
 	if (owner.client)
 		SSdroning.play_area_sound(get_area(owner), owner.client)
@@ -833,19 +810,19 @@
 	// that all limbs have a 50% chance of being paralyzed,
 	// and at least one limb is guaranteed to be paralyzed
 	if (limbs & PARALYZE_L_ARM)
-		ADD_TRAIT(owner, TRAIT_PARALYSIS_L_ARM, TRAIT_STATUS_EFFECT(id))
+		ADD_TRAIT(owner, TRAIT_PARALYSIS_L_ARM, id)
 		traits_added.Add(TRAIT_PARALYSIS_L_ARM)
 		bodyparts_disabled.Add(BODY_ZONE_L_ARM)
 	if (limbs & PARALYZE_R_ARM)
-		ADD_TRAIT(owner, TRAIT_PARALYSIS_R_ARM, TRAIT_STATUS_EFFECT(id))
+		ADD_TRAIT(owner, TRAIT_PARALYSIS_R_ARM, id)
 		traits_added.Add(TRAIT_PARALYSIS_R_ARM)
 		bodyparts_disabled.Add(BODY_ZONE_R_ARM)
 	if (limbs & PARALYZE_L_LEG)
-		ADD_TRAIT(owner, TRAIT_PARALYSIS_L_LEG, TRAIT_STATUS_EFFECT(id))
+		ADD_TRAIT(owner, TRAIT_PARALYSIS_L_LEG, id)
 		traits_added.Add(TRAIT_PARALYSIS_L_LEG)
 		bodyparts_disabled.Add(BODY_ZONE_L_LEG)
 	if (limbs & PARALYZE_R_LEG)
-		ADD_TRAIT(owner, TRAIT_PARALYSIS_R_LEG, TRAIT_STATUS_EFFECT(id))
+		ADD_TRAIT(owner, TRAIT_PARALYSIS_R_LEG, id)
 		traits_added.Add(TRAIT_PARALYSIS_R_LEG)
 		bodyparts_disabled.Add(BODY_ZONE_R_LEG)
 
@@ -857,7 +834,7 @@
 /datum/status_effect/debuff/mishap_arcane_paralysis/on_remove()
 	..()
 	for (var/trait in traits_added)
-		REMOVE_TRAIT(owner, trait, TRAIT_STATUS_EFFECT(id))
+		REMOVE_TRAIT(owner, trait, id)
 
 	for (var/part in bodyparts_disabled)
 		var/obj/item/bodypart/bodypart = owner.get_bodypart(part)
@@ -980,41 +957,3 @@
 	name = "Knockback Cooldown"
 	desc = "I have been knocked back recently by an attack and cannot be knocked back again"
 	icon_state = "debuff" // Placeholder
-
-/datum/status_effect/debuff/cast_disrupted
-	id = "cast_disrupted"
-	alert_type = /atom/movable/screen/alert/status_effect/debuff/cast_disrupted
-	duration = EXPOSED_CAST_LOCKOUT
-	status_type = STATUS_EFFECT_UNIQUE
-
-/datum/status_effect/debuff/cast_disrupted/on_creation(mob/living/new_owner, new_dur)
-	if(new_dur)
-		duration = new_dur
-	return ..()
-
-/datum/status_effect/debuff/feinted
-	id = "feinted"
-	alert_type = /atom/movable/screen/alert/status_effect/debuff/feinted
-	mob_effect_icon = 'icons/mob/mob_effects.dmi'
-	mob_effect_icon_state = "eff_feinted"
-	mob_effect_offset_y = 10
-	mob_effect_layer = MOB_EFFECT_LAYER_FEINTED
-	duration = 30 SECONDS
-
-/datum/status_effect/debuff/feinted/on_creation(mob/living/new_owner, new_dur)
-	if(new_dur)
-		duration = new_dur
-	return ..()
-
-//Unused
-
-/atom/movable/screen/alert/status_effect/debuff/cast_disrupted
-	name = "Casting Disrupted"
-	desc = "My concentration is broken. I cannot gather magicka until I recover."
-	icon = 'icons/mob/screen_alert_combat.dmi'
-	icon_state = "castdisrupted"
-
-/atom/movable/screen/alert/status_effect/debuff/feinted
-	name = "Feinted"
-	desc = "I've been feinted. It won't happen again so soon."
-	icon_state = "feinted"

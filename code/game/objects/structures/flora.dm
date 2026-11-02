@@ -108,7 +108,6 @@
 
 /obj/structure/flora/tree/evil/Destroy()
 	soundloop.stop()
-	QDEL_NULL(soundloop)
 	if(controller)
 		controller.endvines()
 		controller.tree = null
@@ -125,7 +124,6 @@
 	desc = ""
 	icon = 'icons/obj/flora/snowflora.dmi'
 	gender = PLURAL	//"this is grass" not "this is a grass"
-	plane = FLOOR_PLANE
 
 /obj/structure/flora/grass/brown
 	icon_state = "snowgrass1bb"
@@ -157,7 +155,6 @@
 	icon = 'icons/obj/flora/snowflora.dmi'
 	icon_state = "snowbush1"
 	anchored = TRUE
-	max_integrity = 30
 
 /obj/structure/flora/bush/Initialize(mapload)
 	icon_state = "snowbush[rand(1, 6)]"
@@ -170,7 +167,6 @@
 	desc = ""
 	icon = 'icons/obj/flora/ausflora.dmi'
 	icon_state = "firstbush_1"
-	max_integrity = 30
 
 /obj/structure/flora/ausbushes/Initialize(mapload)
 	if(icon_state == "firstbush_1")
@@ -342,7 +338,7 @@
 
 /obj/item/twohanded/required/kirbyplants/random
 	icon_state = "random_plant"
-	var/static/list/states
+	var/list/static/states
 
 /obj/item/twohanded/required/kirbyplants/random/Initialize(mapload)
 	. = ..()
@@ -459,32 +455,6 @@
 /obj/structure/flora/rock/pile/largejungle/Initialize(mapload)
 	. = ..()
 	icon_state = "[initial(icon_state)][rand(1,3)]"
-
-// maple tree
-
-/obj/structure/flora/maple
-	name = "maple tree"
-	desc = "A maple tree, trees with brillant orange, red and yellow leaves, a common imported tree from Grenzelhoft."
-	icon = 'icons/obj/structures/maple_tree.dmi'
-	icon_state = null
-	obj_flags = CAN_BE_HIT | IGNORE_SINK
-	layer = ABOVE_ALL_MOB_LAYER
-	plane = GAME_PLANE_UPPER
-
-	bound_height = 128
-	bound_width  = 128
-
-/obj/structure/flora/maple/a
-	icon_state = "maple1"
-
-/obj/structure/flora/maple/b
-	icon_state = "maple2"
-
-/obj/structure/flora/maple/c
-	icon_state = "maple3"
-
-/obj/structure/flora/maple/d
-	icon_state = "maple4"
 
 
 

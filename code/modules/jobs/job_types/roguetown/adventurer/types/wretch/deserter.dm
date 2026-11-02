@@ -32,10 +32,6 @@
 		/datum/skill/misc/riding = SKILL_LEVEL_EXPERT,
 		/datum/skill/misc/reading = SKILL_LEVEL_JOURNEYMAN,
 	)
-	subclass_stashed_items = list(
-		"Armor Plates" =  /obj/item/repair_kit/metal,
-	)
-	extra_context = "This class is restricted from using the Equestrian virtue."
 
 	virtue_restrictions = list(
 		/datum/virtue/utility/riding
@@ -71,7 +67,7 @@
 				backr = /obj/item/rogueweapon/scabbard/gwstrap
 				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
 			if("Longsword + Shield")
-				beltr = /obj/item/rogueweapon/scabbard/sword/noble
+				beltr = /obj/item/rogueweapon/scabbard/sword
 				r_hand = /obj/item/rogueweapon/sword/long
 				backr = /obj/item/rogueweapon/shield/tower/metal
 				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
@@ -104,18 +100,13 @@
 			"Bucket Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/bucket,
 			"Knight Helmet"		= /obj/item/clothing/head/roguetown/helmet/heavy/knight,
 			"Visored Sallet"			= /obj/item/clothing/head/roguetown/helmet/sallet/visored,
-			"Snouted Visored Sallet"			= /obj/item/clothing/head/roguetown/helmet/sallet/visored/snouted,
 			"Armet"				= /obj/item/clothing/head/roguetown/helmet/heavy/knight/armet,
-			"Snouted Armet"				= /obj/item/clothing/head/roguetown/helmet/heavy/knight/armet/snouted,
 			"Hounskull Bascinet" 		= /obj/item/clothing/head/roguetown/helmet/bascinet/pigface/hounskull,
-			"Roundface Bascinet"	= /obj/item/clothing/head/roguetown/helmet/bascinet/pigface/roundface,
-			"Snouted Roundface Bascinet"	= /obj/item/clothing/head/roguetown/helmet/bascinet/pigface/roundface/snouted,
 			"Etruscan Bascinet" 		= /obj/item/clothing/head/roguetown/helmet/bascinet/etruscan,
 			"Slitted Kettle"		= /obj/item/clothing/head/roguetown/helmet/heavy/knight/skettle,
 			"Froggemund Helmet"	= /obj/item/clothing/head/roguetown/helmet/heavy/frogmouth,
 			"Kulah Khud"	= /obj/item/clothing/head/roguetown/helmet/sallet/zyb,
 			"Otavan Helmet" = /obj/item/clothing/head/roguetown/helmet/otavan,
-			"Cataphract Helmet" = /obj/item/clothing/head/roguetown/helmet/heavy/cataphract,
 			"None"
 		)
 		var/helmchoice = input(H, "Choose your Helm.", "TAKE UP HELMS") as anything in helmets
@@ -128,7 +119,6 @@
 			"Steel Cuirass"		= /obj/item/clothing/suit/roguetown/armor/plate/half,
 			"Fluted Cuirass"	= /obj/item/clothing/suit/roguetown/armor/plate/half/fluted,
 			"Scalemail"		= /obj/item/clothing/suit/roguetown/armor/plate/scale,
-			"Cataphract's Armor"	= /obj/item/clothing/suit/roguetown/armor/plate/cataphract,
 		)
 		var/armorchoice = input(H, "Choose your armor.", "TAKE UP ARMOR") as anything in armors
 		armor = armors[armorchoice]
@@ -143,7 +133,7 @@
 	beltl = /obj/item/storage/belt/rogue/pouch/coins/poor
 	backl = /obj/item/storage/backpack/rogue/satchel //gwstraps landing on backr asyncs with backpack_contents
 	backpack_contents = list(
-		/obj/item/rogueweapon/huntingknife/combat/messer = 1,
+		/obj/item/rogueweapon/huntingknife/idagger/steel/special = 1,
 		/obj/item/flashlight/flare/torch/lantern/prelit = 1,
 		/obj/item/rope/chain = 1,
 		/obj/item/rogueweapon/scabbard/sheath = 1,
@@ -189,7 +179,7 @@
 /datum/outfit/job/roguetown/wretch/desertermaa/pre_equip(mob/living/carbon/human/H)
 	..()
 	if(H.mind)
-		var/weapons = list("Warhammer & Shield","Sabre & Shield","Axe & Shield","Billhook","Greataxe","Halberd","Crossbow","Urumi & Shield")
+		var/weapons = list("Warhammer & Shield","Sabre & Shield","Axe & Shield","Billhook","Greataxe","Halberd","Crossbow",)
 		var/weapon_choice = input(H, "Choose your weapon.", "TAKE UP ARMS") as anything in weapons
 		H.set_blindness(0)
 		switch(weapon_choice)
@@ -215,9 +205,6 @@
 			if("Greataxe")
 				r_hand = /obj/item/rogueweapon/greataxe
 				backl = /obj/item/rogueweapon/scabbard/gwstrap
-			if("Urumi & Shield")
-				r_hand = /obj/item/rogueweapon/whip/urumi
-				backl = /obj/item/rogueweapon/shield/iron
 	H.verbs |= list(/mob/living/carbon/human/mind/proc/setorderswretch)
 	if(H.mind)
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/order/retreat)
@@ -236,7 +223,6 @@
 		"Steel Shishak" 		 = /obj/item/clothing/head/roguetown/helmet/sallet/shishak,
 		"Nomad Helmet" 			 = /obj/item/clothing/head/roguetown/helmet/nomadhelmet,
 		"Grenzelhoft Plume Hat"  = /obj/item/clothing/head/roguetown/grenzelhofthat,
-		"Janissary Helm"  = /obj/item/clothing/head/roguetown/helmet/janissaryhelm,
 		"None"
 		)
 		var/helmchoice = input(H, "Choose your Helm.", "TAKE UP HELMS") as anything in helmets
@@ -322,19 +308,11 @@
 				wrists = /obj/item/clothing/wrists/roguetown/bracers
 				shoes = /obj/item/clothing/shoes/roguetown/boots/otavan
 				gloves = /obj/item/clothing/gloves/roguetown/otavan
-			if("Janissary Set")
-				shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/zyb
-				armor = /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk/janissary
-				pants = /obj/item/clothing/under/roguetown/chainlegs/kilt
-				neck = /obj/item/clothing/neck/roguetown/chaincoif/chainmantle
-				wrists = /obj/item/clothing/wrists/roguetown/bracers
-				shoes = /obj/item/clothing/shoes/roguetown/shalal/reinforced
-				gloves = /obj/item/clothing/gloves/roguetown/chain
 	belt = /obj/item/storage/belt/rogue/leather
 	beltl = /obj/item/rogueweapon/mace/cudgel
 	backr = /obj/item/storage/backpack/rogue/satchel
 	if(H.mind)
-		var/archetype = list("Heavy Infantry", "Light Infantry", "Bogguard/Cavalryman", "Feldsher", "Veteran")
+		var/archetype = list("Heavy Infantry", "Light Infantry", "Bogguard/Cavalryman", "Feldsher", "Warcaster", "Veteran")
 		var/archetype_choice = input (H, "Choose your primary training.", "HOW DO YOU KILL?") as anything in archetype
 		switch(archetype_choice)
 			if("Heavy Infantry") //Classic Deserter. Master Athletics, Expert Swimming and Expert Shields. Otherwise nothing special.
@@ -366,6 +344,19 @@
 				cloak = /obj/item/clothing/suit/roguetown/shirt/robe/feld
 				beltl = /obj/item/storage/belt/rogue/surgery_bag
 				to_chat(H, span_warning("You were a field chirurgeon, a healer rather than a killer. In time, you learned how to murder and became both."))
+			if("Warcaster") //Wretch Spellblade that's not exclusive to racist elfs! T2 Arcyne, Magearmor, Apprentice Arcyne, 12 spell points, but worse stats -- weighted stat total of +5.
+				ADD_TRAIT(H, TRAIT_ARCYNE_T2, TRAIT_GENERIC)
+				ADD_TRAIT(H, TRAIT_MAGEARMOR, TRAIT_GENERIC)
+				H.adjust_skillrank_up_to(/datum/skill/magic/arcane, SKILL_LEVEL_APPRENTICE, TRUE)
+				H.change_stat(STATKEY_STR, -1)
+				H.change_stat(STATKEY_CON, -1)
+				H.change_stat(STATKEY_PER, -1)
+				H.mind?.adjust_spellpoints(12)
+				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/airblade)
+				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/enchant_weapon)
+				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/conjure_weapon)
+				cloak = /obj/item/clothing/cloak/tabard
+				to_chat(H, span_warning("You trained in the difficult skill of casting magic while clad in burdening armour. Your training paid off, but left little time or energy for physical education."))
 			if("Veteran") //Master in primary weapon skills and Expert in all other weapon skills except Unarmed, but worse stats -- weighted stat total of +5.
 				H.adjust_skillrank_up_to(/datum/skill/combat/polearms, SKILL_LEVEL_MASTER, TRUE)
 				H.adjust_skillrank_up_to(/datum/skill/combat/swords, SKILL_LEVEL_MASTER, TRUE)
@@ -388,9 +379,6 @@
 
 /obj/effect/proc_holder/spell/invoked/order
 	name = ""
-	overlay_icon = 'icons/mob/actions/orders.dmi'
-	action_icon = 'icons/mob/actions/orders.dmi'
-	sound = 'sound/magic/inspire_02.ogg'
 	range = 5
 	associated_skill = /datum/skill/misc/athletics
 	devotion_cost = 0
@@ -399,13 +387,15 @@
 	releasedrain = 80
 	recharge_time = 2 MINUTES
 	miracle = FALSE
+	sound = 'sound/magic/inspire_02.ogg'
+
 
 /obj/effect/proc_holder/spell/invoked/order/retreat
 	name = "Tactical Retreat!"
 	chargedrain = 0
 	chargetime = 0
 	desc = "Gives 3 SPD for your brothers!"
-	overlay_state = "move"
+	overlay_state = "movemovemove"
 
 /obj/effect/proc_holder/spell/invoked/order/retreat/cast(list/targets, mob/living/user)
 	. = ..()
@@ -449,7 +439,7 @@
 /obj/effect/proc_holder/spell/invoked/order/bolster
 	name = "Hold the Line!"
 	desc = "Gives 2 CON and 3 WIL for your brothers!"
-	overlay_state = "hold"
+	overlay_state = "takeaim"
 	chargedrain = 0
 	chargetime = 0
 
@@ -491,7 +481,7 @@
 
 /obj/effect/proc_holder/spell/invoked/order/brotherhood
 	name = "For the Brotherhood!"
-	desc = "Orders an underling to stand up and fight without fear or pain."
+	desc = "Your brothers won't feel any pain for a bit, also it'll help them get back on feet!"
 	overlay_state = "onfeet"
 	chargedrain = 0
 	chargetime = 0

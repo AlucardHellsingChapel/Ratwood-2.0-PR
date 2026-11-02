@@ -14,15 +14,12 @@
 		TRAIT_DODGEEXPERT,
 		TRAIT_BLACKBAGGER,
 		TRAIT_PERFECT_TRACKER,
-		TRAIT_SLEUTH,
 		TRAIT_PURITAN_ADVENTURER,//For fluff.
 	)
-	vice_restrictions = list(/datum/charflaw/hemophage, /datum/charflaw/silverweakness)
-	subclass_stats = list(//+9
-		STATKEY_SPD = 3,
-		STATKEY_WIL = 3,
-		STATKEY_PER = 2,
-		STATKEY_STR = -1
+	subclass_stats = list(
+		STATKEY_PER = 3,
+		STATKEY_SPD = 2,
+		STATKEY_WIL = 2,
 	)
 	subclass_skills = list(
 		/datum/skill/combat/wrestling = SKILL_LEVEL_JOURNEYMAN, //Should rely on the seizing garrote to properly subdue foes.
@@ -35,6 +32,7 @@
 		/datum/skill/misc/stealing = SKILL_LEVEL_MASTER,
 		/datum/skill/misc/lockpicking = SKILL_LEVEL_MASTER,
 		/datum/skill/misc/tracking = SKILL_LEVEL_EXPERT,
+		/datum/skill/combat/crossbows = SKILL_LEVEL_EXPERT,
 		/datum/skill/misc/swimming = SKILL_LEVEL_APPRENTICE,
 	)
 	subclass_stashed_items = list(
@@ -49,18 +47,8 @@
 	H.verbs |= /mob/living/carbon/human/proc/faith_test
 	H.verbs |= /mob/living/carbon/human/proc/torture_victim
 	if(H.mind)
-		var/stats = list("I am quick on my feet (+I SPD +I WIL)", "I am stronger than others (+I STR +I PER)") // Both add up to +9
-		var/stat_choice = input(H, "What has PSYDON made you?", "THIS IS WHO PSYDON MADE ME.") as anything in stats
-		switch(stat_choice)
-			if("I am quick on my feet (+I SPD +I WIL)")
-			//does nothing. these stats are already given by default
-			if("I am stronger than others (+I STR +I PER)")
-				H.change_stat(STATKEY_STR, 1)
-				H.change_stat(STATKEY_PER, 1)
-				H.change_stat(STATKEY_WIL, -1)
-				H.change_stat(STATKEY_SPD, -1)
 		var/weapons = list("Blessed Psydonic Dagger", "Psydonic Handmace", "Psydonic Shortsword")
-		var/weapon_choice = input(H,"CHOOSE YOUR WEAPON.", "TAKE UP PSYDON'S ARMS.") as anything in weapons
+		var/weapon_choice = input(H,"Choose your WEAPON.", "TAKE UP PSYDON'S ARMS.") as anything in weapons
 		switch(weapon_choice)
 			if("Blessed Psydonic Dagger")
 				l_hand = /obj/item/rogueweapon/huntingknife/idagger/silver/psydagger
@@ -73,32 +61,18 @@
 				l_hand = /obj/item/rogueweapon/sword/short/psy
 				r_hand = /obj/item/rogueweapon/scabbard/sword
 				H.adjust_skillrank_up_to(/datum/skill/combat/swords, 4, TRUE)
-
-		var/ranged_weapons = list("Slurbow", "Runelock Pistol")
-		var/ranged_choice = input(H, "CHOOSE YOUR RANGED WEAPON.", "STRIKE FROM AFAR.") as anything in ranged_weapons
-		switch(ranged_choice)
-			if("Slurbow")
-				H.adjust_skillrank_up_to(/datum/skill/combat/crossbows, SKILL_LEVEL_EXPERT, TRUE)
-				H.equip_to_slot_or_del(new /obj/item/storage/belt/rogue/leather/knifebelt/black/psydon, SLOT_BELT, TRUE)
-				H.equip_to_slot_or_del(new /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow/slurbow, SLOT_BACK_L, TRUE)
-				var/quivers = list("Bolts - Steel-Tipped", "Sunderbolts - Silver-Tipped, Halved Damage")
-				var/bolt_choice = input(H, "CHOOSE YOUR MUNITIONS.", "TAKE UP PSYDON'S MISSILES.") as anything in quivers
-				switch(bolt_choice)
-					if("Bolts - Steel-Tipped")
-						H.equip_to_slot_or_del(new /obj/item/quiver/bolts, SLOT_BELT_L, TRUE)
-					if("Sunderbolts - Silver-Tipped, Halved Damage")
-						H.equip_to_slot_or_del(new /obj/item/quiver/holybolts, SLOT_BELT_L, TRUE)
-			if("Runelock Pistol")
-				ADD_TRAIT(H, TRAIT_FUSILIER, TRAIT_GENERIC)
-				H.adjust_skillrank_up_to(/datum/skill/combat/firearms, SKILL_LEVEL_EXPERT, TRUE)
-				H.equip_to_slot_or_del(new /obj/item/storage/belt/rogue/leather/twilight_holsterbelt, SLOT_BELT, TRUE)
-				H.equip_to_slot_or_del(new /obj/item/gun/ballistic/revolver/rune/twilight_runelock/lesser, SLOT_BELT_L, TRUE)
-				H.equip_to_slot_or_del(new /obj/item/quiver/twilight_bullet/runicbag, SLOT_BACK_L, TRUE)
-
+		var/quivers = list("Bolts - Steel-Tipped", "Sunderbolts - Silver-Tipped, Halved Damage")
+		var/bolt_choice = input(H,"CHOOSE YOUR MUNITIONS", "TAKE UP PSYDON'S MISSILES.") as anything in quivers
+		switch(bolt_choice)
+			if("Bolts - Steel-Tipped")
+				beltl = /obj/item/quiver/bolts
+			if("Sunderbolts - Silver-Tipped, Halved Damage")
+				beltl = /obj/item/quiver/holybolts
 
 	head = /obj/item/clothing/head/roguetown/roguehood/psydon/confessor
 	armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat/confessor
 	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/inq
+	backl = /obj/item/gun/ballistic/revolver/grenadelauncher/crossbow/slurbow
 	cloak = /obj/item/storage/backpack/rogue/satchel/beltpack
 	wrists = /obj/item/clothing/neck/roguetown/psicross/silver
 	gloves = /obj/item/clothing/gloves/roguetown/otavan/psygloves
@@ -109,7 +83,7 @@
 	pants = /obj/item/clothing/under/roguetown/heavy_leather_pants/otavan
 	shoes = /obj/item/clothing/shoes/roguetown/boots/psydonboots
 	mask = /obj/item/clothing/mask/rogue/facemask/steel/confessor
-	id = /obj/item/clothing/ring/signet/silver/inqscomm
+	id = /obj/item/clothing/ring/signet/silver
 	backpack_contents = list(
 		/obj/item/roguekey/inquisition = 1,
 		/obj/item/rope/inqarticles/inquirycord = 1,

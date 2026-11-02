@@ -100,7 +100,7 @@
 	contains = list(/obj/item/reagent_containers/glass/bottle/rogue/beer/apfelweinheim)
 
 /datum/supply_pack/rogue/alcohol/rtoper
-	name = "Rockhill Toper (Beer)"
+	name = "Rockhill Toper (Lirvas Beer)"
 	cost = 10
 	contains = list(/obj/item/reagent_containers/glass/bottle/rogue/beer/rtoper)
 

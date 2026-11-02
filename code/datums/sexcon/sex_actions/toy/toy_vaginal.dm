@@ -2,17 +2,23 @@
 	name = "Pleasure cunt with toy"
 	user_sex_part = SEX_PART_CUNT
 	category = SEX_CATEGORY_PENETRATE
-	solo = TRUE
+	target_sex_part = SEX_PART_CUNT
 
 /datum/sex_action/toy_vagina/shows_on_menu(mob/living/carbon/human/user, mob/living/carbon/human/target)
-	if(!(. = ..()))
+	if(user != target)
+		return FALSE
+	if(!user.getorganslot(ORGAN_SLOT_VAGINA))
 		return FALSE
 	if(!get_dildo_in_either_hand(user))
 		return FALSE
 	return TRUE
 
-/datum/sex_action/toy_anal/can_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
-	if(!(. = ..()))
+/datum/sex_action/toy_vagina/can_perform(mob/living/user, mob/living/target)
+	if(user != target)
+		return FALSE
+	if(!check_location_accessible(user, user, BODY_ZONE_PRECISE_GROIN, TRUE))
+		return FALSE
+	if(!user.getorganslot(ORGAN_SLOT_VAGINA))
 		return FALSE
 	if(!get_dildo_in_either_hand(user))
 		return FALSE
@@ -24,7 +30,7 @@
 
 /datum/sex_action/toy_vagina/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	var/obj/item/dildo/dildo = get_dildo_in_either_hand(user)
-	user.sexcon_action_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] pleasures [user.p_their()] cunt \the [dildo]."))
+	user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] pleasures [user.p_their()] cunt \the [dildo]."))
 	user.sexcon.outercourse_noise(user, TRUE)
 
 	user.sexcon.perform_sex_action(user, 2, 4, TRUE)

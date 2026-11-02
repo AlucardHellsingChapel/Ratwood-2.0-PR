@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useBackend } from 'tgui/backend';
 import { Window } from 'tgui/layouts';
 import { Box, Section, Stack, TextArea } from 'tgui-core/components';
@@ -19,7 +19,6 @@ type TextInputData = {
   spellcheck: BooleanLike;
   bigmodal?: boolean;
   disable_paste?: boolean; // right now just used by chastity code to force players to type out a message with ctrl+c ctrl+v, other use cases may exist. Options are nice :).
-  preview_leadin?: string | null; // Optional prefix shown as a live preview ahead of the typed text.
 };
 
 export const sanitizeMultiline = (toSanitize: string) => {
@@ -55,12 +54,9 @@ export const TextInputModal = (props) => {
     spellcheck,
     bigmodal,
     disable_paste,
-    preview_leadin,
   } = data;
 
-  // Only initialize input from placeholder on first mount
-  const initialInput = useRef(placeholder || '');
-  const [input, setInput] = useState(initialInput.current);
+  const [input, setInput] = useState(placeholder || '');
 
   const onType = (value: string) => {
     if (value === input) {
@@ -80,11 +76,9 @@ export const TextInputModal = (props) => {
   // so they're comfortable to read and edit. visualMultiline (input overflow) gets a modest bump.
   // bigmodal hard-overrides both for the largest inputs.
   let windowHeight =
-    145 +
-    dynamicHeight +
+    145 + dynamicHeight +
     (multiline ? 225 : visualMultiline ? 80 : 0) +
     (message.length && large_buttons ? 5 : 0);
-  if (preview_leadin) windowHeight += 30;
   if (bigmodal) windowHeight = 500;
   const windowWidth = bigmodal ? 530 : multiline ? 425 : 325;
 
@@ -96,7 +90,7 @@ export const TextInputModal = (props) => {
       act('cancel');
     }
   }
-  // gate for chastity hardmode prayer to prevent cheaters from copy pasting
+// gate for chastity hardmode prayer to prevent cheaters from copy pasting
   const handleBlockedInput = (event) => {
     if (!disable_paste) {
       return;
@@ -115,11 +109,7 @@ export const TextInputModal = (props) => {
             </Stack.Item>
             <Stack.Item grow>
               {/* height:100% propagates the Stack.Item's grown height down to the TextArea */}
-              <div
-                style={{ height: '100%' }}
-                onDrop={handleBlockedInput}
-                onPaste={handleBlockedInput}
-              >
+              <div style={{ height: '100%' }} onDrop={handleBlockedInput} onPaste={handleBlockedInput}>
                 <TextArea
                   autoFocus
                   autoSelect
@@ -134,15 +124,11 @@ export const TextInputModal = (props) => {
                 />
               </div>
             </Stack.Item>
-            {!!preview_leadin && (
-              <Stack.Item>
-                <Box color="label" italic>
-                  {preview_leadin} {input.trim() || '...'}
-                </Box>
-              </Stack.Item>
-            )}
             <Stack.Item>
-              <InputButtons input={input} message={`${input.length}`} />
+              <InputButtons
+                input={input}
+                message={`${input.length}`}
+              />
             </Stack.Item>
           </Stack>
         </Section>

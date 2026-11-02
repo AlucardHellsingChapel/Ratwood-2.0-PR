@@ -13,7 +13,6 @@
 	desc = "This leechtick has feasted on lux and digested it. A crazy person might use this for revival..."
 	sellprice = 40
 	w_class = WEIGHT_CLASS_TINY
-	dropshrink = 0.85
 
 /obj/item/leechtick/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	. = ..()
@@ -33,7 +32,7 @@
 	if(!SSchimeric_tech.get_node_status("CORPSE_TICKS") && target.stat == DEAD)
 		return FALSE
 
-	if(target.has_status_effect(/datum/status_effect/debuff/devitalised) || target.has_status_effect(/datum/status_effect/debuff/devitalised/lux_ripped))
+	if(target.has_status_effect(/datum/status_effect/debuff/devitalised))
 		return FALSE
 
 	var/datum/component/leechtick_attachment/existing = target.GetComponent(/datum/component/leechtick_attachment)

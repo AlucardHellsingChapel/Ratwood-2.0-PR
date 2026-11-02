@@ -1,4 +1,3 @@
-// why does this use a component, it should be on the heart beast type, this is dumb
 /datum/component/chimeric_heart_beast
 	var/obj/structure/roguemachine/chimeric_heart_beast/heart_beast
 	var/base_blood_output = 1
@@ -148,13 +147,11 @@
 		if(!valid_turfs.len)
 			break
 
-		addtimer(CALLBACK(src, PROC_REF(delayed_discharge), valid_turfs), rand(1, 5) SECONDS)
-
-/datum/component/chimeric_heart_beast/proc/delayed_discharge(list/valid_turfs)
-	var/turf/target_turf = pick(valid_turfs)
-	valid_turfs -= target_turf
-	playsound(heart_beast, 'sound/misc/machinevomit.ogg', 75, TRUE)
-	create_discharge_projectile(target_turf)
+		spawn(rand(1, 5) SECONDS)
+			var/turf/target_turf = pick(valid_turfs)
+			valid_turfs -= target_turf
+			playsound(heart_beast, 'sound/misc/machinevomit.ogg', 75, TRUE)
+			create_discharge_projectile(target_turf)
 
 /datum/component/chimeric_heart_beast/proc/process_environment_quirks()
 	if(!environment_quirks.len)
@@ -202,7 +199,7 @@
 
 /datum/component/chimeric_heart_beast/proc/update_blood_overlay()
 	var/blood_percent = blood_pool / max_blood_pool
-	heart_beast.cut_overlays()
+	heart_beast.cut_overlay("blood_pool")
 
 	var/chunk = round(blood_percent * 5) // This gives us 0-5
 	if(chunk >= 1)
@@ -238,10 +235,12 @@
 	SIGNAL_HANDLER
 
 	if(istype(I, /obj/item/heart_blood_canister))
-		INVOKE_ASYNC(src, PROC_REF(try_fill_blood_container), I, user, (max_blood_pool / 10), /obj/item/heart_blood_canister/filled)
+		spawn(0)
+			try_fill_blood_container(I, user, (max_blood_pool / 10), /obj/item/heart_blood_canister/filled)
 		return
 	else if(istype(I, /obj/item/heart_blood_vial))
-		INVOKE_ASYNC(src, PROC_REF(try_fill_blood_container), I, user, (max_blood_pool / 30), /obj/item/heart_blood_vial/filled)
+		spawn(0)
+			try_fill_blood_container(I, user, (max_blood_pool / 30), /obj/item/heart_blood_vial/filled)
 		return
 
 	if(!item_interaction_quirks.len)

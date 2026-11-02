@@ -145,10 +145,7 @@
 			reset_accessory_colors(prefs, entry)
 
 /datum/customizer/organ/wings/anthro
-	customizer_choices = list(
-		/datum/customizer_choice/organ/wings/anthro,
-		/datum/customizer_choice/organ/wings/moth,
-		)
+	customizer_choices = list(/datum/customizer_choice/organ/wings/anthro)
 	allows_disabling = TRUE
 	default_disabled = TRUE
 
@@ -174,7 +171,6 @@
 		/datum/sprite_accessory/wings/wide/low_wings_top,
 		/datum/sprite_accessory/wings/wide/spider,
 		/datum/sprite_accessory/wings/huge/dragon,
-		/datum/sprite_accessory/wings/dragon/clipped,
 		/datum/sprite_accessory/wings/huge/angel,
 		/datum/sprite_accessory/wings/huge/skeleton,
 		/datum/sprite_accessory/wings/large/harpyswept,
@@ -234,7 +230,6 @@
 		/datum/sprite_accessory/wings/wide/dragon_alt1,
 		/datum/sprite_accessory/wings/wide/dragon_alt2,
 		/datum/sprite_accessory/wings/huge/dragon,
-		/datum/sprite_accessory/wings/dragon/clipped,
 		/datum/sprite_accessory/wings/feathery,
 		/datum/sprite_accessory/wings/featheryv2,
 		/datum/sprite_accessory/wings/fairy,

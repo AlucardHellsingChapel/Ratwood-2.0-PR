@@ -4,31 +4,25 @@
 	anvilrepair = /datum/skill/craft/armorsmithing
 
 /obj/item/clothing/head/roguetown/crown/fakecrown
-	no_loot_taint = TRUE
 	name = "fake crown"
 	desc = "You shouldn't be seeing this."
 	icon_state = "serpcrown"
 
 /obj/item/clothing/head/roguetown/crown/surplus
-	no_loot_taint = TRUE
 	name = "crown"
 	icon_state = "serpcrowno"
 	sellprice = 100
 	allowed_race = list(/datum/species/goblinp)
-	dropshrink = null
 
 /obj/item/clothing/head/roguetown/crown/byos
-	no_loot_taint = TRUE
 	name = "ancient crown"
 	desc = "ooga chacka..."
 	color = "#ffe6db"
 	icon_state = "serpcrowno"
 	sellprice = 100
 	slot_flags = ITEM_SLOT_HEAD|ITEM_SLOT_MASK
-	dropshrink = null
 
 /obj/item/clothing/head/roguetown/crown/sparrowcrown
-	no_loot_taint = TRUE
 	name = "champion's circlet"
 	desc = ""
 	icon_state = "sparrowcrown"
@@ -38,7 +32,6 @@
 	sellprice = 50
 
 /obj/item/clothing/head/roguetown/nyle
-	no_loot_taint = TRUE
 	name = "jewel of nyle"
 	icon_state = "nile"
 	body_parts_covered = null
@@ -56,15 +49,11 @@
 	sellprice = 100
 
 /obj/item/clothing/head/roguetown/circlet
-	is_gold = TRUE
-	no_loot_taint = TRUE
 	name = "golden circlet"
 	icon_state = "circlet"
 	item_state = "circlet"
 	sewrepair = FALSE
 	anvilrepair = /datum/skill/craft/armorsmithing
-	nudist_approved = TRUE
-	resistance_flags = FIRE_PROOF
 	sellprice = 50
 
 /obj/item/clothing/head/roguetown/circlet/carvedgem

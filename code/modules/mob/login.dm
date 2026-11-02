@@ -24,8 +24,6 @@
 
 
 /mob/Login()
-	if(!client) // sleeping code can result in the client being already gone
-		return FALSE
 	GLOB.player_list |= src
 	lastKnownIP	= client.address
 	computer_id	= client.computer_id
@@ -41,11 +39,6 @@
 	if(hud_used && client && client.prefs)
 		hud_used.show_hud(hud_used.hud_version)
 		hud_used.update_ui_style(ui_style2icon(client.prefs.UI_style))
-
-	// Re-show any actions that were granted before the hud existed (e.g. during mind transfer)
-	for(var/datum/action/action as anything in actions)
-		if(!action.viewers[hud_used])
-			action.ShowTo(src)
 
 	next_move = 1
 
@@ -84,9 +77,6 @@
 
 		if(client.player_details.player_actions.len)
 			for(var/datum/action/A in client.player_details.player_actions)
-				if(QDELETED(A))
-					client.player_details.player_actions -= A
-					continue
 				A.Grant(src)
 
 		for(var/foo in client.player_details.post_login_callbacks)
@@ -102,15 +92,8 @@
 	log_message("Client [key_name(src)] has taken ownership of mob [src]([src.type])", LOG_OWNERSHIP)
 	enable_client_mobs_in_contents(client)
 	SEND_SIGNAL(src, COMSIG_MOB_CLIENT_LOGIN, client)
-	client?.preload_music()
-
-	// Re-apply per-client noise verb filtering after a client attaches to a human body.
-	// Human Initialize() runs before client prefs are available, so this keeps
-	// "Hide Unavailable Noises" consistent on login/reconnect/body transfer.
-	if(ishuman(src))
-		var/mob/living/carbon/human/H = src
-		H.update_tongue_noise_verbs()
-		H.update_keen_ears_verb()
+	if(client)
+		client.preload_music()
 
 /**
  * Checks if the attached client is an admin and may deadmin them

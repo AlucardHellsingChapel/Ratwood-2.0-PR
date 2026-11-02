@@ -3,7 +3,7 @@
 	allowed_sexes = list(MALE)
 	allowed_races = list(/datum/species/human/northern)
 	outfit = /datum/outfit/job/roguetown/adventurer/whitecheese
-	traits_applied = list(TRAIT_HEAVYARMOR, TRAIT_BREADY, TRAIT_STEELHEARTED)
+	traits_applied = list(TRAIT_HEAVYARMOR, TRAIT_BREADY, TRAIT_STEELHEARTED, TRAIT_ARCYNE_T2)
 	// oh god oh fuck this dont seem very safe to do
 	// this looks kinda op so imma just leave it at patreon level 1 until someone puts this behind a different lock
 	maximum_possible_slots = 1
@@ -16,6 +16,7 @@
 		STATKEY_INT = 3,
 		STATKEY_SPD = 2,
 	)
+	subclass_spellpoints = 9
 	subclass_skills = list(
 		/datum/skill/combat/polearms = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/combat/maces = SKILL_LEVEL_APPRENTICE,
@@ -58,6 +59,9 @@
 	beltl = /obj/item/storage/belt/rogue/pouch/coins/rich
 
 	H.dna.species.soundpack_m = new /datum/voicepack/male/evil/blkknight()
+	if(H.mind)
+		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/lightningbolt)
+		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/projectile/fetch)
 
 	H.ambushable = FALSE
 

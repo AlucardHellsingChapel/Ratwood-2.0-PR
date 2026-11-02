@@ -34,5 +34,4 @@ map byos
 endmap
 
 map deserttown
-	votable
 endmap

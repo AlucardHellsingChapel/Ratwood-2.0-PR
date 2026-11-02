@@ -11,7 +11,7 @@
 	maximum_possible_slots = 1
 	pickprob = 5
 	category_tags = list(CTAG_TOWNER)
-	traits_applied = list(TRAIT_DARKVISION, TRAIT_SMITHING_EXPERT, TRAIT_LEGENDARY_MINER)
+	traits_applied = list(TRAIT_DARKVISION, TRAIT_SMITHING_EXPERT)
 	subclass_stats = list(
 		STATKEY_LCK = 4,
 		STATKEY_STR = 2,
@@ -21,11 +21,12 @@
 		STATKEY_PER = 1
 	)
 	subclass_skills = list(
+		/datum/skill/combat/axes = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/misc/athletics = SKILL_LEVEL_EXPERT, // Tough. Well fed. The strongest of the strong.
 		/datum/skill/combat/wrestling = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/combat/unarmed = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/combat/knives = SKILL_LEVEL_NOVICE,
-		/datum/skill/combat/slings = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/maces = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/craft/engineering = SKILL_LEVEL_NOVICE,
 		/datum/skill/craft/carpentry = SKILL_LEVEL_NOVICE,
 		/datum/skill/craft/masonry = SKILL_LEVEL_JOURNEYMAN,
@@ -45,9 +46,9 @@
 	armor = /obj/item/clothing/suit/roguetown/armor/workervest
 	shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/random
 	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
-	belt = /obj/item/storage/belt/rogue/leather
+	belt = /obj/item/storage/belt/rogue/leather/rope
 	neck = /obj/item/storage/belt/rogue/pouch/coins/mid
-	beltl = /obj/item/rogueweapon/pick/steel
+	beltl = /obj/item/rogueweapon/pick
 	beltr = /obj/item/storage/hip/orestore/bronze
 	backl = /obj/item/storage/backpack/rogue/backpack
 	backpack_contents = list(

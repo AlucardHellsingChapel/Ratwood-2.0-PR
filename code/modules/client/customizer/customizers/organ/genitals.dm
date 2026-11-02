@@ -8,14 +8,6 @@
 /datum/customizer/organ/penis/is_allowed(datum/preferences/prefs)
 	return TRUE
 
-/proc/sheath_type_preference_label(sheath_type)
-	switch(sheath_type)
-		if(SHEATH_TYPE_NORMAL)
-			return "Sheath"
-		if(SHEATH_TYPE_SLIT)
-			return "Slit"
-	return "None"
-
 /datum/customizer_choice/organ/penis
 	abstract_type = /datum/customizer_choice/organ/penis
 	name = "Penis"
@@ -28,7 +20,6 @@
 	..()
 	var/datum/customizer_entry/organ/penis/penis_entry = entry
 	penis_entry.penis_size = sanitize_integer(penis_entry.penis_size, MIN_PENIS_SIZE, MAX_PENIS_SIZE, DEFAULT_PENIS_SIZE)
-	penis_entry.sheath_type = sanitize_integer(penis_entry.sheath_type, SHEATH_TYPE_NONE, SHEATH_TYPE_SLIT, SHEATH_TYPE_NONE)
 
 /datum/customizer_choice/organ/penis/imprint_organ_dna(datum/organ_dna/organ_dna, datum/customizer_entry/entry, datum/preferences/prefs)
 	..()
@@ -36,14 +27,12 @@
 	var/datum/customizer_entry/organ/penis/penis_entry = entry
 	penis_dna.penis_size = penis_entry.penis_size
 	penis_dna.functional = penis_entry.functional
-	penis_dna.sheath_type = penis_entry.sheath_type
 
 /datum/customizer_choice/organ/penis/generate_pref_choices(list/dat, datum/preferences/prefs, datum/customizer_entry/entry, customizer_type)
 	..()
 	var/datum/customizer_entry/organ/penis/penis_entry = entry
 	dat += "<br>Penis size: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=penis_size''>[find_key_by_value(GLOB.named_penis_sizes, penis_entry.penis_size)]</a>"
 	dat += "<br>Functional: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=functional''>[penis_entry.functional ? "YES" : "NO"]</a>"
-	dat += "<br>Sheath: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=sheath_type''>[sheath_type_preference_label(penis_entry.sheath_type)]</a>"
 
 /datum/customizer_choice/organ/penis/handle_topic(mob/user, list/href_list, datum/preferences/prefs, datum/customizer_entry/entry, customizer_type)
 	..()
@@ -57,19 +46,10 @@
 			penis_entry.penis_size = sanitize_integer(new_size, MIN_PENIS_SIZE, MAX_PENIS_SIZE, DEFAULT_PENIS_SIZE)
 		if("functional")
 			penis_entry.functional = !penis_entry.functional
-		if("sheath_type")
-			switch(penis_entry.sheath_type)
-				if(SHEATH_TYPE_NONE)
-					penis_entry.sheath_type = SHEATH_TYPE_NORMAL
-				if(SHEATH_TYPE_NORMAL)
-					penis_entry.sheath_type = SHEATH_TYPE_SLIT
-				else
-					penis_entry.sheath_type = SHEATH_TYPE_NONE
 
 /datum/customizer_entry/organ/penis
 	var/penis_size = DEFAULT_PENIS_SIZE
 	var/functional = TRUE
-	var/sheath_type = SHEATH_TYPE_NONE
 
 /datum/customizer/organ/penis/human
 	customizer_choices = list(/datum/customizer_choice/organ/penis/human)
@@ -80,8 +60,6 @@
 		/datum/customizer_choice/organ/penis/knotted,
 		/datum/customizer_choice/organ/penis/equine,
 		/datum/customizer_choice/organ/penis/equine_knotted,
-		/datum/customizer_choice/organ/penis/equine_slit,
-		/datum/customizer_choice/organ/penis/equine_knotted_slit,
 		/datum/customizer_choice/organ/penis/tapered_mammal,
 		/datum/customizer_choice/organ/penis/tapered_double_mammal,
 		/datum/customizer_choice/organ/penis/tapered,
@@ -132,8 +110,6 @@
 		/datum/customizer_choice/organ/penis/human_anthro,
 		/datum/customizer_choice/organ/penis/equine,
 		/datum/customizer_choice/organ/penis/equine_knotted,
-		/datum/customizer_choice/organ/penis/equine_slit,
-		/datum/customizer_choice/organ/penis/equine_knotted_slit,
 		)
 
 /datum/customizer_choice/organ/penis/human
@@ -165,20 +141,6 @@
 /datum/customizer_choice/organ/penis/equine_knotted
 	name = "Equine Knotted Penis"
 	organ_type = /obj/item/organ/penis/equine_knotted
-	sprite_accessories = list(
-		/datum/sprite_accessory/penis/flared_knotted,
-		)
-
-/datum/customizer_choice/organ/penis/equine_slit
-	name = "Equine Penis (Slit)"
-	organ_type = /obj/item/organ/penis/equine_slit
-	sprite_accessories = list(
-		/datum/sprite_accessory/penis/flared,
-		)
-
-/datum/customizer_choice/organ/penis/equine_knotted_slit
-	name = "Equine Knotted Penis (Slit)"
-	organ_type = /obj/item/organ/penis/equine_knotted_slit
 	sprite_accessories = list(
 		/datum/sprite_accessory/penis/flared_knotted,
 		)
@@ -368,26 +330,19 @@
 	..()
 	var/datum/customizer_entry/organ/breasts/breasts_entry = entry
 	breasts_entry.breast_size = sanitize_integer(breasts_entry.breast_size, MIN_BREASTS_SIZE, MAX_BREASTS_SIZE, DEFAULT_BREASTS_SIZE)
-	breasts_entry.lactating = sanitize_integer(breasts_entry.lactating, LACTATION_DISABLED, LACTATION_AFTER_IMPREGNATION, LACTATION_DISABLED)
 
 /datum/customizer_choice/organ/breasts/imprint_organ_dna(datum/organ_dna/organ_dna, datum/customizer_entry/entry, datum/preferences/prefs)
 	..()
 	var/datum/organ_dna/breasts/breasts_dna = organ_dna
 	var/datum/customizer_entry/organ/breasts/breasts_entry = entry
 	breasts_dna.breast_size = breasts_entry.breast_size
-	breasts_dna.lactation_mode = breasts_entry.lactating
+	breasts_dna.lactating = breasts_entry.lactating
 
 /datum/customizer_choice/organ/breasts/generate_pref_choices(list/dat, datum/preferences/prefs, datum/customizer_entry/entry, customizer_type)
 	..()
 	var/datum/customizer_entry/organ/breasts/breasts_entry = entry
-	var/lactation_label = "Disabled"
-	switch(breasts_entry.lactating)
-		if(LACTATION_ENABLED)
-			lactation_label = "Enabled"
-		if(LACTATION_AFTER_IMPREGNATION)
-			lactation_label = "After Impregnation"
 	dat += "<br>Breast size: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=breast_size''>[find_key_by_value(GLOB.named_breast_sizes, breasts_entry.breast_size)]</a>"
-	dat += "<br>Lactation: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=lactating''>[lactation_label]</a>"
+	dat += "<br>Lactation: <a href='?_src_=prefs;task=change_customizer;customizer=[customizer_type];customizer_task=lactating''>[breasts_entry.lactating ? "Enabled" : "Disabled"]</a>"
 
 /datum/customizer_choice/organ/breasts/handle_topic(mob/user, list/href_list, datum/preferences/prefs, datum/customizer_entry/entry, customizer_type)
 	..()
@@ -400,24 +355,17 @@
 			var/new_size = GLOB.named_breast_sizes[named_size]
 			breasts_entry.breast_size = sanitize_integer(new_size, MIN_BREASTS_SIZE, MAX_BREASTS_SIZE, DEFAULT_BREASTS_SIZE)
 		if("lactating")
-			switch(breasts_entry.lactating)
-				if(LACTATION_DISABLED)
-					breasts_entry.lactating = LACTATION_ENABLED
-				if(LACTATION_ENABLED)
-					breasts_entry.lactating = LACTATION_AFTER_IMPREGNATION
-				else
-					breasts_entry.lactating = LACTATION_DISABLED
+			breasts_entry.lactating = !breasts_entry.lactating
 
 /datum/customizer_entry/organ/breasts
 	var/breast_size = DEFAULT_BREASTS_SIZE
-	/// LACTATION_* mode. Keeps this name because savefiles store it by name.
-	var/lactating = LACTATION_DISABLED
+	var/lactating = FALSE
 
 /datum/customizer/organ/breasts/human
 	customizer_choices = list(/datum/customizer_choice/organ/breasts/human)
 
 /datum/customizer_choice/organ/breasts/human
-	sprite_accessories = list(/datum/sprite_accessory/breasts/pair, /datum/sprite_accessory/breasts/pecs, /datum/sprite_accessory/breasts/pecs/nippleless)
+	sprite_accessories = list(/datum/sprite_accessory/breasts/pair)
 	allows_accessory_color_customization = FALSE
 
 /datum/customizer/organ/breasts/animal
@@ -428,8 +376,6 @@
 		/datum/sprite_accessory/breasts/pair,
 		/datum/sprite_accessory/breasts/quad,
 		/datum/sprite_accessory/breasts/sextuple,
-		/datum/sprite_accessory/breasts/pecs,
-		/datum/sprite_accessory/breasts/pecs/nippleless,
 		)
 
 /datum/customizer/organ/vagina

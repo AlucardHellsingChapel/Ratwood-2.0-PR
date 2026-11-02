@@ -3,9 +3,28 @@
 	stamina_cost = 1.0
 	category = SEX_CATEGORY_PENETRATE
 	user_sex_part = SEX_PART_COCK
-	user_needs_functional = TRUE
 	target_sex_part = SEX_PART_ANUS
 	knot_on_finish = TRUE
+
+/datum/sex_action/anal_sex/shows_on_menu(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	if(user == target)
+		return FALSE
+	if(!user.getorganslot(ORGAN_SLOT_PENIS))
+		return FALSE
+	return TRUE
+
+/datum/sex_action/anal_sex/can_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	if(user == target)
+		return FALSE
+	if(!check_location_accessible(user, user, BODY_ZONE_PRECISE_GROIN, TRUE))
+		return FALSE
+	if(!check_location_accessible(user, target, BODY_ZONE_PRECISE_GROIN, TRUE))
+		return FALSE
+	if(!user.getorganslot(ORGAN_SLOT_PENIS))
+		return FALSE
+	if(!user.sexcon.can_use_penis())
+		return FALSE
+	return TRUE
 
 /datum/sex_action/anal_sex/on_start(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	user.visible_message(span_warning("[user] slides [user.p_their()] cock into [target]'s butt!"))
@@ -13,9 +32,9 @@
 
 /datum/sex_action/anal_sex/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	if(!user.sexcon.do_knot_action)
-		user.sexcon_action_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] fucks [target]'s ass."))
+		user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] fucks [target]'s ass."))
 	else
-		user.sexcon_action_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] knot-fucks [target]'s ass."))
+		user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] knot-fucks [target]'s ass."))
 	user.sexcon.intercourse_noise(target)
 	user.sexcon.do_thrust_animate(target)
 
@@ -26,12 +45,10 @@
 	user.sexcon.perform_sex_action(user, 2, 0, TRUE)
 	if(user.sexcon.check_active_ejaculation())
 		user.visible_message(span_love("[user] cums into [target]'s butt!"))
-		for(var/i = 1; i <= user.sexcon.get_load_bursts(); i++)
-			user.sexcon.cum_into(splashed_user = target, orifice = SEX_PART_ANUS, consume_charge = i == 1 ? TRUE : FALSE)
-			if(HAS_TRAIT(target, TRAIT_BAOTHA_FERTILITY_BOON) && !target.getorganslot(ORGAN_SLOT_VAGINA))
-				user.try_impregnate(target)
-			sleep(10)
+		user.sexcon.cum_into(splashed_user = target, orifice = SEX_PART_ANUS)
 		user.virginity = FALSE
+		if(HAS_TRAIT(target, TRAIT_BAOTHA_FERTILITY_BOON) && !target.getorganslot(ORGAN_SLOT_VAGINA))
+			user.try_impregnate(target)
 
 	if(user.sexcon.considered_limp())
 		user.sexcon.perform_sex_action(target, 1.2, 4, FALSE)
@@ -66,9 +83,9 @@
 
 /datum/sex_action/anal_sex/double/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	if(!user.sexcon.do_knot_action)
-		user.sexcon_action_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] double-fucks [target]'s ass."))
+		user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] double-fucks [target]'s ass."))
 	else
-		user.sexcon_action_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] double-knots [target]'s ass."))
+		user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] double-knots [target]'s ass."))
 	user.sexcon.intercourse_noise(target)
 	user.sexcon.do_thrust_animate(target)
 
@@ -78,12 +95,10 @@
 	user.sexcon.perform_sex_action(user, 2, 0, TRUE)
 	if(user.sexcon.check_active_ejaculation())
 		user.visible_message(span_love("[user] cums into [target]'s butt!"))
-		for(var/i = 1; i <= user.sexcon.get_load_bursts(); i++)
-			user.sexcon.cum_into(splashed_user = target, orifice = SEX_PART_ANUS, consume_charge = i == 1 ? TRUE : FALSE)
-			if(HAS_TRAIT(target, TRAIT_BAOTHA_FERTILITY_BOON) && !target.getorganslot(ORGAN_SLOT_VAGINA))
-				user.try_impregnate(target)
-			sleep(10)
+		user.sexcon.cum_into(splashed_user = target, orifice = SEX_PART_ANUS)
 		user.virginity = FALSE
+		if(HAS_TRAIT(target, TRAIT_BAOTHA_FERTILITY_BOON) && !target.getorganslot(ORGAN_SLOT_VAGINA))
+			user.try_impregnate(target)
 
 	if(user.sexcon.considered_limp())
 		user.sexcon.perform_sex_action(target, 1.2, 4, FALSE)

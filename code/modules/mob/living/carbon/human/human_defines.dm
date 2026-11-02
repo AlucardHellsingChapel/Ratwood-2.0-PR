@@ -7,13 +7,10 @@
 	hud_possible = list(ANTAG_HUD)
 	hud_type = /datum/hud/human
 	base_intents = list(INTENT_HELP, INTENT_DISARM, INTENT_GRAB, INTENT_HARM)
-	possible_mmb_intents = list(INTENT_SPECIAL, INTENT_JUMP, INTENT_KICK, INTENT_BITE, INTENT_GIVE)
+	possible_mmb_intents = list(INTENT_STEAL, INTENT_JUMP, INTENT_KICK, INTENT_BITE, INTENT_GIVE)
 	can_buckle = TRUE
 	buckle_lying = FALSE
 	mob_biotypes = MOB_ORGANIC|MOB_HUMANOID
-	/// When TRUE, gear equipped via outfits gets marked as looted (sells at LOOTED_SELL_MULT).
-	/// Set automatically for clientless/mindless mobs, or explicitly on jobs whose gear shouldn't be farmed.
-	var/taints_loot = FALSE
 
 	ambushable = 1
 
@@ -40,7 +37,6 @@
 	var/detail_color = "000"
 
 	var/skin_tone = "caucasian1"	//Skin tone
-	var/mutant_skin = FALSE	//If TRUE, use mutant color as skin color instead of skin_tone
 
 	var/lip_style = null	//no lipstick by default- arguably misleading, as it could be used for general makeup
 	var/lip_color = "white"
@@ -92,8 +88,10 @@
 	var/last_fire_update
 	var/account_id
 
-	mob_can_parry = TRUE
-	mob_can_dodge = TRUE
+	canparry = TRUE
+	candodge = TRUE
+
+	dodgecd = FALSE
 	dodgetime = 0
 
 	var/list/possibleclass
@@ -179,9 +177,6 @@
 
 	var/datum/charflaw/charflaw  // Legacy single vice (kept for compatibility)
 	var/list/datum/charflaw/vices = list()  // Multiple vices system
-	var/unspent_quirk_points = 0  // Any leftover quirk points are turned into triumphs after the round ends
-
-	var/list/feint_list = list()
 
 	// curse list and cooldown
 	var/list/curses = list()
@@ -213,5 +208,3 @@
 	var/time_flags = 0
 	var/heatstroke_timer_id
 	var/hypothermia_timer_id
-
-	var/branded = FALSE // Saves time during examine if character hasn't been branded at all

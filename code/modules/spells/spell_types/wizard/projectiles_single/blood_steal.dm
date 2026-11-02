@@ -1,13 +1,13 @@
 // Lich / Vampire shared list only
 /obj/effect/proc_holder/spell/invoked/projectile/bloodsteal
 	name = "Blood Steal"
-	desc = "Steal anothers blood for your own collection."
+	desc = "Steal another's blood for your own collection."
 	clothes_req = FALSE
 	overlay_state = "bloodsteal"
 	sound = 'sound/magic/vlightning.ogg'
 	range = 8
 	projectile_type = /obj/projectile/magic/bloodsteal
-	releasedrain = SPELLCOST_MAJOR_PROJECTILE
+	releasedrain = 30
 	chargedrain = 1
 	chargetime = 25
 	recharge_time = 20 SECONDS
@@ -15,7 +15,6 @@
 	no_early_release = TRUE
 	movement_interrupt = FALSE
 	spell_tier = 2
-	spell_impact_intensity = SPELL_IMPACT_MEDIUM
 	invocations = list("Sanguis Furtum!")
 	invocation_type = "shout"
 	glow_color = GLOW_COLOR_VAMPIRIC
@@ -24,11 +23,9 @@
 	chargedloop = /datum/looping_sound/invokegen
 	associated_skill = /datum/skill/magic/blood
 	cost = 3
-	human_req = TRUE
 
 /obj/projectile/magic/bloodsteal
 	name = "blood steal"
-	expose_caster_on_deflect = TRUE
 	tracer_type = /obj/effect/projectile/tracer/bloodsteal
 	muzzle_type = null
 	impact_type = null
@@ -38,12 +35,11 @@
 	damage_type = BRUTE
 	nodamage = FALSE
 	speed = 0.3
-	flag = "piercing"
+	flag = "magic"
 	light_color = "#e74141"
 	light_outer_range = 7
 
-
-/obj/projectile/magic/bloodsteal/on_hit(target, blocked = FALSE)
+/obj/projectile/magic/bloodsteal/on_hit(target)
 	. = ..()
 	if(ismob(target))
 		var/mob/M = target
@@ -52,11 +48,9 @@
 			playsound(get_turf(target), 'sound/magic/magic_nulled.ogg', 100)
 			qdel(src)
 			return BULLET_ACT_BLOCK
-		if(out_of_effective_range())
-			return
-		if(ishuman(target) && blocked < 100)
+		if(ishuman(target))
 			var/mob/living/carbon/human/H = target
-			H.adjust_blood_volume(-45)
+			H.blood_volume = max(H.blood_volume-45, 0)
 			H.handle_blood()
 			H.visible_message(span_danger("[target] has their blood ripped from their body!!"), \
 					span_userdanger("My blood erupts from my body!"), \

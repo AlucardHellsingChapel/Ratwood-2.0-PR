@@ -2,10 +2,6 @@
 	skel_fragile = FALSE
 	skel_outfit = /datum/outfit/job/roguetown/npc/skeleton/dungeon/lich
 
-	//We're a BOSS. We are SMART and SPECIAL.
-	smart_combatant = TRUE
-	special_attacker = TRUE
-
 /datum/outfit/job/roguetown/npc/skeleton/dungeon/lich/pre_equip(mob/living/carbon/human/H)
 	..()
 	wrists = /obj/item/clothing/wrists/roguetown/bracers
@@ -22,7 +18,7 @@
 		beltr = /obj/item/storage/belt/rogue/pouch/treasure/lucky
 	else
 		beltr = /obj/item/storage/belt/rogue/pouch/coins/mid
-	id = /obj/item/clothing/neck/roguetown/psicross/inhumen/ancient
+	id = /obj/item/clothing/neck/roguetown/psicross/inhumen/aalloy
 	H.STASTR = 20
 	H.STAPER = 20
 	H.STASPD = 10

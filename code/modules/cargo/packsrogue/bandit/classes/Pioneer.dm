@@ -38,12 +38,7 @@
 	cost = 20
 	contains = list(/obj/item/clothing/neck/roguetown/gorget)
 
-/datum/supply_pack/rogue/Pioneer/steelgorget
-	name = "Steel Gorget"
-	cost = 30
-	contains = list(/obj/item/clothing/neck/roguetown/gorget/steel)
-
-/datum/supply_pack/rogue/Pioneer/steelcoif
+/datum/supply_pack/rogue/Pioneer/gorget
 	name = "Steel Coif"
 	cost = 30
 	contains = list(/obj/item/clothing/neck/roguetown/chaincoif)
@@ -110,11 +105,6 @@
 	cost = 25
 	contains = list(/obj/item/rogueweapon/stoneaxe/woodcut/pick)
 
-/datum/supply_pack/rogue/Pioneer/dolabra
-	name = "Eleonora"
-	cost = 150
-	contains = list(/obj/item/rogueweapon/stoneaxe/woodcut/steel/woodcutter/dolabra/pioneer)
-
 /datum/supply_pack/rogue/Pioneer/
 
 //Tools of the trade.
@@ -135,9 +125,10 @@
 	contains = list(/obj/item/rogueweapon/tongs)
 
 /datum/supply_pack/rogue/Pioneer/chiselset
+
 	name = "Chisel and Hammer"
 	cost = 20
-	contains = list(/obj/item/rogueweapon/chisel/assembly)
+	contains = list(/obj/item/rogueweapon/chisel/assembly/hammer)
 
 /datum/supply_pack/rogue/Pioneer/handsaw
 	name = "Handsaw"
@@ -146,33 +137,8 @@
 
 /datum/supply_pack/rogue/Pioneer/linker
 	name = "Artificer's Wrench"
-	cost = 20
+	cost = 20 
 	contains = list(/obj/item/contraption/linker)
-
-/datum/supply_pack/rogue/Pioneer/polishing_cream
-	name = "Polishing Cream"
-	cost = 50
-	contains = list(/obj/item/polishing_cream)
-
-/datum/supply_pack/rogue/Pioneer/armor_brush
-	name = "Armor Brush"
-	cost = 50
-	contains = list(/obj/item/armor_brush)
-
-/datum/supply_pack/rogue/Pioneer/Sarrows
-	name = "Steel Bodkin Arrow"
-	cost = 3
-	contains = list(/obj/item/ammo_casing/caseless/rogue/arrow/steel)
-
-/datum/supply_pack/rogue/Pioneer/pyroarrows // Engineering arrows... they can have them...
-	name = "Pyroclastic Arrow"
-	cost = 3
-	contains = list(/obj/item/ammo_casing/caseless/rogue/arrow/pyro)
-
-/datum/supply_pack/rogue/Pioneer/pyrobolts
-	name = "Pyroclastic bolt"
-	cost = 3
-	contains = list(/obj/item/ammo_casing/caseless/rogue/bolt/pyro)
 
 /datum/supply_pack/rogue/Pioneer/cogs
 	name = "Cogs"
@@ -181,48 +147,48 @@
 
 /datum/supply_pack/rogue/Pioneer/bmbstrap
 	name = "Bombdolier"
-	cost = 40 // 70 is far too much, it'd be easier to just make it.
+	cost = 70
 	contains = list(/obj/item/bmbstrap)
 
 //Meh grenades.
 
 /datum/supply_pack/rogue/Pioneer/impactgrenade_smoke
 	name = "Impact grenade (smoke)"
-	cost = 15
+	cost = 20
 	contains = list(/obj/item/impact_grenade/smoke)
 
 /datum/supply_pack/rogue/Pioneer/impactgrenade_healing
 	name = "Impact grenade (healing)"
-	cost = 15
+	cost = 20
 	contains = list(/obj/item/impact_grenade/smoke/healing_gas)
 
 //Great grenades.
 
 /datum/supply_pack/rogue/Pioneer/impactgrenade_poison
 	name = "Impact grenade (poison)"
-	cost = 40
+	cost = 45
 	contains = list(/obj/item/impact_grenade/smoke/poison_gas)
 
 /datum/supply_pack/rogue/Pioneer/impactgrenade_fire
 	name = "Impact grenade (fire)"
-	cost = 40
+	cost = 45
 	contains = list(/obj/item/impact_grenade/smoke/fire_gas)
 
 //Wild grenades.
 
 /datum/supply_pack/rogue/Pioneer/impactgrenade_explosion
 	name = "Impact grenade (explosion)"
-	cost = 50
+	cost = 60
 	contains = list(/obj/item/impact_grenade/explosion)
 
 /datum/supply_pack/rogue/Pioneer/impactgrenade_blind
 	name = "Impact grenade (blind)"
-	cost = 50
+	cost = 60
 	contains = list(/obj/item/impact_grenade/smoke/blind_gas)
 
 /datum/supply_pack/rogue/Pioneer/impactgrenade_mute
 	name = "Impact grenade (mute)"
-	cost = 15
+	cost = 20
 	contains = list(/obj/item/impact_grenade/smoke/mute_gas)
 
 //WMDs.
@@ -237,108 +203,64 @@
 //Not even bringing up the other costs.
 /datum/supply_pack/rogue/Pioneer/bombard_frame
 	name = "Bombard frame"
-	cost = 200
+	cost = 250
 	contains = list(/obj/item/bombard_frame)
 
 /datum/supply_pack/rogue/Pioneer/bombard_barrel
 	name = "Bombard barrel"
-	cost = 200
+	cost = 250
 	contains = list(/obj/item/bombard_barrel)
 
 /datum/supply_pack/rogue/Pioneer/bombard_palantir
 	name = "Palantir"
-	cost = 100
+	cost = 250
 	contains = list(/obj/item/rogueweapon/palantir)
 
 /datum/supply_pack/rogue/Pioneer/bombard_sponge
 	name = "Bombard sponge"
-	cost = 100
+	cost = 150
 	contains = list(/obj/item/rogueweapon/woodstaff/quarterstaff/bombard_sponge)
 
 /datum/supply_pack/rogue/Pioneer/smokepowder_flask
 	name = "Smokepowder flask"
-	cost = 100
+	cost = 150
 	contains = list(/obj/item/powderflask)
 
 //WMDs, but shells for the above!!!!
 //Smoke bombard charges.
 /datum/supply_pack/rogue/Pioneer/bombard_charge_smoke
 	name = "Bombard charge (smoke)"
-	cost = 20
+	cost = 50
 	contains = list(/obj/item/cannonball/smoke)
 
 /datum/supply_pack/rogue/Pioneer/bombard_charge_poison
 	name = "Bombard charge (smoke - poison)"
-	cost = 100
+	cost = 125
 	contains = list(/obj/item/cannonball/smoke_poison)
 
 /datum/supply_pack/rogue/Pioneer/bombard_charge_custom
 	name = "Bombard charge (smoke - custom)"
-	cost = 110
+	cost = 300
 	contains = list(/obj/item/cannonball/smoke_custom)
 
 //Dangerous bombard charges.
 /datum/supply_pack/rogue/Pioneer/bombard_charge_canister
 	name = "Bombard charge (canister)"
-	cost = 100
+	cost = 125
 	contains = list(/obj/item/cannonball/canister)
 
 /datum/supply_pack/rogue/Pioneer/bombard_charge_explosive
 	name = "Bombard charge (explosive)"
-	cost = 250
+	cost = 400
 	contains = list(/obj/item/cannonball/explosive)
 
 /datum/supply_pack/rogue/Pioneer/bombard_charge_incendiary
 	name = "Bombard charge (incendiary)"
-	cost = 150
+	cost = 600
 	contains = list(/obj/item/cannonball/incendiary)
 
 //Misc bombard charges.
 /datum/supply_pack/rogue/Pioneer/bombard_charge_flare
 	name = "Bombard charge (flare)"
-	cost = 20
+	cost = 85
 	contains = list(/obj/item/cannonball/flare)
-
-// Ranged Weaponry
-
-/datum/supply_pack/rogue/Pioneer/bow
-	name = "Bow"
-	cost = 10
-	contains = list(/obj/item/gun/ballistic/revolver/grenadelauncher/bow)
-
-/datum/supply_pack/rogue/Pioneer/crossbow
-	name = "Crossbow"
-	cost = 20
-	contains = list(/obj/item/gun/ballistic/revolver/grenadelauncher/crossbow)
-
-/datum/supply_pack/rogue/Pioneer/recurvebow
-	name = "Recurve Bow"
-	cost = 20
-	contains = list(/obj/item/gun/ballistic/revolver/grenadelauncher/bow/recurve)
-
-/datum/supply_pack/rogue/Pioneer/longbow
-	name = "Longbow"
-	cost = 40
-	contains = list(/obj/item/gun/ballistic/revolver/grenadelauncher/bow/longbow)
-
-/datum/supply_pack/rogue/Pioneer/slurbow
-	name = "Slurbow"
-	cost = 40
-	contains = list(/obj/item/gun/ballistic/revolver/grenadelauncher/crossbow/slurbow)
-
-// Standard Ammunition
-
-/datum/supply_pack/rogue/Pioneer/quiver
-	name = "Empty Quiver"
-	cost = 5
-	contains = list(/obj/item/quiver)
-
-/datum/supply_pack/rogue/Pioneer/quivers/arrows
-	name = "Quiver of Arrows"
-	cost = 10
-	contains = list(/obj/item/quiver/arrows)
-
-/datum/supply_pack/rogue/Pioneer/quivers/bolts
-	name = "Quiver of Bolts"
-	cost = 20
-	contains = list(/obj/item/quiver/bolts)

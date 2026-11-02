@@ -4,15 +4,11 @@
 	damage = 0
 	damage_type = OXY
 	nodamage = TRUE
-	armor_penetration = PEN_NONE // We shouldn't allow any projectile that forget to set to pen all
+	armor_penetration = 100
 	pass_flags = PASSTABLE | PASSGRILLE
 	flag = "magic"
 	var/explode_sound = list('sound/misc/explode/incendiary (1).ogg','sound/misc/explode/incendiary (2).ogg')
 	var/mob/living/carbon/human/sender
-	/// Impact visual intensity. SPELL_IMPACT_NONE / SPELL_IMPACT_LOW / SPELL_IMPACT_MEDIUM / SPELL_IMPACT_HIGH
-	var/spell_impact_intensity = SPELL_IMPACT_LOW
-	/// Override color for the impact effect. If null, uses light_color.
-	var/spell_impact_color
 
 /obj/projectile/magic/death
 	name = "bolt of death"
@@ -123,7 +119,7 @@
 	icon_state = "lavastaff"
 	damage = 15
 	damage_type = BURN
-	flag = "fire"
+	flag = "magic"
 	dismemberment = 50
 	nodamage = FALSE
 
@@ -142,8 +138,8 @@
 	damage = 20
 	damage_type = BURN
 	nodamage = FALSE
-	armor_penetration = PEN_NONE
-	flag = "fire"
+	armor_penetration = 0
+	flag = "magic"
 	hitsound = 'sound/blank.ogg'
 
 /obj/projectile/magic/arcane_barrage/on_hit(target)
@@ -370,7 +366,7 @@
 	icon_state = "xray"
 	damage = 10
 	damage_type = BURN
-	flag = "fire"
+	flag = "magic"
 	range = 15
 
 /obj/projectile/magic/sickness/on_hit(atom/target, blocked = FALSE)

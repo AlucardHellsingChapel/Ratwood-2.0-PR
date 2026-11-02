@@ -203,8 +203,11 @@ GLOBAL_VAR_INIT(underworld_strands, 0)
 		deltimer(spawn_timer)
 
 	var/delay = rand(15 MINUTES, 30 MINUTES)
-	// Single line: addtimer is a macro and macro arguments cannot span newlines
-	spawn_timer = addtimer(CALLBACK(src, PROC_REF(try_spawn)), delay, TIMER_STOPPABLE)
+	spawn_timer = addtimer(
+		CALLBACK(src, PROC_REF(try_spawn)),
+		delay,
+		TIMER_STOPPABLE
+	)
 /obj/effect/landmark/underworldstrands/proc/try_spawn()
 	spawn_timer = null
 	if(GLOB.underworld_strands >= 4)

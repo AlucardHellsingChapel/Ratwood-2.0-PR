@@ -16,6 +16,4 @@
 
 /datum/round_event/migrant_wave/start()
 	. = ..()
-	if(SSmigrants.track_forming[MIGRANT_TRACK_EVENT])
-		return
-	SSmigrants.begin_forming(MIGRANT_TRACK_EVENT, wave_type)
+	SSmigrants.set_current_wave(wave_type, 1 MINUTES)

@@ -15,12 +15,6 @@
 	max_w_class = WEIGHT_CLASS_NORMAL
 	not_while_equipped = TRUE
 
-/datum/component/storage/concrete/roguetown/backpack/arti
-	screen_max_rows = 7
-	screen_max_columns = 6
-	max_w_class = WEIGHT_CLASS_NORMAL
-	not_while_equipped = FALSE
-
 /datum/component/storage/concrete/roguetown/surgery_bag
 	screen_max_rows = 5
 	screen_max_columns = 5
@@ -55,10 +49,6 @@
 	screen_max_columns = 2
 	max_w_class = WEIGHT_CLASS_SMALL
 
-/datum/component/storage/concrete/roguetown/belt/holster_belt
-	screen_max_rows = 2
-	screen_max_columns = 2
-
 /datum/component/storage/concrete/roguetown/coin_pouch
 	screen_max_rows = 4
 	screen_max_columns = 1
@@ -77,7 +67,7 @@
 
 /datum/component/storage/concrete/roguetown/keyring/New(datum/P, ...)
 	. = ..()
-	can_hold = typecacheof(list(/obj/item/roguekey, /obj/item/seal))
+	can_hold = typecacheof(list(/obj/item/roguekey))
 
 /datum/component/storage/concrete/roguetown/belt/knife_belt
 	screen_max_rows = 3		//Lets you hold a regular knife + keys basically.
@@ -123,9 +113,6 @@
 	click_gather = FALSE
 	allow_quick_gather = FALSE
 	allow_quick_empty = FALSE
-
-/datum/component/storage/concrete/roguetown/book
-	max_items = 1
 
 /datum/component/storage/concrete/grid/meatsack // our rucksack is different from
 // Vanderlin so we use a separate one for meatsack
@@ -273,8 +260,8 @@
 			/obj/item/ingot/blacksteel,
 			/obj/item/ingot/steelholy,
 			/obj/item/ingot/silverblessed,
-			/obj/item/ingot/decrepit,
-			/obj/item/ingot/gilbranze,
+			/obj/item/ingot/aalloy,
+			/obj/item/ingot/purifiedaalloy,
 			/obj/item/ingot/aaslag,
 			/obj/item/roguegem,
 			/obj/item/roguegem/green,
@@ -302,8 +289,3 @@
 /datum/component/storage/concrete/roguetown/dice_pouch/New(datum/P, ...)
 	. = ..()
 	can_hold = typecacheof(list(/obj/item/dice))
-
-/datum/component/storage/concrete/grid/anvil_bin
-	max_w_class = WEIGHT_CLASS_HUGE
-	screen_max_rows = 8
-	screen_max_columns = 4

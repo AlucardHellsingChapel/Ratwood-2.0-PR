@@ -11,17 +11,14 @@
 
 	screen.icon_state = "[initial(screen.icon_state)][severity]"
 	screen.severity = severity
-	var/show_screen = screen.should_show_to(src)
-	if (client && show_screen)
+	if (client && screen.should_show_to(src))
 		screen.update_for_view(client.view)
 		client.screen += screen
-	push_screen_to_observers(screen, !show_screen)
 
 	return screen
 
 
 /mob/proc/flash_fullscreen(state)
-	RETURN_TYPE(/atom/movable/screen/fullscreen/flashholder)
 	var/atom/movable/screen/fullscreen/flashholder/screen = screens["flashholder"]
 
 	if(!screen)
@@ -31,33 +28,10 @@
 	if(client && screen.should_show_to(src))
 		screen.update_for_view(client.view)
 		client.screen += screen
-	push_screen_to_observers(screen)
 
 	flick(state,screen)
 	return screen
 
-/// Easy drop-in replacement for flash_fullscreen("redflashX") that checks whether the mob has no-redflash on. Returns the same screen obj that flash_fullscreen does.
-/mob/proc/fullscreen_redflash(state)
-	RETURN_TYPE(/atom/movable/screen/fullscreen/flashholder)
-	var/mob/living/user = src
-	if(!istype(user))
-		return
-	if(user.no_redflash)
-		return
-	else
-		return flash_fullscreen(state)
-
-/mob/proc/update_redflash_pref(no_redflash_pref, update_hud = TRUE)
-	var/mob/living/user = src
-	if(!istype(user))
-		return
-	user.no_redflash = no_redflash_pref
-	// Any time the pref could change (i.e. w/ mind transfer), we will need to make sure only the appropriate overlays get displayed.
-	clear_fullscreen("brute")
-	clear_fullscreen("brute_alt")
-	clear_fullscreen("painflash")
-	if(update_hud) // We are also calling this proc from /mob/living/Login(), which triggers an update itself
-		user.update_damage_hud()
 
 /mob/proc/clear_fullscreen(category, animated = 10)
 	var/atom/movable/screen/fullscreen/screen = screens[category]
@@ -72,13 +46,11 @@
 	else
 		if(client)
 			client.screen -= screen
-		push_screen_to_observers(screen, TRUE)
 		qdel(screen)
 
 /mob/proc/clear_fullscreen_after_animate(atom/movable/screen/fullscreen/screen)
 	if(client)
 		client.screen -= screen
-	push_screen_to_observers(screen, TRUE)
 	qdel(screen)
 
 /mob/proc/clear_fullscreens()
@@ -86,23 +58,20 @@
 		clear_fullscreen(category)
 
 /mob/proc/hide_fullscreens()
-	for(var/category in screens)
-		if(client)
+	if(client)
+		for(var/category in screens)
 			client.screen -= screens[category]
-		push_screen_to_observers(screens[category], TRUE)
 
 /mob/proc/reload_fullscreen()
-	var/atom/movable/screen/fullscreen/screen
-	for(var/category in screens)
-		screen = screens[category]
-		var/show_screen = screen.should_show_to(src)
-		if(client)
-			if(show_screen)
+	if(client)
+		var/atom/movable/screen/fullscreen/screen
+		for(var/category in screens)
+			screen = screens[category]
+			if(screen.should_show_to(src))
 				screen.update_for_view(client.view)
 				client.screen |= screen
 			else
 				client.screen -= screen
-		push_screen_to_observers(screen, !show_screen)
 
 /atom/movable/screen/fullscreen
 	icon = 'icons/mob/screen_full.dmi'
@@ -132,11 +101,6 @@
 
 /atom/movable/screen/fullscreen/brute
 	icon_state = "brutedamageoverlay"
-	layer = UI_DAMAGE_LAYER
-	plane = FULLSCREEN_PLANE
-
-/atom/movable/screen/fullscreen/brute_alt
-	icon_state = "brutedamageoverlay_alt"
 	layer = UI_DAMAGE_LAYER
 	plane = FULLSCREEN_PLANE
 

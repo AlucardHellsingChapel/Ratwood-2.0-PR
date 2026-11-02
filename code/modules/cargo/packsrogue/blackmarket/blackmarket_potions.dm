@@ -22,3 +22,4 @@
 	name = "Antitoxin"
 	cost = 10
 	contains = list(/obj/item/reagent_containers/glass/bottle/rogue/antidote)
+

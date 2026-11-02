@@ -73,7 +73,7 @@
 	var/obj/item/bodypart/BP = get_bodypart(check_zone(def_zone))
 	if(BP)
 		testing("projwound")
-		var/newdam = max(0, P.damage - blocked)
+		var/newdam = P.damage * (100-blocked)/100
 		BP.bodypart_attacked_by(P.woundclass, newdam, zone_precise = def_zone, crit_message = TRUE, weapon = P)
 		return TRUE
 
@@ -81,11 +81,12 @@
 	var/obj/item/bodypart/BP = get_bodypart(check_zone(def_zone))
 	if(!BP)
 		return FALSE
-	var/newdam = max(0, P.damage - blocked)
+	var/newdam = P.damage * (100-blocked)/100
 	if(newdam <= 8)
 		return FALSE
 	if(prob(P.embedchance) && P.dropped)
-		return BP.add_embedded_object(P.dropped, silent = FALSE, crit_message = TRUE)
+		BP.add_embedded_object(P.dropped, silent = FALSE, crit_message = TRUE)
+		return TRUE
 	return FALSE
 
 /mob/living/carbon/send_pull_message(mob/living/target)
@@ -296,6 +297,14 @@
 	*/
 	return FALSE
 
+
+/mob/living/carbon/attack_paw(mob/living/carbon/monkey/M)
+	if(M.used_intent.type == INTENT_HELP)
+		help_shake_act(M)
+		return 0
+
+	if(..()) //successful monkey bite.
+		return 1
 
 /mob/living/carbon/proc/dismembering_strike(mob/living/attacker, dam_zone)
 	if(!attacker.limb_destroyer)

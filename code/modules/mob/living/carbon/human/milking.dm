@@ -3,8 +3,6 @@
 		return
 	if(!get_location_accessible(src, BODY_ZONE_CHEST))
 		return
-	if(user != src && !client?.prefs?.milkable)//user can self milk, but they need the pref toggled to let others milk them
-		return
 
 	// Constructs cannot be milked
 	if(construct)
@@ -37,8 +35,6 @@
 
 		if(!do_after(user, 20, target = src))
 			return
-		if(user != src && !client?.prefs?.milkable)
-			return
 
 		container.reagents.add_reagent(/datum/reagent/consumable/milk, milk_to_take)
 		B.milk_stored -= milk_to_take
@@ -53,9 +49,6 @@
 
 // Blood-to-milk conversion for deathless beings (revenants, vampires, etc. with TRAIT_NOHUNGER)
 /mob/living/carbon/human/proc/try_blood_milking(mob/living/user, obj/item/reagent_containers/glass/container)
-	if(user != src && !client?.prefs?.milkable)
-		return
-
 	// Check container space first
 	if(container.reagents.total_volume >= container.reagents.maximum_volume)
 		to_chat(user, span_warning("[container] is full."))
@@ -68,8 +61,6 @@
 	playsound(get_turf(src), pick('modular/Creechers/sound/milking1.ogg', 'modular/Creechers/sound/milking2.ogg'), 100, TRUE, -1)
 
 	if(!do_after(user, 20, target = src))
-		return
-	if(user != src && !client?.prefs?.milkable)
 		return
 
 	if(has_blood)

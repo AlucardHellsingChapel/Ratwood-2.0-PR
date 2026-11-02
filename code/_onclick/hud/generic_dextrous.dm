@@ -34,7 +34,7 @@
 //	static_inventory += clock
 
 	bloods = new /atom/movable/screen/healths/blood
-	claim_screen(bloods)
+	bloods.hud = src
 	bloods.screen_loc = rogueui_blood
 	static_inventory += bloods
 
@@ -263,7 +263,6 @@
 	using = new/atom/movable/screen/skills
 	using.icon = ui_style
 	using.screen_loc = rogueui_skills
-	using.hud = src //An observer reads the owner of the HUD off this.
 	static_inventory += using
 
 	using = new/atom/movable/screen/craft
@@ -304,14 +303,17 @@
 	infodisplay += healthdoll
 */
 	zone_select =  new /atom/movable/screen/zone_sel()
+	zone_select.icon = 'icons/mob/roguehud64.dmi'
 	zone_select.screen_loc = rogueui_targetdoll
-	claim_screen(zone_select)
-	zone_select.update_zone_layers()
+	zone_select.update_icon()
+	zone_select.hud = src
 	static_inventory += zone_select
 
 	fov_blocker = new /atom/movable/screen/fov_blocker()
 	fov_blocker.hud = src
 	static_inventory += fov_blocker
+
+	zone_select.update_icon()
 
 	stamina = new /atom/movable/screen/stamina()
 	infodisplay += stamina

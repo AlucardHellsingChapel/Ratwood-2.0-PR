@@ -12,7 +12,6 @@
 					/obj/effect/proc_holder/spell/invoked/lesser_heal 			= CLERIC_T1,
 					/obj/effect/proc_holder/spell/invoked/blood_heal			= CLERIC_T1,
 					/obj/effect/proc_holder/spell/invoked/infestation			= CLERIC_T1,
-					/obj/effect/proc_holder/spell/invoked/fleshcraft			= CLERIC_T1,
 					/obj/effect/proc_holder/spell/invoked/pestilent_blade		= CLERIC_T2,
 					/obj/effect/proc_holder/spell/invoked/pestra_heal			= CLERIC_T2,
 					/obj/effect/proc_holder/spell/invoked/attach_bodypart		= CLERIC_T2,
@@ -20,17 +19,15 @@
 					/obj/effect/proc_holder/spell/invoked/cure_rot				= CLERIC_T3,
 					/obj/effect/proc_holder/spell/invoked/resurrect/pestra		= CLERIC_T4,
 	)
-	energy_color = COLOR_PATRON_PESTRA
 	confess_lines = list(
 		"PESTRA SOOTHES ALL ILLS!",
 		"DECAY IS A CONTINUATION OF LIFE!",
 		"MY AFFLICTION IS MY TESTAMENT!",
 	)
 	storyteller = /datum/storyteller/pestra
-	undead_hater = FALSE // cough, cough, there is a reason pestrians are looked at with suspicion
 
 // Near a well, cross, within the physicians, or within the church
-/datum/patron/divine/pestra/can_pray(mob/living/follower)
+/datum/patron/divine/pesta/can_pray(mob/living/follower)
 	. = ..()
 	// Allows prayer near psycross
 	for(var/obj/structure/fluff/psycross/cross in view(4, get_turf(follower)))
@@ -62,4 +59,4 @@
 	*message_self = span_notice("I'm sewn back together by sacred medicine!")
 
 	target.adjustToxLoss(-*situational_bonus)
-	target.adjust_blood_volume(BLOOD_VOLUME_SURVIVE / 3)
+	target.blood_volume += BLOOD_VOLUME_SURVIVE / 3

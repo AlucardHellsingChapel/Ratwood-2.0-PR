@@ -13,10 +13,9 @@
 	var/prob2fail = 5
 	grid_width = 32
 	grid_height = 64
-	dropshrink = 0.7
 
 /obj/item/bomb/Initialize(mapload)
-	. = ..()
+	..()
 	fuze = rand(40,60)
 
 /obj/item/bomb/spark_act()
@@ -24,9 +23,6 @@
 
 /obj/item/bomb/fire_act()
 	light()
-
-/obj/item/bomb/on_package_opened(mob/user)
-	explode(TRUE)
 
 /obj/item/bomb/ex_act()
 	if(!QDELETED(src))
@@ -140,7 +136,7 @@
 	var/list/obj/item/tripwire/wire_trigger = list()
 
 /obj/item/bomb/tripbomb/Initialize(mapload)
-	. = ..()
+	..()
 	icon_state = b_type.icon_state
 
 /obj/item/bomb/tripbomb/attackby(obj/item/I, mob/user, params)
@@ -162,8 +158,11 @@
 	..()
 
 /obj/item/bomb/tripbomb/Destroy()
-	QDEL_LIST(wire_trigger)
-	return ..()
+	..()
+
+	if(wire_trigger.len)
+		for(var/list/obj/item/tripwire/wire in wire_trigger)
+			QDEL_NULL(wire)
 
 /obj/item/bomb/tripbomb/light()
 	var/obj/item/bomb/bomb = new b_type (loc)
@@ -180,8 +179,8 @@
 	var/obj/item/bomb/tripbomb/payload
 
 /obj/item/tripwire/Destroy()
+	..()
 	new /obj/item/natural/fibers(loc)
-	. = ..()
 
 /obj/item/tripwire/attackby(obj/item/I, mob/user, params)
 	if(user.used_intent.blade_class == BCLASS_CUT && I.wlength == WLENGTH_SHORT)
@@ -285,6 +284,10 @@
 	new /obj/item/ash(T)
 	qdel(src)
 
+/obj/item/grenade/smokebomb
+	parent_type = /obj/item/bomb/smoke
+
+
 /obj/item/tntstick
 	name = "blastpowder stick"
 	desc = "A bit of blastpowder in paper shell..."
@@ -295,8 +298,8 @@
 	throwforce = 0
 	slot_flags = ITEM_SLOT_HIP
 	throw_speed = 0.5
-	throw_range = 6
-	var/fuze = 5.5 SECONDS
+	throw_range = 3
+	var/fuze = 7.5 SECONDS
 	var/lit = FALSE
 	var/prob2fail = 1
 
@@ -305,10 +308,6 @@
 
 /obj/item/tntstick/fire_act()
 	light()
-
-/obj/item/tntstick/on_package_opened(mob/user)
-	light()
-	explode(TRUE)
 
 /obj/item/tntstick/ex_act()
 	if(!QDELETED(src))
@@ -349,7 +348,7 @@
 			if(!skipprob && prob(prob2fail))
 				snuff()
 			else
-				explosion(T, devastation_range = 2, heavy_impact_range = 4, light_impact_range = 6, smoke = TRUE, soundin = pick('sound/misc/explode/bottlebomb (1).ogg','sound/misc/explode/bottlebomb (2).ogg'))
+				explosion(T, devastation_range = 1, heavy_impact_range = 2, light_impact_range = 4, smoke = TRUE, soundin = pick('sound/misc/explode/bottlebomb (1).ogg','sound/misc/explode/bottlebomb (2).ogg'))
 				loud_message("A muted explosion echos in the ears of those whom hear it", hearing_distance = 14)
 				qdel(src) //IMPORTANT!! go into walls /turf/closed/wall/ and see /turf/closed/wall/ex_act. Its bounded with /proc/explosion. Same for /obj/structure and /obj/structure/ex_act because if you going to fuck intergity or whatever this shit called players will skin you alive for breaking their equipment and keys
 		else //also /turf/open/floor/ex_act for comment above
@@ -372,7 +371,6 @@
 	throw_range = 2
 	slot_flags = ITEM_SLOT_HIP
 	throw_speed = 0.3
-	dropshrink = 0.8
 	var/fuze = 15 SECONDS
 	var/lit = FALSE
 	var/prob2fail = 1
@@ -382,10 +380,6 @@
 
 /obj/item/satchel_bomb/fire_act()
 	light()
-
-/obj/item/satchel_bomb/on_package_opened(mob/user)
-	light()
-	explode(TRUE)
 
 /obj/item/satchel_bomb/ex_act()
 	if(!QDELETED(src))
@@ -427,7 +421,7 @@
 			if(!skipprob && prob(prob2fail))
 				snuff()
 			else
-				explosion(T, devastation_range = 5, heavy_impact_range = 6, light_impact_range = 10, flame_range = 2, smoke = TRUE, soundin = pick('sound/misc/explode/bottlebomb (1).ogg','sound/misc/explode/bottlebomb (2).ogg'))
+				explosion(T, devastation_range = 3, light_impact_range = 10, flame_range = 1, smoke = TRUE, soundin = pick('sound/misc/explode/bottlebomb (1).ogg','sound/misc/explode/bottlebomb (2).ogg'))
 				loud_message("A loud explosion rings in the ears of those whom hear it", hearing_distance = 28)
 				qdel(src)
 
@@ -451,15 +445,14 @@
 	throw_speed = 1
 	grid_width = 32
 	grid_height = 32
-	dropshrink = 0.75
+
+/obj/item/impact_grenade/Initialize(mapload)
+	. = ..()
 
 // Define a base explodes() proc that subtypes can override because its now explodes proc
 /obj/item/impact_grenade/proc/explodes()
 	STOP_PROCESSING(SSfastprocess, src)
 	qdel(src) // Delete the grenade after use boy (ALWAYS USE IT)
-
-/obj/item/impact_grenade/on_package_opened(mob/user)
-	explodes()
 
 /obj/item/impact_grenade/throw_impact(atom/hit_atom, datum/thrownthing/throwingdatum)
 	..()

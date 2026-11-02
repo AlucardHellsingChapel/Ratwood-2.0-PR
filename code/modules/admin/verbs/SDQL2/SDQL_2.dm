@@ -146,8 +146,6 @@
 	* Literals (numbers, strings, type paths, etc...)
 	* \ref referencing: {0x30000cc} grabs the object with \ref [0x30000cc]
 	* Lists: [a, b, c] or [a: b, c: d]
-	* Nested lists: [[1, 2], [3, 4]] or ['a': [1, 2]]
-	* List access, which chains: contents[1], grid[2][3], contents[1].name
 	* Math and stuff.
 	* A few special variables: src (the object currently scoped on), usr (your mob),
 		marked (your marked datum), global(global scope)
@@ -720,7 +718,7 @@ GLOBAL_DATUM_INIT(sdql2_vv_statobj, /obj/effect/statclick/SDQL2_VV_all, new(null
 		obj_count_finished = length(obj_count_finished)
 	state = SDQL2_STATE_SWITCHING
 
-/datum/SDQL2_query/proc/SDQL_print(object, list/text_list, print_nulls = TRUE, line_break = TRUE)
+/datum/SDQL2_query/proc/SDQL_print(object, list/text_list, print_nulls = TRUE)
 	if(is_proper_datum(object))
 		text_list += "<A HREF='?_src_=vars;[HrefToken(TRUE)];Vars=[REF(object)]'>[REF(object)]</A> : [object]"
 		if(istype(object, /atom))
@@ -741,8 +739,7 @@ GLOBAL_DATUM_INIT(sdql2_vv_statobj, /obj/effect/statclick/SDQL2_VV_all, new(null
 				text_list += " <font color='gray'>in</font> area [a]"
 				if(T.loc != a)
 					text_list += " <font color='gray'>inside</font> [T]"
-		if(line_break)
-			text_list += "<br>"
+		text_list += "<br>"
 	else if(islist(object))
 		var/list/L = object
 		var/first = TRUE
@@ -751,20 +748,17 @@ GLOBAL_DATUM_INIT(sdql2_vv_statobj, /obj/effect/statclick/SDQL2_VV_all, new(null
 			if (!first)
 				text_list += ", "
 			first = FALSE
-			//Entries print inline, so nested lists show up as nested instead of being smeared over the output.
-			SDQL_print(x, text_list, TRUE, FALSE)
+			SDQL_print(x, text_list)
 			if (!isnull(x) && !isnum(x) && L[x] != null)
 				text_list += " -> "
-				SDQL_print(L[x], text_list, TRUE, FALSE)
-		text_list += "]"
-		if(line_break)
-			text_list += "<br>"
+				SDQL_print(L[L[x]])
+		text_list += "]<br>"
 	else
 		if(isnull(object))
 			if(print_nulls)
-				text_list += line_break? "NULL<br>" : "NULL"
+				text_list += "NULL<br>"
 		else
-			text_list += line_break? "[object]<br>" : "[object]"
+			text_list += "[object]<br>"
 
 /datum/SDQL2_query/CanProcCall()
 	if(!allow_admin_interact)
@@ -920,9 +914,9 @@ GLOBAL_DATUM_INIT(sdql2_vv_statobj, /obj/effect/statclick/SDQL2_VV_all, new(null
 				// Need to insert the key like this to prevent duplicate keys fucking up.
 				var/list/dummy = list()
 				dummy[result] = assoc
-				val += dummy
-			else
-				val += list(result)
+				result = dummy
+			val += result
+
 	else if(expression[i] == "@\[")
 		var/list/search_tree = expression[++i]
 		var/already_searching = (state == SDQL2_STATE_SEARCHING) //In case we nest, don't want to break out of the searching state until we're all done.
@@ -1009,12 +1003,11 @@ GLOBAL_DATUM_INIT(sdql2_vv_statobj, /obj/effect/statclick/SDQL2_VV_all, new(null
 	var/v
 	var/static/list/exclude = list("usr", "src", "marked", "global")
 	var/long = start < expression.len
-	var/reading_value = !long || expression[start + 1] == "." || expression[start + 1] == "\["
 	var/datum/D
 	if(is_proper_datum(object))
 		D = object
 
-	if (object == world && reading_value && !(expression[start] in exclude))
+	if (object == world && (!long || expression[start + 1] == ".") && !(expression[start] in exclude))
 		to_chat(usr, span_danger("World variables are not allowed to be accessed. Use global."))
 		return null
 
@@ -1032,14 +1025,14 @@ GLOBAL_DATUM_INIT(sdql2_vv_statobj, /obj/effect/statclick/SDQL2_VV_all, new(null
 		v = query.SDQL_expression(source, expression[start + 1])
 		start++
 		long = start < expression.len
-	else if(D != null && reading_value && (expression[start] in D.vars))
+	else if(D != null && (!long || expression[start + 1] == ".") && (expression[start] in D.vars))
 		if(D.can_vv_get(expression[start]) || superuser)
 			v = D.vars[expression[start]]
 		else
 			v = "SECRET"
 	else if(D != null && long && expression[start + 1] == ":" && hascall(D, expression[start]))
 		v = expression[start]
-	else if(reading_value)
+	else if(!long || expression[start + 1] == ".")
 		switch(expression[start])
 			if("usr")
 				v = usr
@@ -1094,27 +1087,18 @@ GLOBAL_DATUM_INIT(sdql2_vv_statobj, /obj/effect/statclick/SDQL2_VV_all, new(null
 				return null
 	else if(object == GLOB) // Shitty ass hack kill me.
 		v = expression[start]
-	while(long)
+	if(long)
 		if(expression[start + 1] == ".")
 			return SDQL_var(v, expression[start + 2], null, source, superuser, query)
 		else if(expression[start + 1] == ":")
 			return (query.options & SDQL2_OPTION_BLOCKING_CALLS)? query.SDQL_function_async(object, v, expression[start + 2], source) : query.SDQL_function_blocking(object, v, expression[start + 2], source)
-		else if(expression[start + 1] == "\[")
-			if(isnull(v))
-				return null
-			if(!islist(v))
-				to_chat(usr, span_danger("Tried to index [v], which is not a list."))
-				return null
+		else if(expression[start + 1] == "\[" && islist(v))
 			var/list/L = v
 			var/index = query.SDQL_expression(source, expression[start + 2])
-			if(isnum(index) && (!ISINTEGER(index) || index < 1 || L.len < index))
+			if(isnum(index) && (!ISINTEGER(index) || L.len < index))
 				to_chat(usr, span_danger("Invalid list index: [index]"))
 				return null
-			v = L[index]
-			start += 2
-			long = start < expression.len
-		else
-			break
+			return L[index]
 	return v
 
 /proc/SDQL2_tokenize(query_text)

@@ -83,7 +83,7 @@
 	
 	if(to_remove)
 		C.visible_message(span_userdanger("[C]'s [to_remove.name] is torn off by the tendrils!"))
-		to_remove.dismember(damage = 999)
+		to_remove.dismember()
 
 		var/obj/effect/temp_visual/dir_setting/bloodsplatter/splatter = new(get_turf(C), pick(GLOB.cardinals))
 		splatter.color = "#880000"
@@ -93,7 +93,7 @@
 	var/obj/item/bodypart/head = C.get_bodypart(BODY_ZONE_HEAD)
 	if(head)
 		C.visible_message(span_userdanger("[C]'s head is violently torn off by the tendrils!"))
-		head.dismember(damage = 999, vorpal = TRUE)
+		head.dismember()
 		C.adjustBruteLoss(200)
 		var/obj/effect/temp_visual/dir_setting/bloodsplatter/splatter = new(get_turf(C), pick(GLOB.cardinals))
 		splatter.color = "#880000"

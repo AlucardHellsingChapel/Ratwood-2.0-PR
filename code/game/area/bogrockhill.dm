@@ -3,6 +3,7 @@
 /area/rogue/outdoors/bograt
 	name = "Rockhill Bog"
 	icon_state = "bog"
+	warden_area = TRUE
 	ambientsounds = AMB_BOGDAY
 	ambientnight = AMB_BOGNIGHT
 	spookysounds = SPOOKY_FROG
@@ -131,6 +132,7 @@
 	ambush_mobs = null
 	deathsight_message = "a foreign, distant pass, leading to the fetid bog"
 	icon_state = "bog"
+	warden_area = TRUE
 	ambientsounds = AMB_BOGDAY
 	ambientnight = AMB_BOGNIGHT
 	spookysounds = SPOOKY_FROG

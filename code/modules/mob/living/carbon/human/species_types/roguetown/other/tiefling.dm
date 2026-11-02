@@ -17,10 +17,9 @@
 
 	skin_tone_wording = "Progenitor"
 
-	species_traits = list(EYECOLOR,HAIR,FACEHAIR,LIPS,STUBBLE,OLDGREY,MUTCOLORS_PARTSONLY)
+	species_traits = list(EYECOLOR,HAIR,FACEHAIR,LIPS,STUBBLE,OLDGREY)
 	default_features = MANDATORY_FEATURE_LIST
 	use_skintones = 1
-	mutant_skin_option = TRUE
 	disliked_food = NONE
 	liked_food = NONE
 	possible_ages = ALL_AGES_LIST
@@ -73,13 +72,10 @@
 		/datum/customizer/bodypart_feature/legwear,
 		/datum/customizer/organ/horns/anthro,
 		/datum/customizer/organ/tail/tiefling,
-		/datum/customizer/organ/tail/manticore,
 		/datum/customizer/organ/testicles/anthro,
 		/datum/customizer/organ/penis/anthro,
 		/datum/customizer/organ/breasts/human,
 		/datum/customizer/organ/vagina/human_anthro,
-		/datum/customizer/bodypart_feature/pubes,
-		/datum/customizer/bodypart_feature/pits,
 		/datum/customizer/organ/ears/tiefling,
 		)
 	body_marking_sets = list(
@@ -93,10 +89,6 @@
 	body_markings = list(
 		/datum/body_marking/flushed_cheeks,
 		/datum/body_marking/eyeliner,
-		/datum/body_marking/tall_eyes,
-		/datum/body_marking/outer_tall_eyes,
-		/datum/body_marking/blank_face,
-		/datum/body_marking/face_paint,
 		/datum/body_marking/tonage,
 		/datum/body_marking/bangs,
 		/datum/body_marking/bun,
@@ -151,8 +143,7 @@
 		"Krizzsha" = SKIN_COLOR_KRIZZSHA,
 		"Tosiz" = SKIN_COLOR_TOSIZ,
 		"Velothel" = SKIN_COLOR_VELOTHEL,
-		"Ashol" = SKIN_COLOR_ASHOL,
-		"Pyris" = SKIN_COLOR_PYRIS
+		"Ashol" = SKIN_COLOR_ASHOL
 	)
 
 /datum/species/tieberian/get_hairc_list()

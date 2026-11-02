@@ -17,8 +17,6 @@
 	grid_height = 64
 	grid_width = 32
 	component_type = /datum/component/storage/concrete/roguetown/coin_pouch
-	salvage_amount = 1
-	salvage_result = /obj/item/natural/fibers
 
 /obj/item/storage/belt/rogue/pouch/coins/poor/Initialize(mapload)
 	. = ..()
@@ -90,13 +88,6 @@
 /obj/item/storage/belt/rogue/pouch/coins/readyuppouch/Initialize(mapload)
 	. = ..()
 	var/obj/item/roguecoin/silver/pile/readyuppile/H = new(loc)
-	if(istype(H))
-		if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, H, null, TRUE, TRUE))
-			qdel(H)
-
-/obj/item/storage/belt/rogue/pouch/coins/gilbranze/Initialize(mapload)
-	. = ..()
-	var/obj/item/roguecoin/gilbranze/pile/H = new(loc)
 	if(istype(H))
 		if(!SEND_SIGNAL(src, COMSIG_TRY_STORAGE_INSERT, H, null, TRUE, TRUE))
 			qdel(H)

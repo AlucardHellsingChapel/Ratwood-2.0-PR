@@ -6,8 +6,13 @@
 	stamina_cost = 0
 	category = SEX_CATEGORY_HANDS
 
+/datum/sex_action/spanking/shows_on_menu(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	if(user == target)
+		return FALSE
+	return TRUE
+
 /datum/sex_action/spanking/can_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
-	if(!(. = ..()))
+	if(user == target)
 		return FALSE
 	if(!user.sexcon.Adjacent_Or_Closet(target))
 		return FALSE
@@ -23,7 +28,7 @@
 	playsound(target, sound, 50, TRUE, -2, ignore_walls = FALSE)
 
 	var/msg = "[user] [user.sexcon.get_generic_force_adjective()] spanks [target]'s butt."
-	user.sexcon_action_message(user.sexcon.spanify_force(msg))
+	user.visible_message(user.sexcon.spanify_force(msg))
 
 	// Arousal and pain logic
 	var/arousal_amt = 1.2 + (force * 0.5)

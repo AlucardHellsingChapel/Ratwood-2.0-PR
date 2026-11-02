@@ -8,7 +8,7 @@
 	mode = AI_IDLE
 	faction = list("viking", "station")
 	ambushable = FALSE
-	dodgetime = 1.5 SECONDS
+	dodgetime = 15
 	flee_in_pain = FALSE
 	possible_rmb_intents = list()
 
@@ -33,7 +33,6 @@
 	ADD_TRAIT(src, TRAIT_DISFIGURED, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_CRITICAL_RESISTANCE, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_NOPAINSTUN, TRAIT_GENERIC)
-	ADD_TRAIT(src, TRAIT_CRIT_THRESHOLD, TRAIT_GENERIC)
 	equipOutfit(new /datum/outfit/job/roguetown/human/species/human/northern/mad_touched_treasure_hunter)
 	var/obj/item/organ/eyes/organ_eyes = getorgan(/obj/item/organ/eyes)
 	if(organ_eyes)
@@ -58,13 +57,13 @@
 		face_atom(get_step(src,pick(GLOB.cardinals)))
 
 /datum/outfit/job/roguetown/human/species/human/northern/mad_touched_treasure_hunter/pre_equip(mob/living/carbon/human/H)
-	wrists = /obj/item/clothing/wrists/roguetown/bracers/ancient
-	mask = /obj/item/clothing/mask/rogue/facemask/ancient/mad_touched
+	wrists = /obj/item/clothing/wrists/roguetown/bracers/paalloy
+	mask = /obj/item/clothing/mask/rogue/facemask/steel/paalloy/mad_touched
 	armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy
 	shirt = /obj/item/clothing/suit/roguetown/armor/gambeson
 	if(prob(20))
 		shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/light
-	pants = /obj/item/clothing/under/roguetown/platelegs/ancient
+	pants = /obj/item/clothing/under/roguetown/platelegs/paalloy
 	belt = /obj/item/storage/belt/rogue/leather
 	if(prob(15))
 		beltl = /obj/item/storage/belt/rogue/pouch/medicine
@@ -75,19 +74,19 @@
 	if(prob(30))
 		id = /obj/item/clothing/ring/silver
 	else
-		id = /obj/item/clothing/ring/decrepit
+		id = /obj/item/clothing/ring/aalloy
 	head = /obj/item/clothing/head/roguetown/menacing/mad_touched_treasure_hunter
 	neck = /obj/item/clothing/neck/roguetown/chaincoif/chainmantle
-	gloves = /obj/item/clothing/gloves/roguetown/plate/ancient
+	gloves = /obj/item/clothing/gloves/roguetown/plate/paalloy
 	cloak = /obj/item/clothing/cloak/wickercloak
 	if(prob(33))
-		r_hand = /obj/item/rogueweapon/greatsword/ancient
+		r_hand = /obj/item/rogueweapon/greatsword/paalloy
 	else if(prob(33))
 		r_hand = /obj/item/rogueweapon/shield/buckler
-		l_hand = /obj/item/rogueweapon/huntingknife/idagger/steel/ancient
+		l_hand = /obj/item/rogueweapon/huntingknife/idagger/steel/padagger
 	else
-		r_hand = /obj/item/rogueweapon/sword/sabre/ancient
-		l_hand = /obj/item/rogueweapon/sword/sabre/ancient
+		r_hand = /obj/item/rogueweapon/sword/sabre/palloy
+		l_hand = /obj/item/rogueweapon/sword/sabre/palloy
 
 	shoes = /obj/item/clothing/shoes/roguetown/boots/leather
 	//carbon ai is still pretty dumb so making them a threat to players requires pretty crazy looking stats. don't think too hard about it.
@@ -122,17 +121,17 @@
 	color = "#999999"
 	armor = ARMOR_LEATHER
 
-/obj/item/clothing/mask/rogue/facemask/ancient/mad_touched
+/obj/item/clothing/mask/rogue/facemask/steel/paalloy/mad_touched
 	name = "eerie ancient mask"
 
-/obj/item/clothing/mask/rogue/facemask/ancient/mad_touched/equipped(mob/user, slot)
+/obj/item/clothing/mask/rogue/facemask/steel/paalloy/mad_touched/equipped(mob/user, slot)
 	. = ..()
 	if(slot == SLOT_WEAR_MASK)
 		ADD_TRAIT(src, TRAIT_NODROP, CURSED_ITEM_TRAIT)
 		var/mob/living/carbon/human/mad_touched = user
 		mad_touched.apply_damage(25, BRUTE, BODY_ZONE_HEAD)
 
-/obj/item/clothing/mask/rogue/facemask/ancient/mad_touched/mad_touched/dropped(mob/user)
+/obj/item/clothing/mask/rogue/facemask/steel/paalloy/mad_touched/dropped(mob/user)
 	. = ..()
 	REMOVE_TRAIT(src, TRAIT_NODROP, CURSED_ITEM_TRAIT)
 

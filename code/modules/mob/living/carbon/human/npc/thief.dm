@@ -2,16 +2,13 @@
 	mode = NPC_AI_IDLE
 	faction = list("thieves")
 	ambushable = FALSE
-	dodgetime = 3 SECONDS
+	dodgetime = 30
 	flee_in_pain = TRUE
 	a_intent = INTENT_HELP
 	m_intent = MOVE_INTENT_SNEAK
 	d_intent = INTENT_DODGE
 	aggressive= TRUE
 	wander = TRUE
-
-	//Thieves, often smart and slippery.
-	smart_combatant = TRUE
 
 /mob/living/carbon/human/species/human/northern/thief/retaliate(mob/living/L)
 	.=..()

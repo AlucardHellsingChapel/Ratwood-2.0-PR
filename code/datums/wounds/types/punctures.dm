@@ -68,19 +68,19 @@
 #define PUNC_UPG_CLAMP_RAW 1.3
 #define PUNC_ARMORED_BLEED_CLAMP 7
 
-/datum/wound/dynamic/puncture/upgrade(dam, armor, exposed, pen_info)
+/datum/wound/dynamic/puncture/upgrade(dam, armor, exposed)
 	whp += (dam * PUNC_UPG_WHPRATE)
 	if(!armor || exposed)
 		set_bleed_rate(bleed_rate + PUNC_UPG_CLAMP_RAW)
 	else
-		switch(pen_info)
-			if(1 to 2)
+		switch(dam)
+			if(1 to 4)
 				set_bleed_rate(bleed_rate + 0.3)
-			if(3 to 4)
+			if(5 to 9)
 				set_bleed_rate(bleed_rate + 0.4)
-			if(5 to 6)
+			if(10 to 13)
 				set_bleed_rate(bleed_rate + 0.5)
-			if(7 to 8)
+			if(14 to 99)	//At 80 armor and 30 base damage this would require ~16 STR
 				set_bleed_rate(bleed_rate + 0.75)
 	sew_threshold += (dam * PUNC_UPG_SEWRATE)
 	woundpain += (dam * PUNC_UPG_PAINRATE)

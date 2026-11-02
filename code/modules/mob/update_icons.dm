@@ -47,7 +47,6 @@
 	return
 
 /mob/proc/update_hair()
-	// TODO: COMPLETELY REMOVE THIS PROC AND ALL CASES WHERE IT'S CALLED
 	return
 
 /mob/proc/update_fire()

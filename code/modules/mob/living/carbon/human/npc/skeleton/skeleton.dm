@@ -15,7 +15,7 @@
 	base_intents = list(INTENT_HELP, INTENT_DISARM, INTENT_GRAB, /datum/intent/unarmed/claw)
 	a_intent = INTENT_HELP
 	d_intent = INTENT_PARRY
-	possible_mmb_intents = list(INTENT_SPECIAL, INTENT_JUMP, INTENT_KICK, INTENT_BITE)
+	possible_mmb_intents = list(INTENT_STEAL, INTENT_JUMP, INTENT_KICK, INTENT_BITE)
 	cmode_music = 'sound/music/combat_weird.ogg'
 
 
@@ -35,7 +35,8 @@
 /mob/living/carbon/human/species/skeleton/Initialize(mapload)
 	. = ..()
 	cut_overlays()
-	addtimer(CALLBACK(src, PROC_REF(after_creation)), 1 SECONDS)
+	spawn(10)
+		after_creation()
 
 /mob/living/carbon/human/species/skeleton/after_creation()
 	..()
@@ -49,10 +50,8 @@
 	name = "Skeleton"
 	real_name = "Skeleton"
 	voice_type = VOICE_TYPE_MASC //So that "Unknown Man" properly substitutes in with face cover
-	set_bark(pick("sans", "papyrus")) // Hilarious
 	ADD_TRAIT(src, TRAIT_NOMOOD, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_BREADY, TRAIT_GENERIC)
-	ADD_TRAIT(src, TRAIT_NO_VOICEPACK_OVERRIDE, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_NOHUNGER, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_EASYDISMEMBER, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_NOBREATH, TRAIT_GENERIC)
@@ -64,7 +63,7 @@
 	ADD_TRAIT(src, TRAIT_SILVER_WEAK, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_EXTREME_TEMPERATURE_IMMUNE, TRAIT_GENERIC)
 	if(skel_fragile)
-		ADD_TRAIT(src, TRAIT_SHATTER_WEAKNESS, TRAIT_GENERIC)
+		ADD_TRAIT(src, TRAIT_CRITICAL_WEAKNESS, TRAIT_GENERIC)
 	else
 		ADD_TRAIT(src, TRAIT_SELF_SUSTENANCE, TRAIT_GENERIC) // If not fragile, then you're summoned by a real antag
 		// Therefore you get the trait to grind up to Jman.

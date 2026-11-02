@@ -5,7 +5,7 @@
 	worshippers = "Fishermen, Axians, Lamia, Dreamers, Madmen"
 	virtues = "Dreaming, Open-Mindedness, Purity"
 	sins = "Forgetfulness, Deception, Taking Name in Vain"
-	mob_traits = list(TRAIT_ABYSSOR_SWIM, TRAIT_SEA_DRINKER, TRAIT_WATERLOVING)
+	mob_traits = list(TRAIT_ABYSSOR_SWIM, TRAIT_SEA_DRINKER)
 	miracles = list(/obj/effect/proc_holder/spell/targeted/touch/orison			= CLERIC_ORI,
 					/obj/effect/proc_holder/spell/invoked/aquatic_compulsion	= CLERIC_T0,
 					/obj/effect/proc_holder/spell/self/abyssor_wind				= CLERIC_T0,
@@ -19,7 +19,6 @@
 					/obj/effect/proc_holder/spell/invoked/abyssal_infusion		= CLERIC_T4,
 					/obj/effect/proc_holder/spell/invoked/resurrect/abyssor		= CLERIC_T4,
 	)
-	energy_color = COLOR_PATRON_ABYSSOR
 	confess_lines = list(
 		"ABYSSOR COMMANDS THE WAVES!",
 		"THE OCEAN'S FURY IS ABYSSOR'S WILL!",

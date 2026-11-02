@@ -192,7 +192,6 @@
 //////////////
 
 /obj/item/clothing/neck/necklace/dope
-	is_gold = TRUE
 	name = "gold necklace"
 	desc = ""
 	icon = 'icons/obj/clothing/neck.dmi'

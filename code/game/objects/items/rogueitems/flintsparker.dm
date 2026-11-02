@@ -15,8 +15,6 @@
 	resistance_flags = FIRE_PROOF
 	grid_height = 32
 	grid_width = 32
-	dropshrink = 0.8
-	color = "#dfdada"//just debrightening the sprite a smidge
 
 /obj/item/flint/attack_self(mob/living/user)
 	if(world.time < flintcd + 10)
@@ -24,7 +22,7 @@
 	flintcd = world.time
 	playsound(user, 'sound/items/flint.ogg', 100, FALSE)
 	if(prob(80))
-		user.fullscreen_redflash("whiteflash")
+		user.flash_fullscreen("whiteflash")
 		var/datum/effect_system/spark_spread/S = new()
 		var/turf/front = get_step(user,user.dir)
 		S.set_up(1, 1, front)
@@ -40,4 +38,4 @@
 	playsound(user, 'sound/items/flint.ogg', 100, FALSE)
 	if(prob(50))
 		A.spark_act()
-		user.fullscreen_redflash("whiteflash")
+		user.flash_fullscreen("whiteflash")

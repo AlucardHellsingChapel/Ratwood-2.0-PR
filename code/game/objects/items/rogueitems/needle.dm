@@ -29,14 +29,11 @@
 #define XP_ON_SUCCESS 0.5
 /// The minimum delay between automatic sewing attempts.
 #define AUTO_SEW_DELAY CLICK_CD_MELEE
-#define SEW_HP_EXP_NORMALIZER 600
-#define SEW_EXP_PER_STEP 0.1
-#define SEW_EXP_FINISH 5
 
 /obj/item/needle
 	name = "needle"
 	icon_state = "needle"
-	desc = "This sharp needle can sew wounds, mend clothing, and stab someone if you're desperate."
+	desc = "This sharp needle can sew wounds, mend clothing, and stab someone if you’re desperate."
 	icon = 'icons/roguetown/items/misc.dmi'
 	lefthand_file = 'icons/mob/inhands/misc/food_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/misc/food_righthand.dmi'
@@ -58,7 +55,6 @@
 	var/can_repair = TRUE
 	grid_width = 32
 	grid_height = 32
-	dropshrink = 0.75
 
 /obj/item/needle/examine()
 	. = ..()
@@ -206,11 +202,6 @@
 	var/list/sewable
 	var/obj/item/bodypart/affecting
 	if(iscarbon(patient))
-		//OV edit
-		if(isooze(patient))
-			to_chat(doctor, span_warning("You can't sew an Ooze, their wounds must be burned closed."))
-			return FALSE
-		//OV edit end
 		affecting = patient.get_bodypart(check_zone(doctor.zone_selected))
 		if(!affecting)
 			to_chat(doctor, span_warning("That limb is missing."))
@@ -235,8 +226,6 @@
 		stringamt >= 1)
 		if(!do_after(doctor, 2 SECONDS, target = patient))
 			break
-		if(doctor.mind)
-			doctor.mind.add_sleep_experience(skill_used, doctor.STAINT * SEW_EXP_PER_STEP)
 		playsound(loc, 'sound/foley/sewflesh.ogg', 100, TRUE, -2)
 		target_wound.sew_progress = min(target_wound.sew_progress + moveup, target_wound.sew_threshold)
 
@@ -254,9 +243,7 @@
 		if(target_wound.sew_progress < target_wound.sew_threshold)
 			continue
 		if(doctor.mind)
-			var/exp_scale = target_wound.sew_threshold / SEW_HP_EXP_NORMALIZER
-			var/base_exp = doctor.STAINT * SEW_EXP_FINISH
-			doctor.mind.add_sleep_experience(skill_used, base_exp * exp_scale)
+			doctor.mind.add_sleep_experience(skill_used, doctor.STAINT * 2.5)
 		use(1)
 		target_wound.sew_wound()
 		if(patient == doctor)
@@ -283,9 +270,9 @@
 	desc = span_green("This needle has been blessed by the goddess of medicine herself!")
 	infinite = TRUE
 
-/obj/item/needle/decrepit
+/obj/item/needle/aalloy
 	name = "decrepit needle"
-	icon_state = "needle" // "aneedle" // currently missing the sprite
+	icon_state = "aneedle"
 	desc = "This decrepit old needle doesn't seem helpful for much."
 	stringamt = 5
 	maxstring = 5
@@ -305,6 +292,3 @@
 #undef XP_ON_FAIL
 #undef XP_ON_SUCCESS
 #undef AUTO_SEW_DELAY
-#undef SEW_HP_EXP_NORMALIZER
-#undef SEW_EXP_PER_STEP
-#undef SEW_EXP_FINISH

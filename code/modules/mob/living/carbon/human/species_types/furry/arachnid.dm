@@ -71,8 +71,6 @@
 		/datum/customizer/organ/penis/anthro,
 		/datum/customizer/organ/breasts/human,
 		/datum/customizer/organ/vagina/anthro,
-		/datum/customizer/bodypart_feature/pubes/fuzzy,
-		/datum/customizer/bodypart_feature/pits/fuzzy,
 		)
 	body_marking_sets = list(
 		/datum/body_marking_set/none,
@@ -89,9 +87,6 @@
 	body_markings = list(
 		/datum/body_marking/flushed_cheeks,
 		/datum/body_marking/eyeliner,
-		/datum/body_marking/tall_eyes,
-		/datum/body_marking/outer_tall_eyes,
-		/datum/body_marking/blank_face,
 		/datum/body_marking/plain,
 		/datum/body_marking/tiger,
 		/datum/body_marking/tiger/dark,
@@ -135,7 +130,6 @@
 
 	allowed_taur_types = list(
 		/obj/item/bodypart/taur/spider,
-		/obj/item/bodypart/taur/spider/weaver,
 		/obj/item/bodypart/taur/ant,
 		/obj/item/bodypart/taur/wasp
 	)
@@ -147,23 +141,13 @@
 /datum/species/arachnid/qualifies_for_rank(rank, list/features)
 	return TRUE
 
-/datum/species/arachnid/on_species_gain(mob/living/carbon/arachnidcarbon, datum/species/old_species) // one of those auto-appends a dot at the end of player speech
+/datum/species/arachnid/on_species_gain(mob/living/carbon/C, datum/species/old_species) // one of those auto-appends a dot at the end of player speech
 	..()
-	RegisterSignal(arachnidcarbon, COMSIG_MOB_SAY, PROC_REF(handle_speech))
-	give_web_spells(arachnidcarbon)
+	RegisterSignal(C, COMSIG_MOB_SAY, PROC_REF(handle_speech))
 
-/datum/species/arachnid/proc/give_web_spells(mob/living/carbon/arachnidcarbon)
-	arachnidcarbon.AddSpell(new /obj/effect/proc_holder/spell/self/spin_web/thin)
-	arachnidcarbon.AddSpell(new /obj/effect/proc_holder/spell/self/spin_web/dense)
-
-/datum/species/arachnid/on_species_loss(mob/living/carbon/arachnidcarbon) // one of those auto-appends a dot at the end of player speech
+/datum/species/arachnid/on_species_loss(mob/living/carbon/C) // one of those auto-appends a dot at the end of player speech
 	. = ..()
-	UnregisterSignal(arachnidcarbon, COMSIG_MOB_SAY)
-	remove_web_spells(arachnidcarbon)
-
-/datum/species/arachnid/proc/remove_web_spells(mob/living/carbon/arachnidcarbon)
-	arachnidcarbon.RemoveSpell(/obj/effect/proc_holder/spell/self/spin_web/thin)
-	arachnidcarbon.RemoveSpell(/obj/effect/proc_holder/spell/self/spin_web/dense)
+	UnregisterSignal(C, COMSIG_MOB_SAY)
 
 /datum/species/arachnid/get_random_features()
 	var/list/returned = MANDATORY_FEATURE_LIST

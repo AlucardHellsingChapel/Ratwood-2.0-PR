@@ -12,7 +12,6 @@
 	max_integrity = 200
 	integrity_failure = 0.1
 	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
-	dropshrink = 0.8
 	var/gendered
 	var/race
 	var/datum/bodypart_feature/legwear/legwears_feature

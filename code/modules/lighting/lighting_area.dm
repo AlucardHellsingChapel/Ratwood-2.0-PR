@@ -17,7 +17,8 @@
 	else
 		add_overlay(/obj/effect/fullbright)
 		for (var/turf/T in src)
-			T.lighting_clear_overlay()
+			if (T.lighting_object)
+				T.lighting_clear_overlay()
 
 	return TRUE
 

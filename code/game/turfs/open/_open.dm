@@ -1,5 +1,4 @@
 /turf/open
-	abstract_type = /turf/open
 	plane = FLOOR_PLANE
 	var/slowdown = 0 //negative for faster, positive for slower
 
@@ -11,7 +10,7 @@
 	var/clawfootstep = null
 	var/heavyfootstep = null
 	var/footstepstealth = FALSE
-	baseturfs = /turf/baseturf_openspace
+	baseturfs = /turf/open/transparent/openspace
 
 	damage_deflection = INFINITY //TODO: Find a better method for breakable turf system
 
@@ -19,11 +18,12 @@
 	return 0
 
 /turf/open/get_slowdown(mob/user)
-	. = slowdown
-	if(platform_atom_count > 0)
-		return
+	var/total_slowdown = slowdown
 	for(var/obj/obj in contents)
-		. += obj.object_slowdown
+		if(obj.obj_flags & BLOCK_Z_OUT_DOWN)
+			return slowdown
+		total_slowdown += obj.object_slowdown
+	return total_slowdown
 
 /turf
 	var/landsound = null

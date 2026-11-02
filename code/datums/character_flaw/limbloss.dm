@@ -16,7 +16,6 @@
 	name = "Wood Arm (R)"
 	desc = "I lost my right arm long ago, but the wooden arm doesn't bleed as much... but it is flammable.<br><i>(Incompatible with Bronze Arm (R) virtue)</i>"
 	lost_zone = BODY_ZONE_R_ARM
-	point_value = 2
 
 /datum/charflaw/limbloss/arm_r/on_mob_creation(mob/user)
 	..()
@@ -25,12 +24,12 @@
 	var/mob/living/carbon/human/H = user
 	var/obj/item/bodypart/r_arm/prosthetic/woodright/L = new()
 	L.attach_limb(H)
+	H.adjust_triumphs(1)
 
 /datum/charflaw/limbloss/arm_l
 	name = "Wood Arm (L)"
 	desc = "I lost my left arm long ago, but the wooden arm doesn't bleed as much... but it is flammable.<br><i>(Incompatible with Bronze Arm (L) virtue)</i>"
 	lost_zone = BODY_ZONE_L_ARM
-	point_value = 2
 
 /datum/charflaw/limbloss/arm_l/on_mob_creation(mob/user)
 	..()
@@ -39,3 +38,4 @@
 	var/mob/living/carbon/human/H = user
 	var/obj/item/bodypart/l_arm/prosthetic/woodleft/L = new()
 	L.attach_limb(H)
+	H.adjust_triumphs(1)

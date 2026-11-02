@@ -21,8 +21,6 @@
 		/datum/skill/misc/athletics = SKILL_LEVEL_APPRENTICE,
 	)
 
-	extra_context = "This class is restricted from using the Equestrian virtue."
-
 	virtue_restrictions = list(
 		/datum/virtue/utility/riding
 	)
@@ -50,5 +48,5 @@
 		H.AddSpell(new /obj/effect/proc_holder/spell/self/choose_riding_virtue_mount)
 
 /mob/living/simple_animal/hostile/retaliate/rogue/goat/tame/Initialize(mapload)
-	. = ..()
+	..()
 	tamed()

@@ -38,7 +38,7 @@ GLOBAL_LIST_EMPTY(priest_swap_timers)
 	round_contrib_points = 5
 	social_rank = SOCIAL_RANK_ROYAL
 	//No nobility for you, being a member of the clergy means you gave UP your nobility. It says this in many of the church tutorial texts.
-	quirk_restrictions = list(/datum/quirk/noble, /datum/quirk/hunted)
+	virtue_restrictions = list(/datum/virtue/utility/noble)
 	job_traits = list(
 		TRAIT_CHOSEN,
 		TRAIT_RITUALIST,
@@ -67,7 +67,9 @@ GLOBAL_LIST_EMPTY(priest_swap_timers)
 		H.real_name = "[title] [prev_real_name]"
 		H.name = "[title] [prev_name]"
 
-		addtimer(CALLBACK(src, PROC_REF(_delayed_path_choice), H), 50)
+		spawn(50)
+			if(H && H.client)
+				_delayed_path_choice(H)
 
 /datum/advclass/bishop
 	name = "Bishop"
@@ -228,7 +230,7 @@ GLOBAL_LIST_EMPTY(priest_swap_timers)
 /mob/living/carbon/human/proc/coronate_lord()
 	set name = "Coronate"
 	set category = "Priest"
-	to_chat (src, span_warning("The process of crowning a new ruler, and binding his soul to the Throne of the Realm takes a most heavy toil. Any newly coronated Noble Liege will not be able to be revived. You should probably mention this."))
+	to_chat (src, span_warning("The process of crowning a new ruler, and binding his soul to the Throne of the Vale takes a most heavy toil. Any newly coronated Noble Liege will not be able to be revived. You should probably mention this."))
 	if(!mind)
 		return
 	if(world.time < 30 MINUTES)
@@ -264,8 +266,8 @@ GLOBAL_LIST_EMPTY(priest_swap_timers)
 		SSticker.regentmob = null
 		var/dispjob = mind.assigned_role
 		removeomen(OMEN_NOLORD)
-		say("By the authority of the gods, I pronounce you Ruler of all the realm!")
-		priority_announce("[real_name] the [dispjob] has named [HU.real_name] the inheritor of [SSmapping.map_adjustment.realm_name]!", title = "Long Live [HU.real_name]!", sound = 'sound/misc/bell.ogg')
+		say("By the authority of the gods, I pronounce you Ruler of all the vale!")
+		priority_announce("[real_name] the [dispjob] has named [HU.real_name] the inheritor of ROTWOOD VALE!", title = "Long Live [HU.real_name]!", sound = 'sound/misc/bell.ogg')
 		var/datum/job/roguetown/nomoredukes = SSjob.GetJob("Grand Duke")
 		if(nomoredukes)
 			nomoredukes.total_positions = -1000 //We got what we got now.
@@ -281,7 +283,7 @@ GLOBAL_LIST_EMPTY(priest_swap_timers)
 		to_chat(src, span_warning("I need to do this in the chapel."))
 		return FALSE
 
-	var/announcementinput = input("Bellow to the realm", "Make an Announcement") as text|null
+	var/announcementinput = input("Bellow to the vale", "Make an Announcement") as text|null
 	if(announcementinput)
 		if(!src.can_speak_vocal())
 			to_chat(src,span_warning("I can't speak!"))
@@ -381,7 +383,7 @@ GLOBAL_LIST_EMPTY(priest_swap_timers)
 		return
 
 	var/found = FALSE
-	var/inputty = input("Mark a member of the clergy as an apostate, removing their ability to use miracles... (apostasy them again to remove it)", "Sinner Name") as text|null
+	var/inputty = input("Put an apostasy on someone, removing their ability to use miracles... (apostasy them again to remove it)", "Sinner Name") as text|null
 
 	if (!inputty)
 		return
@@ -423,10 +425,8 @@ GLOBAL_LIST_EMPTY(priest_swap_timers)
 		GLOB.apostasy_players += inputty
 		COOLDOWN_START(src, priest_apostasy, PRIEST_APOSTASY_COOLDOWN)
 
-		var/curse_resist = HAS_TRAIT(H, TRAIT_CURSE_RESIST)
-
 		if (istype(H.patron, /datum/patron/divine))
-			H.apply_status_effect(/datum/status_effect/debuff/apostasy, curse_resist)
+			H.apply_status_effect(/datum/status_effect/debuff/apostasy)
 			H.add_stress(/datum/stressevent/apostasy)
 			to_chat(H, span_warning("A holy silence falls upon you. Your Patron cannot hear you anymore..."))
 		else

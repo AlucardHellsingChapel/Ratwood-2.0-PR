@@ -5,7 +5,7 @@
 	body_parts_covered = CHEST|GROIN|LEGS|ARMS
 	permeability_coefficient = 0.9
 	slot_flags = ITEM_SLOT_ICLOTHING
-	armor = ARMOR_CLOTHING
+	armor = list("blunt" = 0, "slash" = 0, "stab" = 0,  "piercing" = 0, "fire" = 0, "acid" = 0)
 	equip_sound = 'sound/blank.ogg'
 	drop_sound = 'sound/blank.ogg'
 	pickup_sound =  'sound/blank.ogg'

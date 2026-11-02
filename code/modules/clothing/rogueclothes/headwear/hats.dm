@@ -21,6 +21,7 @@
 	sewrepair = FALSE
 	armor = ARMOR_PLATE
 	blocksound = PLATEHIT
+	prevent_crits = list(BCLASS_CUT, BCLASS_STAB, BCLASS_CHOP, BCLASS_BLUNT, BCLASS_TWIST)
 	body_parts_covered = HEAD|HAIR
 	max_integrity = ARMOR_INT_HELMET_STEEL
 	anvilrepair = /datum/skill/craft/armorsmithing
@@ -34,7 +35,6 @@
 	icon_state = "tophat"
 	color = CLOTHING_BLACK
 	nudist_approved = TRUE
-	dropshrink = null
 
 /obj/item/clothing/head/roguetown/bardhat
 	name = "bard's hat"
@@ -83,17 +83,6 @@
 	cold_protection = HEAD
 	min_cold_protection_temperature = 50
 
-/obj/item/clothing/head/roguetown/loadoutpapakha
-	name = "Soft-sided papakha"
-	icon_state = "papakha"
-	item_state = "papakha"
-	resistance_flags = FIRE_PROOF //doesnt spawn, only a cosmetic loadout item. Keep the swag.
-	nudist_approved = TRUE
-	salvage_result = /obj/item/natural/fur
-	salvage_amount = 1
-	cold_protection = HEAD
-	min_cold_protection_temperature = 50
-
 /obj/item/clothing/head/roguetown/hatblu
 	name = "fur hat"
 	desc = "A blue hat lined with fur."
@@ -120,7 +109,6 @@
 	nudist_approved = TRUE
 	heat_protection = HEAD
 	max_heat_protection_temperature = BODYTEMP_HEAT_LEVEL_ONE_MAX
-	dropshrink = null
 
 /obj/item/clothing/head/roguetown/chaperon
 	name = "chaperon hat"
@@ -161,7 +149,7 @@
 /obj/item/clothing/head/roguetown/chaperon/noble/update_icon()
 	cut_overlays()
 	if(get_detail_tag())
-		var/mutable_appearance/pic = mutable_appearance(icon(icon, "[get_detail_state(icon_state)][detail_tag]"))
+		var/mutable_appearance/pic = mutable_appearance(icon(icon, "[icon_state][detail_tag]"))
 		pic.appearance_flags = RESET_COLOR
 		if(get_detail_color())
 			pic.color = get_detail_color()
@@ -172,7 +160,8 @@
 	desc = "A noble's chaperon made for the local Marshal. \"How terribly unfortunate you are!\""
 	color = "#641E16"
 	detail_color = "#b68e37ff"
-	armor = ARMOR_LEATHER // spellsinger hat stats. Drip or drown.
+	prevent_crits = list(BCLASS_CUT, BCLASS_BLUNT, BCLASS_TWIST)
+	armor = ARMOR_SPELLSINGER // spellsinger hat stats. Drip or drown.
 	nudist_approved = FALSE // armored
 
 /obj/item/clothing/head/roguetown/chaperon/noble/guildmaster
@@ -193,16 +182,10 @@
 	icon_state = "chap_alt"
 	item_state = "chap_alt"
 	color = "#7dcea0"
-	
+
 /obj/item/clothing/head/roguetown/chaperon/greyscale/elder
 	name = "elder's chaperon hat"
 	color = "#007fff"
-
-/obj/item/clothing/head/roguetown/chaperon/greyscale/shepherd
-	name = "mountaineer's chaperon"
-	desc = "A fashionable citygoer's chaperon worn around an insconspicuous iron skullcap. It has a cute little Mamük brooch on the tip of the hood. Szöréndnížine shepherds spend plenty of time in the city and have taken a liking to the chaperon's exaggerated swagger."
-	armor = ARMOR_LEATHER
-	max_integrity = ARMOR_INT_HELMET_IRON - 25
 
 /obj/item/clothing/head/roguetown/chef
 	name = "chef's hat"
@@ -218,12 +201,10 @@
 	item_state = "armingcap"
 	flags_inv = HIDEEARS
 	nudist_approved = TRUE
-	salvage_result = /obj/item/natural/cloth
-	fiber_salvage = FALSE
+	salvage_result = /obj/item/natural/hide/cured
 	//dropshrink = 0.75
 	cold_protection = HEAD
 	min_cold_protection_temperature = BODYTEMP_COLD_LEVEL_ONE_MAX
-	dropshrink = null
 
 /obj/item/clothing/head/roguetown/knitcap
 	name = "knit cap"
@@ -245,7 +226,6 @@
 	//dropshrink = 0.75
 	dynamic_hair_suffix = null
 	nudist_approved = TRUE
-	fiber_salvage = FALSE
 
 /obj/item/clothing/head/roguetown/headband/bloodied
 	name = "bloodied headband"
@@ -253,9 +233,10 @@
 	icon_state = "headband"
 	item_state = "headband"
 	color = "#851a16"
-	armor = ARMOR_LEATHER
+	armor = ARMOR_LEATHER_GOOD
 	max_integrity = ARMOR_INT_HELMET_LEATHER
 	body_parts_covered = HEAD|HAIR|EARS
+	prevent_crits = list(BCLASS_CUT, BCLASS_CHOP, BCLASS_TWIST) //Themed to protect against deadites and nitebeasts. Doesn't stop blunt-, smash-, or stabbing crits.
 	//dropshrink = 0.75
 	dynamic_hair_suffix = null
 
@@ -280,10 +261,10 @@
 	icon_state = "headband"
 	color = "#bfb8a9"
 	resistance_flags = FIRE_PROOF
-	fiber_salvage = TRUE
-	armor = ARMOR_LEATHER //Highest preset protection value for head armor, without leaving people unable to sleep with the headband on. Should be appropriate for the Monk's role.
+	armor = ARMOR_SPELLSINGER //Highest preset protection value for head armor, without leaving people unable to sleep with the headband on. Should be appropriate for the Monk's role.
 	body_parts_covered = HEAD|HAIR|EARS
 	max_integrity = ARMOR_INT_SIDE_STEEL //High leather-tier protection and critical resistances, steel-tier integrity.
+	prevent_crits = list(BCLASS_CUT, BCLASS_STAB, BCLASS_BLUNT, BCLASS_TWIST)
 	blocksound = SOFTHIT
 	nudist_approved = FALSE // armored
 	//dropshrink = 0.75
@@ -300,8 +281,9 @@
 	icon_state = "inqhat"
 	item_state = "inqhat"
 	max_integrity = ARMOR_INT_HELMET_HARDLEATHER
-	armor = ARMOR_LEATHER
-	body_parts_covered = HEAD|EARS|HAIR|NOSE|EYES
+	armor = ARMOR_SPELLSINGER
+	body_parts_covered = HEAD|HAIR|EARS
+	prevent_crits = list(BCLASS_CUT, BCLASS_BLUNT, BCLASS_TWIST)
 	cold_protection = HEAD
 	min_cold_protection_temperature = BODYTEMP_COLD_LEVEL_ONE_MAX
 	heat_protection = HEAD
@@ -358,8 +340,6 @@
 	icon_state = "nun"
 	sellprice = 5
 	nudist_approved = TRUE
-	dropshrink = null
-	fiber_salvage = FALSE
 
 /obj/item/clothing/head/roguetown/hennin
 	name = "hennin"
@@ -446,7 +426,6 @@
 	desc = "Keeps the hair in check, and looks proper."
 	icon_state = "shawl"
 	nudist_approved = TRUE
-	fiber_salvage = FALSE
 
 /obj/item/clothing/head/roguetown/articap
 	name = "artificer's cap"
@@ -464,7 +443,7 @@
 
 /obj/item/clothing/head/roguetown/wizhat/random/Initialize(mapload)
 	icon_state = pick("wizardhatred", "wizardhatyellow", "wizardhatgreen", "wizardhat")
-	return ..()
+	..()
 
 /obj/item/clothing/head/roguetown/witchhat
 	name = "witch hat"
@@ -505,17 +484,13 @@
 	icon_state = "tricorn"
 	armor = ARMOR_CLOTHING
 	max_integrity = 100
+	prevent_crits = list(BCLASS_BLUNT, BCLASS_TWIST)
 	anvilrepair = null
 	smeltresult = null
 	blocksound = SOFTHIT
 	nudist_approved = TRUE // this gets an exception for being ARMOR_CLOTHING but why does it prevent crits???
 	salvage_result = /obj/item/natural/hide/cured
 	salvage_amount = 1
-	sewrepair = TRUE
-
-/obj/item/clothing/head/roguetown/helmet/tricorn/ComponentInitialize()
-	AddComponent(/datum/component/armour_filtering/positive, TRAIT_FENCERDEXTERITY)
-	AddComponent(/datum/component/armour_filtering/positive, TRAIT_MAGEDEXTERITY)
 
 /obj/item/clothing/head/roguetown/helmet/tricorn/skull
 	icon_state = "tricorn_skull"
@@ -533,6 +508,7 @@
 	body_parts_covered = HEAD|HAIR|EARS|NOSE
 	icon_state = "bandana"
 	armor = ARMOR_CLOTHING
+	prevent_crits = list(BCLASS_TWIST)
 	anvilrepair = null
 	smeltresult = null
 	blocksound = SOFTHIT
@@ -561,7 +537,7 @@
 /obj/item/clothing/head/roguetown/veiled/update_icon()
 	cut_overlays()
 	if(get_detail_tag())
-		var/mutable_appearance/pic = mutable_appearance(icon(icon, "[get_detail_state(icon_state)][detail_tag]"))
+		var/mutable_appearance/pic = mutable_appearance(icon(icon, "[icon_state][detail_tag]"))
 		pic.appearance_flags = RESET_COLOR
 		if(get_detail_color())
 			pic.color = get_detail_color()
@@ -578,7 +554,6 @@
 	item_state = "loudmouth"
 	color = CLOTHING_RED
 	nudist_approved = TRUE
-	mob_overlay_icon = 'icons/roguetown/clothing/onmob/head.dmi'
 
 /obj/item/clothing/head/roguetown/scarf
 	name = "scarf"
@@ -632,3 +607,4 @@
 	color = "#262927"
 	detail_color = "#FFFFFF"
 	altdetail_color = "#9c2525"
+	

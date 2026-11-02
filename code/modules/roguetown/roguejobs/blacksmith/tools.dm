@@ -1,6 +1,5 @@
 //Base hammer type. (Wood / Iron / Steel)
 /obj/item/rogueweapon/hammer
-	abstract_type = /obj/item/rogueweapon/hammer
 	force = 21
 	possible_item_intents = list(/datum/intent/mace/strike, /datum/intent/mace/smash)
 	name = "template hammer"
@@ -17,7 +16,6 @@
 	grid_width = 32
 	grid_height = 64
 	var/quality = 1
-	is_tool = TRUE
 
 /obj/item/rogueweapon/hammer/getonmobprop(tag)
 	. = ..()
@@ -257,25 +255,14 @@
 	force = 18
 	max_integrity = 15
 
-/obj/item/rogueweapon/hammer/ancient
-	name = "ancient hammer"
-	desc = "A hammer of polished gilbronze. Remade masterfully upon a smooth handle, it shall make forth the armaments of HER legionnaries and great works..."
-	icon_state = "ahammer"
-	smeltresult = /obj/item/ingot/aaslag
-
-/obj/item/rogueweapon/hammer/ancient/decrepit
+/obj/item/rogueweapon/hammer/aalloy
 	name = "decrepit hammer"
-	desc = "A hammer of wrought bronze. It has pounded out the beginning of a thousand legacies; of humble adventurers, of noble legionnaires, and of foolish heroes."
+	desc = "A decrepit old hammer."
+	icon_state = "ahammer"
 	force = 12
 	max_integrity = 10
+	smeltresult = /obj/item/ingot/aalloy
 
-/obj/item/rogueweapon/hammer/bronze
-	name = "bronze hammer"
-	desc = "'I've been gripping this thing since before I could even walk - I didn't choose this, this is who I am. I just strike it. I don't think.' </br>'I spent my youth desperate to forge a better sword, become a more skilled smith, before I knew it..' </br>'I was old.' </br>'I don't even know what the hell I strike the iron for. But there is still one thing I like about it..' </br>'..the sparks. I like seeing sparks.. ..breathtaking, life, bursting before my eyes for just a moment..'"
-	icon_state = "hammer_bronze"
-	smeltresult = /obj/item/ingot/bronze
-	force = 24
-	max_integrity = 300
 
 /obj/item/rogueweapon/hammer/copper
 	name = "copper hammer"
@@ -297,14 +284,13 @@
 	smeltresult = /obj/item/ingot/steel
 
 /obj/item/rogueweapon/hammer/blacksteel
-	force = 28
+	force = 25
 	name = "blacksteel hammer"
 	desc = "A hammer made of blacksteel, to drive even the hardest metals into submission."
 	icon = 'icons/roguetown/weapons/tools.dmi'
 	icon_state = "bs_masterhammer"
 	item_state = "bs_masterhammer"
 	quality = 2
-	max_integrity = 450
 	smeltresult = /obj/item/ingot/blacksteel
 
 /obj/item/rogueweapon/hammer/blacksteel/getonmobprop(tag)
@@ -365,7 +351,6 @@
 	smeltresult = /obj/item/ingot/iron
 	grid_width = 32
 	grid_height = 64
-	is_tool = TRUE
 
 /obj/item/rogueweapon/tongs/examine(mob/user)
 	. = ..()
@@ -441,29 +426,14 @@
 		else
 			icon_state = "stonetongsi0"
 
-/obj/item/rogueweapon/tongs/ancient
-	name = "ancient tongs"
-	desc = "Wrought gilbranze pincers the molten alloy, putting it before the anvil and hammer. Soon, it will fashion a new legacy; one unmarred by this dogmatic millenia."
-	icon_state = "atongs"
-	smeltresult = /obj/item/ingot/aaslag
-
-/obj/item/rogueweapon/tongs/ancient/update_icon()
-	. = ..()
-	if(!hingot)
-		icon_state = "atongs"
-	else
-		if(hott)
-			icon_state = "atongsi1"
-		else
-			icon_state = "atongsi0"
-
-/obj/item/rogueweapon/tongs/ancient/decrepit
+/obj/item/rogueweapon/tongs/aalloy
 	name = "decrepit tongs"
-	desc = "How many ingots of once-pure alloy have these rusted, falling-apart jaws handled? The lyves taken through proxy of weapons once pincered by this tool? Perhaps it's about time that tally incremented yet again."
+	icon_state = "atongs"
 	force = 5
+	smeltresult = null
 	max_integrity = 10
 
-/obj/item/rogueweapon/tongs/ancient/decrepit/update_icon()
+/obj/item/rogueweapon/tongs/aalloy/update_icon()
 	. = ..()
 	if(!hingot)
 		icon_state = "atongs"
@@ -475,13 +445,11 @@
 
 /obj/item/rogueweapon/tongs/blacksteel
 	name = "blacksteel tongs"
-	desc = "A pair of blacksteel jaws, almost certainly used as a sign of prestige."
+	desc = "A pair of blacksteel jaws almost certainly used as a sign of prestige."
 	icon_state = "bs_tongs"
 	wdefense = 6
 	icon = 'icons/roguetown/weapons/tools.dmi'
 	smeltresult = /obj/item/ingot/blacksteel
-	force = 20
-	max_integrity = 450
 
 /obj/item/rogueweapon/tongs/blacksteel/update_icon()
 	. = ..()

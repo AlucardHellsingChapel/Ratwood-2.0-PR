@@ -18,7 +18,6 @@
 	max_buckled_mobs = 1
 	buckle_lying = 0
 	buckle_prevents_pull = TRUE
-	buckle_blocks_spells = TRUE
 
 	max_integrity = 250
 	resistance_flags = NONE
@@ -54,7 +53,7 @@
 	var/mob/living/L = user
 
 	if(istype(L))
-		if(!user.canUseTopic(src, BE_CLOSE))
+		if(!user.canUseTopic(src, BE_CLOSE, ismonkey(user)))
 			return FALSE
 		else
 			return TRUE

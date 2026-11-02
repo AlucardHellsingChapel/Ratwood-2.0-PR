@@ -58,9 +58,9 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 
 /obj/effect/landmark/events/haunts/Initialize(mapload)
 	. = ..()
-	GLOB.hauntstart += get_turf(src)
+	GLOB.hauntstart += src
 	icon_state = ""
-	return INITIALIZE_HINT_QDEL
+
 
 /obj/effect/landmark/events/testportal
 	name = "testserverportal"
@@ -183,18 +183,10 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	name = "Head Physician"
 	icon_state = "arrow"
 
-/obj/effect/landmark/start/chaplain
-	name = "Court Chaplain"
-	icon_state = "arrow"
-
 /obj/effect/landmark/start/guardsman
 	name = "City Guard"
 	icon_state = "arrow"
-
-/obj/effect/landmark/start/watchcaptain
-	name = "Watch Captain"
-	icon_state = "arrow"
-
+	
 /obj/effect/landmark/start/rookie
 	name = "Rookie"
 	icon_state = "arrow"
@@ -210,7 +202,6 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 /obj/effect/landmark/start/bogguardsman
 	name = "Bog Guard"
 	icon_state = "arrow"
-	jobspawn_override = list("Bog Guard", "Vanguard")
 
 /obj/effect/landmark/start/warden
 	name = "Warden"
@@ -471,39 +462,8 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	icon_state = "arrow"
 
 /obj/effect/landmark/start/sapprentice
-	name = "Guild Apprentice"
+	name = "Smithy Apprentice"
 	icon_state = "arrow"
-
-/obj/effect/landmark/start/rockhillslaver
-	name = "Rockhill Slaver"
-	icon_state = "arrow"
-
-/obj/effect/landmark/start/rockhillslavelate
-	name = "Rockhill Slaver Late"
-	jobspawn_override = list("Slaver", "Slave")
-	delete_after_roundstart = FALSE
-
-/obj/effect/landmark/start/rockhillslave
-	name = "Rockhill Slave"
-	icon_state = "arrow"
-
-/obj/effect/landmark/start/baron
-	name = "Baron"
-	icon_state = "arrow"
-
-/obj/effect/landmark/start/baronlate
-	name = "Baron Late"
-	jobspawn_override = list("Baron")
-	delete_after_roundstart = FALSE
-
-/obj/effect/landmark/start/retainer
-	name = "Retainer"
-	icon_state = "arrow"
-
-/obj/effect/landmark/start/retainerlate
-	name = "Retainer Late"
-	jobspawn_override = list("Retainer")
-	delete_after_roundstart = FALSE
 	
 /obj/effect/landmark/start/lich
 	name = "lich"

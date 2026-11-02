@@ -126,11 +126,7 @@ GLOBAL_LIST_INIT(freqtospan, list(
 				arrowpart += " ⇊"
 			
 			var/hidden = TRUE
-			var/has_keen_ears = FALSE
-			if(ishuman(src))
-				var/mob/living/carbon/human/self_human = src
-				has_keen_ears = self_human.has_keen_ears()
-			if(has_keen_ears)
+			if(HAS_TRAIT(src, TRAIT_KEENEARS))
 				if(ishuman(speaker) && ishuman(src))
 					var/mob/living/carbon/human/HS = speaker
 					var/mob/living/carbon/human/HL = src
@@ -144,10 +140,7 @@ GLOBAL_LIST_INIT(freqtospan, list(
 			else
 				hidden = TRUE
 			if(hidden)
-				if(ishuman(speaker))
-					var/mob/living/carbon/human/human = speaker
-					namepart = human.get_alt_name(TRUE)
-				else if(istype(speaker, /mob/living))
+				if(istype(speaker, /mob/living))
 					var/mob/living/L = speaker
 					namepart = "Unknown [(L.gender == FEMALE) ? "Woman" : "Man"]"
 				else

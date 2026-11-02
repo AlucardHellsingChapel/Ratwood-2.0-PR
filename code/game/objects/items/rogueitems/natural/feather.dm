@@ -16,7 +16,6 @@
 	muteinmouth = TRUE
 	spitoutmouth = FALSE
 	w_class = WEIGHT_CLASS_TINY
-	dropshrink = 0.75
 
 //reproduces some code from pens so that we can utilize feathers for renaming objects
 

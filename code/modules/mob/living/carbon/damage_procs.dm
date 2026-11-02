@@ -68,6 +68,8 @@
 	if(amount > 0)
 		take_overall_damage(amount, 0, 0, updating_health, required_status)
 	else
+		if(has_status_effect(/datum/status_effect/buff/fortify))
+			amount *= 1.5
 		heal_overall_damage(abs(amount), 0, 0, required_status ? required_status : BODYPART_ORGANIC, updating_health)
 	return amount
 
@@ -77,6 +79,8 @@
 	if(amount > 0)
 		take_overall_damage(0, amount, 0, updating_health, required_status)
 	else
+		if(has_status_effect(/datum/status_effect/buff/fortify))
+			amount *= 1.5
 		heal_overall_damage(0, abs(amount), 0, required_status ? required_status : BODYPART_ORGANIC, updating_health)
 	return amount
 
@@ -178,7 +182,7 @@
 	if(!parts.len)
 		return
 	var/obj/item/bodypart/picked = pick(parts)
-	if(picked.heal_damage(brute, burn, stamina, required_status, updating_health))
+	if(picked.heal_damage(brute, burn, stamina, required_status))
 		update_damage_overlays()
 
 //Damages ONE bodypart randomly selected from damagable ones.
@@ -189,7 +193,7 @@
 	if(!parts.len)
 		return
 	var/obj/item/bodypart/picked = pick(parts)
-	if(picked.receive_damage(brute, burn, stamina, check_armor ? run_armor_check(picked, (brute ? "blunt" : burn ? "fire" : stamina ? "bullet" : null)) : FALSE, updating_health, required_status))
+	if(picked.receive_damage(brute, burn, stamina,check_armor ? run_armor_check(picked, (brute ? "blunt" : burn ? "fire" : stamina ? "bullet" : null)) : FALSE))
 		update_damage_overlays()
 
 //Heal MANY bodyparts, in random order
@@ -249,7 +253,7 @@
 			var/stamina_was = picked.stamina_dam
 
 
-			update |= picked.receive_damage(brute_per_part, burn_per_part, stamina_per_part, FALSE, FALSE, required_status)
+			update |= picked.receive_damage(brute_per_part, burn_per_part, stamina_per_part, FALSE, required_status)
 
 			brute	= round(brute - (picked.brute_dam - brute_was), DAMAGE_PRECISION)
 			burn	= round(burn - (picked.burn_dam - burn_was), DAMAGE_PRECISION)

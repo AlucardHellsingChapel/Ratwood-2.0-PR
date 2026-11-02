@@ -4,36 +4,29 @@
 		{
 			"type": "byond",
 			"request": "launch",
-			"name": "Launch DreamSeeker (low memory mode)",
-			"preLaunchTask": "Build All (low memory mode)",
-			"dmb": "${workspaceFolder}/${command:CurrentDMB}"
-		},
-		{
-			"type": "byond",
-			"request": "launch",
 			"name": "Launch DreamSeeker (Local Testing - No Dungeon)",
-			"preLaunchTask": "Build All (Local Testing - No Dungeon)",
+            "preLaunchTask": "Build All (Local Testing - No Dungeon)",
 			"dmb": "${workspaceFolder}/${command:CurrentDMB}"
 		},
 		{
 			"type": "byond",
 			"request": "launch",
 			"name": "Launch DreamSeeker (Local Testing)",
-			"preLaunchTask": "Build All (Local Testing)",
+            "preLaunchTask": "Build All (Local Testing)",
 			"dmb": "${workspaceFolder}/${command:CurrentDMB}"
 		},
 		{
 			"type": "byond",
 			"request": "launch",
 			"name": "Launch DreamSeeker",
-			"preLaunchTask": "Build All",
+            "preLaunchTask": "Build All",
 			"dmb": "${workspaceFolder}/${command:CurrentDMB}"
 		},
 		{
 			"type": "byond",
 			"request": "launch",
 			"name": "Launch DreamDaemon (Local Testing)",
-			"preLaunchTask": "Build All (Local Testing)",
+            "preLaunchTask": "Build All (Local Testing)",
 			"dmb": "${workspaceFolder}/${command:CurrentDMB}",
 			"dreamDaemon": true
 		},
@@ -41,7 +34,7 @@
 			"type": "byond",
 			"request": "launch",
 			"name": "Launch DreamDaemon (Local Testing - No Dungeon)",
-			"preLaunchTask": "Build All (Local Testing - No Dungeon)",
+            "preLaunchTask": "Build All (Local Testing - No Dungeon)",
 			"dmb": "${workspaceFolder}/${command:CurrentDMB}",
 			"dreamDaemon": true
 		},
@@ -49,7 +42,7 @@
 			"type": "byond",
 			"request": "launch",
 			"name": "Launch DreamDaemon",
-			"preLaunchTask": "Build All",
+            "preLaunchTask": "Build All",
 			"dmb": "${workspaceFolder}/${command:CurrentDMB}",
 			"dreamDaemon": true
 		},
@@ -57,7 +50,7 @@
 			"type": "byond",
 			"request": "launch",
 			"name": "Launch DreamDaemon (unit tests)",
-			"preLaunchTask": "Build All (unit tests)",
+            "preLaunchTask": "Build All (unit tests)",
 			"dmb": "${workspaceFolder}/${command:CurrentDMB}",
 			"dreamDaemon": true
 		}

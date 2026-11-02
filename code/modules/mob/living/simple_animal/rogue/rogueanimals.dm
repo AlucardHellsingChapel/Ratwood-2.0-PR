@@ -36,12 +36,13 @@
 	tame_chance = 0
 	retreat_distance = 10
 	minimum_distance = 10
+	dodge_sound = 'sound/combat/dodge.ogg'
 	dodge_prob = 0
 
 	var/deaggroprob = 10
 	var/eat_forever
 	
-	mob_can_dodge = TRUE
+	candodge = TRUE
 
 	var/summon_tier = 0 // Tier of summoning
 	var/summon_primer = null // The message they get when summoned
@@ -64,21 +65,21 @@
 			Immobilize(clamp(damage/2, 1, 30))
 			shake_camera(src, 1, 1)
 		if(damage < 10)
-			fullscreen_redflash("redflash1")
+			flash_fullscreen("redflash1")
 		else if(damage < 20)
-			fullscreen_redflash("redflash2")
+			flash_fullscreen("redflash2")
 		else if(damage >= 20)
-			fullscreen_redflash("redflash3")
+			flash_fullscreen("redflash3")
 	if(damagetype == BURN)
 		if(damage > 10 && prob(damage))
 			emote("pain")
 			shake_camera(src, 1, 1)
 		if(damage < 10)
-			fullscreen_redflash("redflash1")
+			flash_fullscreen("redflash1")
 		else if(damage < 20)
-			fullscreen_redflash("redflash2")
+			flash_fullscreen("redflash2")
 		else if(damage >= 20)
-			fullscreen_redflash("redflash3")
+			flash_fullscreen("redflash3")
 
 /mob/living/simple_animal/hostile/retaliate/rogue/death(gibbed)
 	emote("death")
@@ -97,24 +98,24 @@
 /mob/living/simple_animal/hostile/retaliate/rogue/proc/find_food()
 	if(food > 50 && !eat_forever)
 		return
+	var/list/around = view(1, src)
 	var/list/foundfood = list()
-	if(stat || !food_typecache)
+	if(stat)
 		return
-	for(var/obj/item/F in view(1, src))
-		if(!food_typecache[F.type])
-			continue
-		if(!src.Adjacent(F))
+	for(var/obj/item/F in around)
+		if(is_type_in_list(F, food_type))
 			foundfood += F
-			continue
-		face_atom(F)
-		playsound(src,'sound/misc/eat.ogg', rand(30,60), TRUE)
-		qdel(F)
-		food = max(food + 30, 100)
-		return TRUE
+			if(src.Adjacent(F))
+				face_atom(F)
+				playsound(src,'sound/misc/eat.ogg', rand(30,60), TRUE)
+				qdel(F)
+				food = max(food + 30, 100)
+				return TRUE
 	for(var/obj/item/F in foundfood)
-		var/turf/T = get_turf(F)
-		Goto(T,move_to_delay,0)
-		return TRUE
+		if(is_type_in_list(F, food_type))
+			var/turf/T = get_turf(F)
+			Goto(T,move_to_delay,0)
+			return TRUE
 	return FALSE
 
 /mob/living/simple_animal/hostile/retaliate/rogue/AttackingTarget()
@@ -200,9 +201,9 @@
 /mob/living/simple_animal/hostile/retaliate/rogue/tamed()
 	del_on_deaggro = 0
 	aggressive = 0
-	if(LAZYLEN(enemies))
+	if(enemies.len)
 		if(prob(23))
-			clear_enemies()
+			enemies = list()
 			src.visible_message(span_notice("[src] calms down."))
 			LoseTarget()
 		else
@@ -216,13 +217,13 @@
 /mob/living/simple_animal/hostile/retaliate/rogue/Life()
 	. = ..()
 	if(.)
-		if(LAZYLEN(enemies))
+		if(enemies.len)
 			if(prob(4))
 				emote("cidle")
 			if(prob(deaggroprob))
 				if(mob_timers["aggro_time"])
 					if(world.time > mob_timers["aggro_time"] + 30 SECONDS)
-						clear_enemies()
+						enemies = list()
 						src.visible_message(span_info("[src] calms down."))
 						LoseTarget()
 				else
@@ -255,8 +256,8 @@
 //		retreat_distance = 10
 //		minimum_distance = 10
 	if(is_apple_pacified_mount())
-		if(LAZYLEN(enemies))
-			clear_enemies()
+		if(enemies.len)
+			enemies = list()
 			LoseTarget()
 		return 0
 	mob_timers["aggro_time"] = world.time
@@ -295,7 +296,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/rogue/food_tempted(obj/item/O, mob/user)
 	testing("tempted")
-	if(food_typecache?[O.type] && !stop_automated_movement)
+	if(is_type_in_list(O, food_type) && !stop_automated_movement)
 		testing("infoodtype")
 		stop_automated_movement = TRUE
 		Goto(user,move_to_delay)

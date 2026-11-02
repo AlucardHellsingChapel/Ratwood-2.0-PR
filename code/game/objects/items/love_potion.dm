@@ -6,7 +6,6 @@
 	icon_state = "lovebottle"
 	grid_width = 64
 	grid_height = 64
-	dropshrink = 0.8
 
 /obj/item/lovepotion/attack(mob/living/carbon/human/M, mob/user)
 	if(!isliving(M) || M.stat == DEAD)

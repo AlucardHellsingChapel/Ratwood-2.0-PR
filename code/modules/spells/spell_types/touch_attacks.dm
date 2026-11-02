@@ -11,7 +11,7 @@
 /obj/effect/proc_holder/spell/targeted/touch/Destroy()
 	remove_hand()
 	to_chat(usr, span_notice("The power of the spell dissipates from my hand."))
-	return ..()
+	..()
 
 /obj/effect/proc_holder/spell/targeted/touch/proc/remove_hand(recharge = FALSE)
 	QDEL_NULL(attached_hand)
@@ -23,7 +23,7 @@
 		CRASH("Incorrect touch spell hand.")
 	//Start recharging.
 	attached_hand = null
-	action?.build_all_button_icons()
+	action.UpdateButtonIcon()
 
 /obj/effect/proc_holder/spell/targeted/touch/cast(list/targets, mob/user = usr)
 	if(!QDELETED(attached_hand))
@@ -36,7 +36,7 @@
 			if(ChargeHand(C))
 				return
 
-/obj/effect/proc_holder/spell/targeted/touch/charge_check(mob/user)
+/obj/effect/proc_holder/spell/targeted/touch/charge_check(mob/user,silent = FALSE)
 	if(!QDELETED(attached_hand)) //Charge doesn't matter when putting the hand away.
 		return TRUE
 	else

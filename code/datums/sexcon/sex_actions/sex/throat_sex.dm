@@ -7,18 +7,28 @@
 	knot_on_finish = TRUE
 
 /datum/sex_action/throat_sex/shows_on_menu(mob/living/carbon/human/user, mob/living/carbon/human/target)
-	if(!(. = ..()))
+	if(user == target)
 		return FALSE
-	if(knot_on_finish && isdullahan(target))
+	if(!user.getorganslot(ORGAN_SLOT_PENIS))
+		return FALSE
+	if(isdullahan(target) && knot_on_finish)
 		var/datum/species/dullahan/dullahan = target.dna.species
 		if(dullahan.headless)
 			return FALSE
 	return TRUE
 
 /datum/sex_action/throat_sex/can_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
-	if(!(. = ..()))
+	if(user == target)
 		return FALSE
-	if(knot_on_finish && isdullahan(target))
+	if(!check_location_accessible(user, user, BODY_ZONE_PRECISE_GROIN, TRUE))
+		return FALSE
+	if(!check_location_accessible(user, target, BODY_ZONE_PRECISE_MOUTH))
+		return FALSE
+	if(!user.getorganslot(ORGAN_SLOT_PENIS))
+		return FALSE
+	if(!user.sexcon.can_use_penis())
+		return FALSE
+	if(isdullahan(target) && knot_on_finish)
 		var/datum/species/dullahan/dullahan = target.dna.species
 		if(dullahan.headless)
 			return FALSE
@@ -30,9 +40,9 @@
 
 /datum/sex_action/throat_sex/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	if(!user.sexcon.do_knot_action)
-		user.sexcon_action_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] fucks [target]'s throat."))
+		user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] fucks [target]'s throat."))
 	else
-		user.sexcon_action_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] knot-fucks [target]'s throat."))
+		user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] knot-fucks [target]'s throat."))
 	user.sexcon.intercourse_noise(target, TRUE)
 	user.sexcon.oralcourse_noise(target)
 	user.sexcon.do_thrust_animate(target)
@@ -44,9 +54,7 @@
 	user.sexcon.perform_sex_action(user, 2, 0, TRUE)
 	if(user.sexcon.check_active_ejaculation())
 		user.visible_message(span_love("[user] cums into [target]'s throat!"))
-		for(var/i = 1; i <= user.sexcon.get_load_bursts(); i++)
-			user.sexcon.cum_into(oral = TRUE, splashed_user = target, consume_charge = i == 1 ? TRUE : FALSE) // give facial status effect for the target, considering this was rough throat sex
-			sleep(10)
+		user.sexcon.cum_into(oral = TRUE, splashed_user = target) // give facial status effect for the target, considering this was rough throat sex
 		user.virginity = FALSE
 
 	if(user.sexcon.considered_limp())
@@ -83,9 +91,9 @@
 
 /datum/sex_action/throat_sex/double/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	if(!user.sexcon.do_knot_action)
-		user.sexcon_action_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] double-fucks [target]'s throat."))
+		user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] double-fucks [target]'s throat."))
 	else
-		user.sexcon_action_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] double-knots [target]'s throat."))
+		user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] double-knots [target]'s throat."))
 	user.sexcon.intercourse_noise(target, TRUE)
 	user.sexcon.oralcourse_noise(target)
 	user.sexcon.do_thrust_animate(target)
@@ -93,9 +101,7 @@
 	user.sexcon.perform_sex_action(user, 2, 0, TRUE)
 	if(user.sexcon.check_active_ejaculation())
 		user.visible_message(span_love("[user] cums into [target]'s throat!"))
-		for(var/i = 1; i <= user.sexcon.get_load_bursts(); i++)
-			user.sexcon.cum_into(oral = TRUE, splashed_user = target, consume_charge = i == 1 ? TRUE : FALSE) // give facial status effect for the target, considering this was rough throat sex
-			sleep(10)
+		user.sexcon.cum_into(oral = TRUE, splashed_user = target) // give facial status effect for the target, considering this was rough throat sex
 		user.virginity = FALSE
 
 	if(user.sexcon.considered_limp())

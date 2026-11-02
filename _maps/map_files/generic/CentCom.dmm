@@ -686,7 +686,7 @@
 "bJ" = (
 /mob/living/simple_animal/hostile/retaliate/rogue/troll/cave,
 /obj/item/natural/cloth,
-/obj/item/clothing/suit/roguetown/armor/chainmail/ancient/decrepit,
+/obj/item/clothing/suit/roguetown/armor/chainmail/aalloy,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/dietroyt)
 "bR" = (
@@ -798,7 +798,7 @@
 /turf/open/water/bloody,
 /area/rogue/under/wretch/graggarena)
 "eR" = (
-/obj/item/reagent_containers/glass/bucket/pot/decrepit,
+/obj/item/reagent_containers/glass/bucket/pot/aalloy,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/dietroyt)
 "fc" = (
@@ -940,7 +940,7 @@
 /area/rogue/indoors/ravoxarena)
 "hH" = (
 /obj/structure/table/church/alt,
-/obj/item/roguecoin/gilbranze,
+/obj/item/roguecoin/aalloy,
 /turf/open/floor/rogue/underworld/road,
 /area/rogue/indoors/deathsedge)
 "hK" = (
@@ -1410,7 +1410,6 @@
 /area/rogue/dietroyt)
 "rk" = (
 /obj/effect/landmark/start/dungeoneer,
-/obj/structure/roguemachine/ticket_manager,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/dietroyt)
 "rl" = (
@@ -1446,7 +1445,7 @@
 /turf/open/floor/rogue/sand,
 /area/rogue/under/wretch/graggarena)
 "rQ" = (
-/turf/closed/void,
+/turf/closed,
 /area/rogue)
 "rT" = (
 /obj/structure/pillory/reinforced{
@@ -1542,7 +1541,7 @@
 /turf/open/floor/rogue/underworld/space/sparkle_quiet,
 /area/rogue/indoors/ravoxarena)
 "tN" = (
-/turf/closed/void,
+/turf/closed,
 /area/rogue/under)
 "tV" = (
 /obj/item/natural/rock,
@@ -1647,10 +1646,10 @@
 /obj/effect/landmark/start/new_player,
 /area/start)
 "wO" = (
-/turf/closed/void,
+/turf/closed,
 /area/rogue/outdoors)
 "wX" = (
-/obj/item/fishingrod/decrepit,
+/obj/item/fishingrod/aalloy,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/dietroyt)
 "wZ" = (
@@ -1721,7 +1720,7 @@
 /turf/closed/wall/mineral/rogue/decostone,
 /area/rogue/indoors/ravoxarena)
 "yK" = (
-/turf/closed/void,
+/turf/closed,
 /area/rogue/indoors)
 "yQ" = (
 /obj/machinery/light/rogue/torchholder,
@@ -1998,7 +1997,7 @@
 /turf/open/floor/rogue/underworld/road,
 /area/rogue/indoors/deathsedge)
 "Eb" = (
-/obj/item/reagent_containers/glass/cup/decrepitmug,
+/obj/item/reagent_containers/glass/cup/aalloymug,
 /turf/open/floor/rogue/grasspurple,
 /area/rogue/dietroyt)
 "Ed" = (
@@ -2054,7 +2053,7 @@
 /turf/open/floor/rogue/sand,
 /area/rogue/under/wretch/graggarena)
 "Fz" = (
-/obj/item/reagent_containers/glass/bowl/decrepit,
+/obj/item/reagent_containers/glass/bowl/aalloy,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/dietroyt)
 "FD" = (
@@ -2201,7 +2200,7 @@
 /turf/open/floor/rogue/cobble,
 /area/rogue)
 "Js" = (
-/obj/item/clothing/shoes/roguetown/boots/armor/ancient/decrepit,
+/obj/item/clothing/shoes/roguetown/boots/aalloy,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/dietroyt)
 "JA" = (
@@ -2271,12 +2270,12 @@
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/dietroyt)
 "KQ" = (
-/obj/structure/fluff/walldeco/customflag,
+/obj/structure/fluff/walldeco/customflag/rockhill,
 /turf/closed/wall/mineral/rogue/stone/unbreakable,
 /area/rogue/dietroyt)
 "KV" = (
 /obj/structure/table/church/end/alt,
-/obj/item/roguecoin/gilbranze,
+/obj/item/roguecoin/aalloy,
 /turf/open/floor/rogue/underworld/road,
 /area/rogue/indoors/deathsedge)
 "Le" = (
@@ -2400,8 +2399,8 @@
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/dietroyt)
 "OA" = (
-/obj/item/rogueweapon/greatsword/ancient/decrepit,
-/obj/item/clothing/head/roguetown/helmet/heavy/ancient/decrepit,
+/obj/item/rogueweapon/greatsword/aalloy,
+/obj/item/clothing/head/roguetown/helmet/heavy/aalloy,
 /turf/open/floor/rogue/naturalstone,
 /area/rogue/dietroyt)
 "OG" = (

@@ -36,7 +36,7 @@
 	var/mob/living/L = user
 
 	if(istype(L))
-		if(!user.canUseTopic(src, BE_CLOSE))
+		if(!user.canUseTopic(src, BE_CLOSE, ismonkey(user)))
 			return FALSE
 		else
 			return TRUE
@@ -57,6 +57,9 @@
 		if(buildstacktype)
 			new buildstacktype(loc,buildstackamount)
 	..()
+
+/obj/structure/chair/attack_paw(mob/user)
+	return attack_hand(user)
 
 /obj/structure/chair/narsie_act()
 	var/obj/structure/chair/wood/W = new/obj/structure/chair/wood(get_turf(src))
@@ -150,7 +153,7 @@
 	return mutable_appearance('icons/obj/chairs.dmi', "comfychair_armrest")
 
 /obj/structure/chair/comfy/Destroy()
-	armrest = null
+	QDEL_NULL(armrest)
 	return ..()
 
 /obj/structure/chair/comfy/post_buckle_mob(mob/living/M)
@@ -222,7 +225,7 @@
 	if(over_object == usr && Adjacent(usr))
 		if(QDELETED(src) || !item_chair || !usr.can_hold_items() || has_buckled_mobs() || src.flags_1 & NODECONSTRUCT_1)
 			return
-		if(!usr.canUseTopic(src, BE_CLOSE))
+		if(!usr.canUseTopic(src, BE_CLOSE, ismonkey(usr)))
 			return
 		usr.visible_message("<span class='notice'>[usr] grabs \the [src.name].</span>", "<span class='notice'>I grab \the [src.name].</span>")
 		var/obj/item/C = new item_chair(loc)
@@ -339,15 +342,15 @@
 /obj/item/chair/wood/wings
 	icon_state = "wooden_chair_wings_toppled"
 	origin_type = /obj/structure/chair/wood/wings
-
 /obj/structure/chair/mime
 	name = "invisible chair"
 	desc = ""
 	anchored = FALSE
-	mouse_opacity = MOUSE_OPACITY_OPAQUE
+	icon_state = null
 	buildstacktype = null
-	item_chair = /obj/item/chair/mime
-	alpha = 15
+	item_chair = null
+	flags_1 = NODECONSTRUCT_1
+	alpha = 0
 
 /obj/structure/chair/mime/post_buckle_mob(mob/living/M)
 	M.pixel_y += 5

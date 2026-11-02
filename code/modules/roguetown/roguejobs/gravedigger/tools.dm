@@ -21,7 +21,6 @@
 	max_blade_int = 300
 	grid_width = 32
 	grid_height = 96
-	is_tool = TRUE
 
 /obj/item/rogueweapon/shovel/Destroy()
 	if(heldclod)
@@ -49,7 +48,7 @@
 	icon_state = "inscoop"
 	chargetime = 0
 	noaa = TRUE
-	dodgeable_intent = FALSE
+	candodge = FALSE
 	misscost = 0
 	no_attack = TRUE
 
@@ -64,7 +63,7 @@
 	user.changeNext_move(user.used_intent.clickcd)
 
 	if(user.used_intent.type == /datum/intent/shovelscoop)
-		if(istype(T, /turf/open/floor/rogue/dirt) || istype(T, /turf/open/floor/rogue/grass) || istype(T, /turf/open/floor/rogue/grassred) || istype(T, /turf/open/floor/rogue/grassyel) || istype(T, /turf/open/floor/rogue/grasscold) || istype(T, /turf/open/floor/rogue/grasspurple) || istype(T, /turf/open/floor/rogue/grassgrey))
+		if(istype(T, /turf/open/floor/rogue/dirt))
 			var/turf/open/floor/rogue/dirt/D = T
 
 			if(!heldclod && user && istype(user.rmb_intent, /datum/rmb_intent/strong) && HAS_TRAIT(user, TRAIT_GRAVEROBBER))
@@ -119,7 +118,6 @@
 								break
 
 						playsound(T, 'sound/items/dig_shovel.ogg', 100, TRUE)
-						user.log_message("tore open a grave-sized pit with [src]", LOG_GAME)
 
 				return
 
@@ -149,7 +147,6 @@
 						new /obj/structure/closet/dirthole(T)
 					else
 						T.ChangeTurf(/turf/open/floor/rogue/dirt/road, flags = CHANGETURF_INHERIT_AIR)
-					user.log_message("started digging a hole with [src]", LOG_GAME)
 
 					heldclod = new(src)
 					playsound(T, 'sound/items/dig_shovel.ogg', 100, TRUE)
@@ -177,6 +174,10 @@
 			heldclod = null
 			playsound(T, 'sound/items/empty_shovel.ogg', 100, TRUE)
 			update_icon()
+			return
+
+		if(istype(T, /turf/open/floor/rogue/grass) || istype(T, /turf/open/floor/rogue/grassred) || istype(T, /turf/open/floor/rogue/grassyel) || istype(T, /turf/open/floor/rogue/grasscold) || istype(T, /turf/open/floor/rogue/grasspurple) || istype(T, /turf/open/floor/rogue/grassgrey))
+			to_chat(user, span_warning("There is grass in the way."))
 			return
 
 		if(istype(T, /turf/open/floor/rogue/snow) || istype(T, /turf/open/floor/rogue/snowrough) || istype(T, /turf/open/floor/rogue/snowpatchy))
@@ -370,7 +371,7 @@
 	smeltresult = null
 	grid_height = 64
 
-/obj/item/rogueweapon/shovel/decrepit
+/obj/item/rogueweapon/shovel/aalloy
 	force = 8
 	name = "decrepit shovel"
 	desc = "A tool of wrought bronze, for burying the lyfeless. His worshippers would say that death is necessary; that the bod will nourish this world, so that more lyfe may sprout. But to those who know the truth - Her truth, it is nothing more than a mockery."
@@ -378,30 +379,6 @@
 	smeltresult = /obj/item/ingot/aaslag
 	color = "#bb9696"
 	sellprice = 15
-
-/obj/item/rogueweapon/shovel/bronze
-	force = 23
-	name = "bronze shovel"
-	desc = "Dig the mound, so that water may flow into a thirsting crop. Puncture the earth, so that its depths may be catered to your whim. Leaven the soil, so that the buried may know peace from this world's evils."
-	icon_state = "bronzeshovel"
-	wlength = WLENGTH_SHORT
-	slot_flags = ITEM_SLOT_HIP
-	w_class = WEIGHT_CLASS_NORMAL
-	smeltresult = /obj/item/ingot/bronze
-	max_integrity = 300
-	grid_height = 64
-
-/obj/item/rogueweapon/shovel/bronze/spade
-	force = 17
-	name = "bronze spade"
-	desc = "Dig the mound, so that water may flow into a thirsting crop. Puncture the earth, so that its depths may be catered to your whim. Leaven the soil, so that the buried may know peace from this world's evils."
-	icon_state = "bronzespade"
-	wlength = WLENGTH_SHORT
-	slot_flags = ITEM_SLOT_HIP
-	w_class = WEIGHT_CLASS_NORMAL
-	smeltresult = /obj/item/ingot/bronze
-	max_integrity = 300
-	grid_height = 64
 
 /obj/item/rogueweapon/shovel/silver
 	force = 25
@@ -433,15 +410,6 @@
 		added_int = 50,\
 		added_def = 2,\
 	)
-
-/obj/item/rogueweapon/shovel/blacksteel
-	force = 27
-	name = "blacksteel shovel"
-	desc = "So much for being served on a silver platter."
-	icon_state = "blacksteelshovel"
-	smeltresult = /obj/item/ingot/blacksteel
-	max_blade_int = 450
-	max_integrity = 450
 
 /obj/item/burial_shroud
 	name = "winding sheet"
@@ -615,8 +583,8 @@
 	Scarred by a hundred fieldworks, its socket is nicked from prying and the edge has been honed to bite through roots-or armor-in a pinch."
 	force = 12//It has a gripped state. USE IT!!!!!
 	force_wielded = 28//It's not just a better battleaxe, now. God I hate this thing.
-	possible_item_intents = list(/datum/intent/axe/cut, /datum/intent/axe/chop, /datum/intent/mace/smash, /datum/intent/shovelscoop)
-	gripped_intents = list(/datum/intent/axe/cut, /datum/intent/axe/chop, /datum/intent/mace/smash)
+	possible_item_intents = list(/datum/intent/axe/cut/battle, /datum/intent/axe/chop/battle, /datum/intent/mace/smash, /datum/intent/shovelscoop)
+	gripped_intents = list(/datum/intent/axe/cut/battle, /datum/intent/axe/chop/battle, /datum/intent/mace/smash)
 	icon_state = "saperka"//Temp sprite. Why was this just the shovel icon? I HATE YOU!!!!
 	icon = 'icons/roguetown/weapons/tools.dmi'
 	sharpness = 100
@@ -631,6 +599,7 @@
 	wdefense = 5
 	swingsound = BLADEWOOSH_MED
 	associated_skill = /datum/skill/combat/axes
+	demolition_mod = 2.5//Woodcutter axe level. A whole 1.0 lower than what it was before. I hate you. - Carl
 	resistance_flags = FLAMMABLE
 	pickup_sound = 'modular_helmsguard/sound/sheath_sounds/draw_polearm.ogg'
 
@@ -697,7 +666,7 @@
 	/datum/intent/axe/chop/stone, /datum/intent/shovelscoop)//Two hands to let you shovel and chop.
 	icon = 'icons/roguetown/weapons/64.dmi'
 	icon_state = "mortstaff"//Temp sprite.
-	associated_skill = /datum/skill/combat/polearms
+	associated_skill = /datum/skill/combat/staves
 	wdefense = 3
 	wdefense_wbonus = 3//Bless this, m'lord.
 	max_integrity = 200

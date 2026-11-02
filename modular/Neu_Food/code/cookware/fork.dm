@@ -14,15 +14,10 @@
 	possible_item_intents = list(/datum/intent/use, /datum/intent/dagger/thrust/fork)
 	swingsound = list('sound/combat/wooshes/bladed/wooshsmall (1).ogg','sound/combat/wooshes/bladed/wooshsmall (2).ogg','sound/combat/wooshes/bladed/wooshsmall (3).ogg')
 
-/obj/item/kitchen/fork/get_mechanics_examine(mob/user)
-	. = ..()
-	. += span_info("Left-clicking most foodstuffs with the fork allows you to take a bite from it.")
-	. += span_info("Nobler appetites prefer utensils over simply eating and drinking with one's bare hands.")
-
 /datum/intent/dagger/thrust/fork
-	penfactor = PEN_LIGHT
+	penfactor = 20
 
-/obj/item/kitchen/fork/decrepit
+/obj/item/kitchen/fork/aalloy
 	name = "decrepit fork"
 	icon_state = "afork"
 	color = "#bb9696"
@@ -32,11 +27,6 @@
 	name = "iron fork"
 	icon_state = "fork_iron"
 	sellprice = 6
-
-/obj/item/kitchen/fork/bronze
-	name = "bronze fork"
-	icon_state = "fork_bronze"
-	sellprice = 10
 
 /obj/item/kitchen/fork/tin
 	name = "tin fork"

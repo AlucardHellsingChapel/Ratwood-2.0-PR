@@ -11,7 +11,6 @@
 	content_overlays = FALSE
 	bloody_icon_state = "bodyblood"
 	sewrepair = TRUE
-	dropshrink = 0.9
 	component_type = /datum/component/storage/concrete/roguetown/surgery_bag
 	populate_contents = list(
 		/obj/item/rogueweapon/surgery/scalpel,
@@ -50,7 +49,7 @@
 		/obj/item/rogueweapon/surgery/hemostat/improv,
 		/obj/item/rogueweapon/surgery/retractor/improv,
 		/obj/item/natural/bundle/cloth/bandage/full,
-		/obj/item/needle/decrepit
+		/obj/item/needle/aalloy
 	)
 
 /obj/item/storage/belt/rogue/surgery_bag/empty

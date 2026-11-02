@@ -23,11 +23,6 @@
 	cost = 20
 	contains = list(/obj/item/clothing/head/roguetown/helmet/kettle)
 
-/datum/supply_pack/rogue/Knave/leather/plhood
-	name = "Padded Leather Hood"
-	cost = 25
-	contains = list(/obj/item/clothing/head/roguetown/helmet/leather/armorhood)
-
 //////////
 // NECK //
 //////////
@@ -65,11 +60,6 @@
 	name = "Leather Armor"
 	cost = 10
 	contains = list(/obj/item/clothing/suit/roguetown/armor/leather)
-
-/datum/supply_pack/rogue/Knave/leather/lcorslet
-	name = "Leather Corslet"
-	cost = 20
-	contains = list(/obj/item/clothing/suit/roguetown/armor/leather/bikini)
 
 /datum/supply_pack/rogue/Knave/leather/studded
 	name = "Studded Leather Armor"
@@ -143,16 +133,6 @@
 	cost = 20
 	contains = list(/obj/item/rogueweapon/huntingknife/idagger/steel/parrying)
 
-/datum/supply_pack/rogue/Knave/krisdag
-	name = "Kris Dagger"
-	cost = 20
-	contains = list(/obj/item/rogueweapon/huntingknife/idagger/steel/kris)
-
-/datum/supply_pack/rogue/Knave/rondeldag
-	name = "Rondel Dagger"
-	cost = 30
-	contains = list(/obj/item/rogueweapon/huntingknife/idagger/steel/rondel)
-
 /datum/supply_pack/rogue/Knave/saildagger
 	name = "Etruscan Sail Dagger"
 	cost = 30
@@ -167,36 +147,6 @@
 	name = "Elven Dagger"
 	cost = 40
 	contains = list(/obj/item/rogueweapon/huntingknife/idagger/silver/elvish)
-
-/datum/supply_pack/rogue/Knave/rapier
-	name = "Rapier"
-	cost = 20
-	contains = list(/obj/item/rogueweapon/sword/rapier)
-
-/datum/supply_pack/rogue/Knave/cuprapier
-	name = "Etruscan Rapier"
-	cost = 30
-	contains = list(/obj/item/rogueweapon/sword/rapier/vaquero)
-
-/datum/supply_pack/rogue/Knave/sabre
-	name = "Sabre"
-	cost = 20
-	contains = list(/obj/item/rogueweapon/sword/sabre)
-
-/datum/supply_pack/rogue/Knave/messer
-	name = "Messer"
-	cost = 20
-	contains = list(/obj/item/rogueweapon/sword/short/messer)
-
-/datum/supply_pack/rogue/Knave/falchion
-	name = "Falchion"
-	cost = 20
-	contains = list(/obj/item/rogueweapon/sword/short/falchion)
-
-/datum/supply_pack/rogue/Knave/estoc
-	name = "Estoc"
-	cost = 40
-	contains = list(/obj/item/rogueweapon/estoc)
 
 //////////////////////
 // WEAPONS - RANGED //

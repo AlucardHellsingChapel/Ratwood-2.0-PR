@@ -41,7 +41,7 @@
 	pants = /obj/item/clothing/under/roguetown/loincloth/brown
 	backl = /obj/item/gun/ballistic/revolver/grenadelauncher/bow
 	beltr = /obj/item/quiver/arrows
-	beltl = /obj/item/rogueweapon/huntingknife/idagger/steel/ancient
+	beltl = /obj/item/rogueweapon/huntingknife/idagger/steel/padagger
 
 /datum/advclass/tribalrabble/rabble
 	name = "Hunter"

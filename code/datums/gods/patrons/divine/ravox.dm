@@ -16,7 +16,6 @@
 					/obj/effect/proc_holder/spell/invoked/persistence			= CLERIC_T3,
 					/obj/effect/proc_holder/spell/invoked/resurrect/ravox		= CLERIC_T4,
 	)
-	energy_color = COLOR_PATRON_RAVOX
 	confess_lines = list(
 		"RAVOX IS JUSTICE!",
 		"THROUGH STRIFE, GRACE!",
@@ -62,9 +61,9 @@
 	if(istype(target.get_active_held_item(), /obj/item/rogueweapon))
 		bonus += 0.5
 
-	if(target == user && target.get_blood_volume() <= BLOOD_VOLUME_OKAY && COOLDOWN_FINISHED(src, lesser_heal_buff_cooldown))
+	if(target == user && target.blood_volume <= BLOOD_VOLUME_OKAY && COOLDOWN_FINISHED(src, lesser_heal_buff_cooldown))
 		user.emote("warcry")
-		user.adjust_blood_volume(BLOOD_VOLUME_SURVIVE / 3)
+		user.blood_volume += BLOOD_VOLUME_SURVIVE / 3
 		bonus += 2
 		COOLDOWN_START(src, lesser_heal_buff_cooldown, 30 SECONDS)
 

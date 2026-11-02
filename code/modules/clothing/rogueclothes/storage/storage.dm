@@ -47,46 +47,8 @@
 	sewrepair = TRUE
 	sellprice = 10
 	resistance_flags = FIRE_PROOF
-	dropshrink = 0.8
-	force = 10
-	associated_skill = /datum/skill/combat/whipsflails
-	sewrepair = TRUE
-	wbalance = WBALANCE_SWIFT
-	wdefense = 0
-	swingsound = WHIPWOOSH
-	possible_item_intents = list(
-		/datum/intent/whip/belt/tip,
-		/datum/intent/whip/belt/buckle,
-	)
-
-/datum/intent/whip/belt/tip
-	name = "belt lash"
-	blade_class = BCLASS_BLUNT
-	attack_verb = list("lashes", "cracks")
-	hitsound = list('sound/combat/hits/blunt/flailhit.ogg')
-	chargetime = 0
-	recovery = 5
-	damfactor = 0.5
-	penfactor = PEN_NONE
-	reach = 1
-	icon_state = "inlash"
-	item_d_type = "slash"
-
-/datum/intent/whip/belt/buckle
-	name = "buckle strike"
-	blade_class = BCLASS_BLUNT
-	attack_verb = list("lashes", "cracks")
-	hitsound = list('sound/combat/hits/blunt/flailhit.ogg')
-	chargetime = 0
-	recovery = 5
-	damfactor = 1
-	penfactor = PEN_NONE		
-	reach = 1								
-	icon_state = "instrike"
-	item_d_type = "slash"
 
 /obj/item/storage/belt/rogue/leather/plaquegold
-	is_gold = TRUE
 	name = "plaque belt"
 	icon_state = "goldplaque"
 	sellprice = 50
@@ -142,25 +104,6 @@
 /obj/item/storage/belt/rogue/leather/battleskirt/black
 	color = CLOTHING_BLACK
 
-/obj/item/storage/belt/rogue/leather/battleskirt/breechcloth
-	name = "belt with breechcloth"
-	desc = "A fine leather strap notched with holes for a buckle to secure itself, and nestled above a halved tabard's coverings."
-	icon_state = "breechcloth"
-	flags_inv = HIDECROTCH
-	sewrepair = FALSE
-	detail_tag = "_belt"
-
-/obj/item/storage/belt/rogue/leather/battleskirt/breechcloth/blackbelt
-	name = "black belt with breechcloth"
-	desc = "A fine black-leather strap notched with holes for a buckle to secure itself, and nestled above a halved tabard's coverings."
-	icon_state = "breechclothalt"
-	flags_inv = HIDECROTCH
-	sewrepair = FALSE
-	detail_tag = "_belt"
-
-/obj/item/storage/belt/rogue/leather/battleskirt/breechcloth/red
-	color = CLOTHING_RED
-
 /obj/item/storage/belt/rogue/leather/battleskirt/barbarian
 	color = "#48443b"
 
@@ -215,15 +158,6 @@
 	icon = 'icons/roguetown/clothing/belts.dmi'
 	icon_state = "butlersuspenders"
 	item_state = "butlersuspenders"
-	mob_overlay_icon = 'icons/roguetown/clothing/onmob/belts.dmi'
-	slot_flags = ITEM_SLOT_BELT
-
-/obj/item/storage/belt/rogue/leather/suspenders/butler/colored
-	name = "suspenders"
-	desc = "A pair of suspenders which go over the shoulders. Used for keeping one's pants in place in an admittably fashionable style."
-	icon = 'icons/roguetown/clothing/belts.dmi'
-	icon_state = "butlersuspenderscolorable"
-	item_state = "butlersuspenderscolorable"
 	mob_overlay_icon = 'icons/roguetown/clothing/onmob/belts.dmi'
 	slot_flags = ITEM_SLOT_BELT
 
@@ -316,7 +250,7 @@
 	component_type = /datum/component/storage/concrete/roguetown/backpack
 
 /obj/item/storage/backpack/rogue/artibackpack
-	name = "cooling backpack"
+	name = "Cooling backpack"
 	desc = "A leather backpack with complex pipework coursing through it. It hums and vibrates constantly."
 	icon_state = "artibackpack"
 	item_state = "artibackpack" 
@@ -327,10 +261,7 @@
 	max_integrity = 300
 	equip_sound = 'sound/blank.ogg'
 	bloody_icon_state = "bodyblood"
-	component_type = /datum/component/storage/concrete/roguetown/backpack/arti
-
-/obj/item/storage/backpack/rogue/artibackpack/engineer
-	name = "engineer's backpack"
+	component_type = /datum/component/storage/concrete/roguetown/backpack
 
 /obj/item/storage/backpack/rogue/backpack/bagpack
 	name = "rucksack"
@@ -377,72 +308,6 @@
 	desc = "A dark belt with real gold making up the buckle and highlights. How bougie."
 	icon_state = "stewardbelt"
 	item_state = "stewardbelt"
-
-//Holster belt
-/obj/item/storage/belt/rogue/leather/twilight_holsterbelt
-	name = "holster belt"
-	desc = "A belt with an attached holster. Had to sacrifice belt space for the convenience of carrying a pistol."
-	icon_state = "holsterbelt"
-	item_state = "holsterbelt"
-	strip_delay = 20
-	var/max_storage = 1
-	var/list/pistol = list()
-	sewrepair = TRUE
-	component_type = /datum/component/storage/concrete/roguetown/belt/holster_belt
-	grid_width = 96
-	grid_height = 96
-
-/obj/item/storage/belt/rogue/leather/twilight_holsterbelt/update_icon()
-	if(pistol.len)
-		icon_state = "holsterbelt_full"
-	else
-		icon_state = "holsterbelt"
-
-/obj/item/storage/belt/rogue/leather/twilight_holsterbelt/proc/eatpistol(obj/A)
-	if((A.type in typesof(/obj/item/gun/ballistic/revolver/rune/twilight_runelock)) || (A.type in typesof(/obj/item/gun/ballistic/firearm/arquebus_pistol)))
-		var/obj/item/gun/ballistic/P = A
-		if(!P.gripped_intents)
-			if(pistol.len < max_storage)
-				P.forceMove(src)
-				pistol += P
-				update_icon()
-				return TRUE
-			else
-				return FALSE
-
-/obj/item/storage/belt/rogue/leather/twilight_holsterbelt/attackby(obj/A, loc, params)
-	if((A.type in typesof(/obj/item/gun/ballistic/revolver/rune/twilight_runelock)) || (A.type in typesof(/obj/item/gun/ballistic/firearm/arquebus_pistol)))
-		var/obj/item/gun/ballistic/P = A
-		if(!P.gripped_intents)
-			if(pistol.len < max_storage)
-				if(ismob(loc))
-					var/mob/M = loc
-					M.doUnEquip(P, TRUE, src, TRUE, silent = TRUE)
-				else
-					P.forceMove(src)
-				pistol += P
-				update_icon()
-				to_chat(usr, span_notice("I holster the [P.name] into [src.name]."))
-			else
-				to_chat(loc, span_warning("Something is already holstered."))
-			return
-	..()
-
-/obj/item/storage/belt/rogue/leather/twilight_holsterbelt/attack_right(mob/user)
-	if(pistol.len)
-		var/obj/O = pistol[pistol.len]
-		pistol -= O
-		O.forceMove(user.loc)
-		user.put_in_hands(O)
-		update_icon()
-		return TRUE
-
-/obj/item/storage/belt/rogue/leather/twilight_holsterbelt/examine(mob/user)
-	. = ..()
-	if(pistol.len == 1)
-		. += span_notice("There is a weapon in the holster.")
-	else
-		. += span_notice("The holster is empty.")
 
 //Knifeblade belts, act as quivers mixed with belts. Lower storage size of a belt, but holds knives without taking space.
 /obj/item/storage/belt/rogue/leather/knifebelt
@@ -570,7 +435,6 @@
 	w_class = WEIGHT_CLASS_NORMAL
 	max_integrity = 300
 	equip_sound = 'sound/blank.ogg'
-	dropshrink = 0.8
 	//content_overlays = FALSE
 	bloody_icon_state = "bodyblood"
 	anvilrepair = /datum/skill/craft/blacksmithing

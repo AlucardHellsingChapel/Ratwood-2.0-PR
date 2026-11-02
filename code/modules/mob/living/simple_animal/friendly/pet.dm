@@ -40,7 +40,7 @@
 	QDEL_NULL(pcollar)
 	return ..()
 
-/mob/living/simple_animal/pet/revive(full_heal = FALSE, admin_revive = FALSE, bypass_foreign_brain_check = FALSE)
+/mob/living/simple_animal/pet/revive(full_heal = FALSE, admin_revive = FALSE)
 	. = ..()
 	if(.)
 		if(collar_type)

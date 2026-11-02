@@ -80,7 +80,7 @@
 			intensity = 60
 			lube_flags = NO_SLIP_WHEN_WALKING
 		if(TURF_WET_LUBE)
-			intensity = 1 SECONDS
+			intensity = 80
 			lube_flags = SLIDE | GALOSHES_DONT_HELP
 		if(TURF_WET_ICE)
 			intensity = 120

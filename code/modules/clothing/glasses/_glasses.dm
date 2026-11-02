@@ -49,7 +49,6 @@
 	tint = 3
 	darkness_view = 1
 	dog_fashion = /datum/dog_fashion/head
-	dropshrink = null
 
 /obj/item/clothing/glasses/blindfold/equipped(mob/living/carbon/human/user, slot)
 	. = ..()

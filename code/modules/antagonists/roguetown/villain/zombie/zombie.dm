@@ -10,10 +10,8 @@
 	/// SET TO FALSE IF WE DON'T TURN INTO ROTMEN WHEN REMOVED
 	var/become_rotman = FALSE
 	var/zombie_start
-	/// The body this datum deadified. The mind can move away, a severed head puts it in a brainmob,
-	/// and the restore must reach the flesh. Never qdel it, weakref/Destroy() qdels its target
-	var/datum/weakref/deadite_body_ref
 	var/revived = FALSE
+	var/next_idle_sound
 
 	antag_flags = FLAG_FAKE_ANTAG
 
@@ -31,11 +29,11 @@
 	var/STAWIL
 	var/cmode_music
 	var/list/base_intents
-	/// Default language from before we turned, restored on cure.
-	var/prior_default_language
 
 	/// Whether or not we have been turned
 	var/has_turned = FALSE
+	/// Last time we bit someone - Zombies will try to bite after 10 seconds of not biting
+	var/last_bite
 	/// Traits applied to the owner mob when we turn into a zombie
 	var/static/list/traits_zombie = list(
 		TRAIT_INFINITE_STAMINA,
@@ -56,8 +54,7 @@
 		TRAIT_ZOMBIE_IMMUNE,
 		TRAIT_ROTMAN,
 		TRAIT_NORUN,
-		TRAIT_SILVER_WEAK,
-		TRAIT_STRONGBITE,
+		TRAIT_SILVER_WEAK
 	)
 	/// Traits applied to the owner when we are cured and turn into just "rotmen"
 	var/static/list/traits_rotman = list(
@@ -96,13 +93,13 @@
 /*
 	Deadite transformation is 2 ways. First is on the initial bite (low chance) and second is on being chewed on.
 
-	Initial bite is: rogueweapons/mmb/bite.dm, /mob/living/carbon/onbite(mob/living/carbon/human/user) ->
+	Initial bite is: other_mobs.dm, /mob/living/carbon/onbite(mob/living/carbon/human/user) ->
 	bite_victim.zombie_infect_attempt() ->
 	attempt_zombie_infection(src, "bite", ZOMBIE_BITE_CONVERSION_TIME) -> rng check here
 	time passes ->
 	wake_zombie.
 
-	Wound transformation goes: rogueweapons/mmb/bite.dm, /obj/item/grabbing/bite/proc/bitelimb(mob/living/carbon/human/user) ->
+	Wound transformation goes: grabbing.dm, /obj/item/grabbing/bite/proc/bitelimb(mob/living/carbon/human/user) ->
 	/datum/wound/proc/zombie_infect_attempt() ->
 	human_owner.attempt_zombie_infection(src, "wound", zombie_infection_time) ->
 	time passes ->
@@ -111,15 +108,12 @@
 	Infection transformation process goes -> infection -> timered transform in zombie_infect_attempt() [drink red/holy water and kill timer?] -> /datum/antagonist/zombie/proc/wake_zombie -> zombietransform
 */
 /datum/antagonist/zombie/on_gain(admin_granted = FALSE)
-	var/mob/living/carbon/human/zombie = ishuman(owner?.current) ? owner.current : null
-	if(!zombie) // Everything below dereferences the body, and a half-built datum restores nulls when removed
-		qdel(src)
-		return
-	var/obj/item/bodypart/head = zombie.get_bodypart(BODY_ZONE_HEAD)
-	if(!head)
-		qdel(src)
-		return
-	deadite_body_ref = WEAKREF(zombie)
+	var/mob/living/carbon/human/zombie = owner?.current
+	if(zombie)
+		var/obj/item/bodypart/head = zombie.get_bodypart(BODY_ZONE_HEAD)
+		if(!head)
+			qdel(src)
+			return
 	zombie_start = world.time
 	was_i_undead = zombie.mob_biotypes & MOB_UNDEAD
 	special_role = zombie.mind?.special_role
@@ -151,10 +145,7 @@
 */
 ///Remove zombification - cure rot, surgical rot remove
 /datum/antagonist/zombie/on_removal()
-	// Restore the body we deadified, not whatever mob the mind now occupies
-	var/mob/living/carbon/human/zombie = deadite_body_ref?.resolve()
-	if(!ishuman(zombie))
-		zombie = ishuman(owner?.current) ? owner.current : null // Pre-weakref datums, and admin-built ones
+	var/mob/living/carbon/human/zombie = owner?.current
 	if(zombie)
 
 		zombie.infected = FALSE // Makes sure admins removing deadification removes the infected var if they do it before they turn
@@ -198,21 +189,18 @@
 
 
 
-		// Rising swaps the lists in become_alive, this only covers admins curing someone already alive.
-		// A still-dead corpse stays in the dead list or it counts toward pop caps and hides from locate_dead
-		if(zombie.stat != DEAD)
-			GLOB.dead_mob_list -= zombie
-			GLOB.alive_mob_list |= zombie
+		GLOB.dead_mob_list -= zombie // Remove it from global dead/alive mob list here here, if they're a zombie they probably died.
+		// There is a better way to maintain it but needs overhaul. Will cover the two methods of zombie
+		GLOB.alive_mob_list += zombie// in both cure rot and medicine.
 
 		zombie.cmode_music = cmode_music
 
 		for(var/trait in traits_zombie)
 			REMOVE_TRAIT(zombie, trait, "[type]")
 		zombie.remove_client_colour(/datum/client_colour/monochrome)
-		zombie.remove_language(/datum/language/undead, source = "[type]")
-		if(has_turned)
-			var/datum/language_holder/language_holder = zombie.get_language_holder()
-			language_holder.selected_default_language = prior_default_language
+		zombie.remove_language(/datum/language/undead)
+		var/datum/language_holder/language_holder = zombie.get_language_holder()
+		language_holder.selected_default_language = null
 
 		if(has_turned && become_rotman)
 			zombie.STACON = max(zombie.STACON - 2, 1) //ur rotting bro
@@ -245,8 +233,8 @@
 
 //Housekeeping's done. Transform into zombie.
 /datum/antagonist/zombie/proc/transform_zombie()
-	var/mob/living/carbon/human/zombie = owner?.current
-	if(!ishuman(zombie)) // A severed head puts the mind in a brainmob, everything below dereferences the body
+	var/mob/living/carbon/human/zombie = owner.current
+	if(!zombie)
 		qdel(src)
 		return
 	var/obj/item/bodypart/head = zombie.get_bodypart(BODY_ZONE_HEAD)
@@ -281,9 +269,8 @@
 	zombie.faction += "undead"
 	zombie.faction += "zombie"
 	zombie.faction -= "neutral"
-	zombie.grant_language(/datum/language/undead, source = "[type]")
+	zombie.grant_language(/datum/language/undead)
 	var/datum/language_holder/language_holder = zombie.get_language_holder()
-	prior_default_language = language_holder.selected_default_language
 	language_holder.selected_default_language = /datum/language/undead
 	zombie.verbs |= /mob/living/carbon/human/proc/zombie_seek
 	for(var/obj/item/bodypart/zombie_part as anything in zombie.bodyparts)
@@ -315,6 +302,7 @@
 	zombie.STASPD = rand(5,7)
 
 	zombie.STAINT = 1
+	last_bite = world.time
 	has_turned = TRUE
 	// Drop your helm and gorgies boy you won't need it anymore!!!
 	var/static/list/removed_slots = list(
@@ -329,14 +317,13 @@
 // Infected wake param is just a transition from living to zombie, via zombie_infect()
 // Prevoously you just died without warning in ~3 min, now you just become an antag instead of having to die first if infected.
 /datum/antagonist/zombie/proc/wake_zombie(infected_wake = FALSE)
-	var/mob/living/carbon/human/zombie = owner?.current
-	if(!ishuman(zombie))
+	if(!owner.current)
+		return
+	var/mob/living/carbon/human/zombie = owner.current
+	if(!zombie || !istype(zombie))
 		return
 	var/obj/item/bodypart/head = zombie.get_bodypart(BODY_ZONE_HEAD)
 	if(!head)
-		qdel(src)
-		return
-	if(zombie.has_foreign_brain()) // Must precede the healing below, or a refused rise leaves a healed living body
 		qdel(src)
 		return
 	if(zombie.stat != DEAD && !infected_wake)
@@ -346,52 +333,28 @@
 		qdel(src)
 		return
 
-	zombie.set_blood_volume(BLOOD_VOLUME_NORMAL)
+	
+
+	zombie.blood_volume = BLOOD_VOLUME_NORMAL
 	zombie.setOxyLoss(0, updating_health = FALSE, forced = TRUE)
 	zombie.setToxLoss(0, updating_health = FALSE, forced = TRUE)
-	zombie.adjustBruteLoss(-INFINITY, updating_health = FALSE, forced = TRUE)
-	zombie.adjustFireLoss(-INFINITY, updating_health = FALSE, forced = TRUE)
-	zombie.heal_wounds(INFINITY)
-	if(zombie.stat == DEAD)
-		if(!zombie.become_alive(UNCONSCIOUS)) // Backstops the pre-heal foreign gate above
-			qdel(src)
-			return
-		if(zombie.stat >= DEAD) // Rose but was too broken to stay up, do not fall through to the transform
-			qdel(src)
-			return
-	else // Infected while still alive, forced under rather than raised, not a death transition
-		zombie.stat = UNCONSCIOUS
-		zombie.updatehealth()
-		zombie.update_mobility()
-		zombie.update_sight()
-		zombie.reload_fullscreen()
+	if(!infected_wake)	// if we died, heal all this too
+		zombie.adjustBruteLoss(-INFINITY, updating_health = FALSE, forced = TRUE)
+		zombie.adjustFireLoss(-INFINITY, updating_health = FALSE, forced = TRUE)
+		zombie.heal_wounds(INFINITY)
+	zombie.stat = UNCONSCIOUS
+	zombie.updatehealth()
+	zombie.update_mobility()
+	zombie.update_sight()
+	zombie.reload_fullscreen()
 	transform_zombie()
 	if(zombie.stat >= DEAD)
 		//could not revive
 		qdel(src)
 
-	zombie.fullscreen_redflash("redflash3")
-	zombie.emote("scream") // Warning for nearby players
-	zombie.Knockdown(1)
-	zombie.remove_status_effect(/datum/status_effect/zombie_infection)
-
 /datum/antagonist/zombie/greet()
 	to_chat(owner.current, span_userdanger("Death is not the end..."))
 	return ..()
-
-/**
- * Cancels a pending rise for a corpse that can never turn.
- *
- * The body keeps rotting normally, it just stops being a candidate, so rotting.dm never calls back
- * here for it again. qdel rather than on_removal as in remove_zombie_antag(). A dormant datum never
- * turned, so on_gain wrote nothing worth restoring, and on_removal would regenerate organs and clear
- * rotted on every limb, erasing the corpse's decay.
- */
-/proc/cancel_deadite_rise(mob/living/carbon/zombie)
-	zombie.infected = FALSE
-	var/datum/antagonist/zombie/dormant_antag = zombie.mind?.has_antag_datum(/datum/antagonist/zombie)
-	if(dormant_antag)
-		qdel(dormant_antag)
 
 /*
 	Proc for our newly infected to wake up as a zombie
@@ -408,44 +371,34 @@
 
 	var/obj/item/bodypart/head = zombie.get_bodypart(BODY_ZONE_HEAD)
 	if (!head) // Missing head
-		cancel_deadite_rise(zombie)
-		return
-
-	if (zombie.has_foreign_brain()) // Stitched-on stranger's head, the rot cannot knit it to this flesh. Pre-heal on purpose
-		cancel_deadite_rise(zombie)
+		qdel(zombie)
 		return
 
 	if (zombie.stat != DEAD && infected_wake) // Died too hard
-		cancel_deadite_rise(zombie)
+		qdel(zombie)
 		return
 
 	if (istype(zombie.loc, /obj/structure/closet/dirthole) || istype(zombie.loc, /obj/structure/closet/crate/coffin)) // Buried
-		cancel_deadite_rise(zombie)
+		qdel(zombie)
 		return
 
 	record_round_statistic(STATS_DEADITES_WOKEN_UP)
 	// Heal the zombie
-	zombie.set_blood_volume(BLOOD_VOLUME_NORMAL)
+	zombie.blood_volume = BLOOD_VOLUME_NORMAL
 	zombie.setOxyLoss(0, updating_health = FALSE, forced = TRUE) // Zombies don't breathe
 	zombie.setToxLoss(0, updating_health = FALSE, forced = TRUE) // Zombies are immune to poison
-	zombie.adjustBruteLoss(-INFINITY, updating_health = FALSE, forced = TRUE)
-	zombie.adjustFireLoss(-INFINITY, updating_health = FALSE, forced = TRUE)
-	zombie.heal_wounds(INFINITY) // Heal all non-permanent wounds
-	to_chat(zombie, span_userdanger("Your bones snap back into place and your flesh knits itself back together as you rise again in undeath."))
 
-	if(zombie.stat == DEAD)
-		if(!zombie.become_alive(UNCONSCIOUS)) // Backstops the pre-heal foreign gate above. The corpse stays
-			zombie.infected = FALSE
-			return
-		if(zombie.stat >= DEAD) // Rose but was too broken to stay up, the corpse stays
-			zombie.infected = FALSE
-			return
-	else // Converted or infected while still alive, forced under rather than raised, not a death transition
-		zombie.stat = UNCONSCIOUS
-		zombie.updatehealth()
-		zombie.update_mobility()
-		zombie.update_sight()
-		zombie.reload_fullscreen()
+	if (infected_wake || converted)
+		zombie.adjustBruteLoss(-INFINITY, updating_health = FALSE, forced = TRUE)
+		zombie.adjustFireLoss(-INFINITY, updating_health = FALSE, forced = TRUE)
+		zombie.heal_wounds(INFINITY) // Heal all non-permanent wounds
+		to_chat(zombie, span_userdanger("Your bones snap back into place and your flesh knits itself back together as you rise again in undeath."))
+
+	zombie.stat = UNCONSCIOUS // Start unconscious
+	zombie.updatehealth() // Then check if the mob should wake up
+	zombie.update_mobility()
+	zombie.update_sight()
+	zombie.reload_fullscreen()
 	zombie.infected = FALSE //The infection has finished and they are now a zombie
 
 	var/datum/antagonist/zombie/zombie_antag = zombie.mind?.has_antag_datum(/datum/antagonist/zombie)
@@ -454,31 +407,31 @@
 	else
 		CRASH("[zombie] tried to wake up as a zombie but did not have the antag set.")
 
-	if (zombie.stat >= DEAD) // Turned and died anyway. The corpse keeps its datum so it can still be cured
+	if (zombie.stat >= DEAD) // We couldn't bring them back to life as a zombie. Nothing we can do.
+		qdel(zombie)
 		return
 
 
 	if (converted || infected_wake)
-		zombie.fullscreen_redflash("redflash3")
+		zombie.flash_fullscreen("redflash3")
 		zombie.emote("scream") // Warning for nearby players
 		zombie.Knockdown(1)
-		zombie.drop_all_held_items()
 
 ///Making sure they're not any other antag as well as adding the zombie datum to their mind
 /mob/living/carbon/human/proc/zombie_check_can_convert()
 	if(!mind)
-		return FALSE
+		return
 	if(mind.has_antag_datum(/datum/antagonist/vampire))
-		return FALSE
+		return
 	if(mind.has_antag_datum(/datum/antagonist/werewolf))
-		return FALSE
+		return
 	if(mind.has_antag_datum(/datum/antagonist/zombie))
-		return FALSE
+		return
 	if(mind.has_antag_datum(/datum/antagonist/skeleton))
-		return FALSE
+		return
 	if(mind.has_antag_datum(/datum/antagonist/gnoll))
 		return FALSE
 	if(HAS_TRAIT(src, TRAIT_ZOMBIE_IMMUNE))
-		return FALSE
+		return
 	return mind.add_antag_datum(/datum/antagonist/zombie)
 

@@ -5,7 +5,6 @@
 	icon_state = "irondust"
 	w_class = WEIGHT_CLASS_TINY
 	experimental_inhand = FALSE
-	dropshrink = 0.75//way easier to organise on tables like this
 	/*
 		So, you're here about potions: TLDR - the cauldron takes up to 4 items, from this, makes 1 recipe. Major gives 3 points, med 2 points,minor 1 point.
 		If no recipe gets above 5 points, it makes nothing,otherwise It then makes the recipe with the HIGHEST POINTS.
@@ -68,8 +67,8 @@
 	name = "viscera"
 	icon_state = "viscera"
 	major_pot = /datum/alch_cauldron_recipe/big_health_potion
-	med_pot = /datum/alch_cauldron_recipe/deadite_rot
-	minor_pot = /datum/alch_cauldron_recipe/health_potion
+	med_pot = /datum/alch_cauldron_recipe/health_potion
+	minor_pot = /datum/alch_cauldron_recipe/antidote
 
 /obj/item/alch/waterdust
 	name = "water essentia"
@@ -137,15 +136,13 @@
 	. = ..()
 	. += span_info("It has [charges] charge\s remaining.")
 
-/obj/item/alch/bloomstone/Destroy(force=FALSE)
-	if(force)
-		charges = 0
+/obj/item/alch/bloomstone/Destroy()
 	remove_filter("bloomstone_glow")
 	charges--
 	if(charges > 0)
 		// Stone survives this use; re-apply glow and stay alive.
 		add_filter("bloomstone_glow", 2, list("type" = "outline", "color" = "#73c47a", "alpha" = 95, "size" = 1))
-		return QDEL_HINT_LETMELIVE // <---- DO NOT EVER EVER EVER EVER EVER EVER EVER EVER EVER DO THIS
+		return QDEL_HINT_LETMELIVE
 	// All charges spent — shatter into stone dust.
 	new /obj/item/alch/stonedust(get_turf(src))
 	if(loc && isliving(loc))
@@ -164,16 +161,16 @@
 	name = "coal dust"
 	icon_state = "coaldust"
 	major_pot = /datum/alch_cauldron_recipe/antidote
-	med_pot = /datum/alch_cauldron_recipe/deadite_rot
+	med_pot = /datum/alch_cauldron_recipe/end_potion
 	minor_pot = /datum/alch_cauldron_recipe/str_potion
 
 /obj/item/alch/stonedust
 	name = "stone dust"
 	desc = "Finely ground mineral dust used for glass clay refinement."
 	icon_state = "coaldust"
-	major_pot = /datum/alch_cauldron_recipe/antidote
-	med_pot = /datum/alch_cauldron_recipe/end_potion
-	minor_pot = /datum/alch_cauldron_recipe/stam_poison
+	major_pot = null
+	med_pot = null
+	minor_pot = null
 
 /obj/item/alch/silverdust
 	name = "silver dust"
@@ -376,7 +373,7 @@
 
 	major_pot = /datum/alch_cauldron_recipe/doompoison
 	med_pot = /datum/alch_cauldron_recipe/berrypoison
-	minor_pot = /datum/alch_cauldron_recipe/deadite_rot
+	minor_pot = /datum/alch_cauldron_recipe/stam_poison
 
 /obj/item/alch/matricaria
 	name = "matricaria"

@@ -34,7 +34,7 @@
 	var/mob/living/L = user
 
 	if(istype(L))
-		if(!user.canUseTopic(src, BE_CLOSE, FALSE))
+		if(!user.canUseTopic(src, BE_CLOSE, ismonkey(user)))
 			return FALSE
 		else
 			return TRUE
@@ -64,6 +64,9 @@
 		if(buildstacktype)
 			new buildstacktype(loc,buildstackamount)
 	..()
+
+/obj/structure/bed/attack_paw(mob/user)
+	return attack_hand(user)
 
 /obj/structure/bed/attackby(obj/item/W, mob/user, params)
 	if(W.tool_behaviour == TOOL_WRENCH && !(flags_1&NODECONSTRUCT_1))

@@ -6,7 +6,7 @@
 	overlay_icon = 'icons/mob/actions/genericmiracles.dmi'
 	overlay_state = "heal"
 	action_icon_state = "heal"
-	releasedrain = SPELLCOST_MIRACLE
+	releasedrain = 35
 	chargedrain = 0
 	chargetime = 3
 	recharge_time = 5 MINUTES
@@ -17,11 +17,10 @@
 	chargedloop = /datum/looping_sound/wind
 	sound = 'sound/magic/woundheal_crunch.ogg'
 	invocation_type = "none"
-	glow_color = GLOW_COLOR_BUFF
+	glow_color = GLOW_COLOR_ARCANE
 	glow_intensity = GLOW_INTENSITY_MEDIUM
 	associated_skill = /datum/skill/magic/arcane
 	spell_tier = 3
-	spell_impact_intensity = SPELL_IMPACT_NONE
 	antimagic_allowed = FALSE
 	miracle = FALSE
 	var/delay = 4.5 SECONDS	//Reduced to 1.5 seconds with Legendary

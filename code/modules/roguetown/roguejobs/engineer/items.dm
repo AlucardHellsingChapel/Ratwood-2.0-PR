@@ -46,6 +46,7 @@
 /obj/item/roguegear/bronze
 	name = "cog"
 	desc = "A cog with teeth meticulously crafted for tight interlocking."
+	smeltresult = /obj/item/ingot/bronze
 
 /obj/item/roguegear/wood
 	var/cart_capacity = 0

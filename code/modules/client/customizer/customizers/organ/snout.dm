@@ -125,8 +125,7 @@
 		/datum/sprite_accessory/snout/front/otie,
 		/datum/sprite_accessory/snout/hpanda,
 		/datum/sprite_accessory/snout/vulp,
-		/datum/sprite_accessory/snout/skulldog,
-		/datum/sprite_accessory/snout/hspots
+		/datum/sprite_accessory/snout/skulldog
 		)
 
 /datum/customizer/organ/snout/tajaran

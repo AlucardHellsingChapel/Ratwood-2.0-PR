@@ -24,8 +24,6 @@
 
 /datum/coven_power/eora/empathic_bond/activate(mob/living/target)
 	. = ..()
-	if(!.)
-		return
 	if(!ishuman(target))
 		to_chat(owner, span_warning("You can only sense the emotions of other people."))
 		return
@@ -82,8 +80,6 @@
 
 /datum/coven_power/eora/artistic_inspiration/activate(mob/living/target)
 	. = ..()
-	if(!.)
-		return
 	if(!ishuman(target))
 		to_chat(owner, span_warning("Only humans can receive artistic inspiration."))
 		return
@@ -99,12 +95,11 @@
 	// Boost mood and give temporary creative buff do this for now until we add some form of creation quality outside of blacksmithing
 	target.add_stress(/datum/stressevent/artistic_inspiration)
 
-	//the base class already schedules deactivation off duration_length - do not double it up
+	addtimer(CALLBACK(src, PROC_REF(deactivate), inspired), duration_length)
 
-/datum/coven_power/eora/artistic_inspiration/deactivate(atom/target, direct = FALSE)
+/datum/coven_power/eora/artistic_inspiration/deactivate(mob/living/carbon/human/target)
 	. = ..()
-	if(ismob(target))
-		to_chat(target, span_info("The divine inspiration fades, but the memory of it remains."))
+	to_chat(target, span_info("The divine inspiration fades, but the memory of it remains."))
 
 //FAMILIAL BOND
 /datum/coven_power/eora/familial_bond
@@ -122,8 +117,6 @@
 
 /datum/coven_power/eora/familial_bond/activate(mob/living/target)
 	. = ..()
-	if(!.)
-		return
 	if(!ishuman(target))
 		to_chat(owner, span_warning("You can only bond with other people."))
 		return
@@ -159,8 +152,6 @@
 
 /datum/coven_power/eora/beautys_restoration/activate(mob/living/target)
 	. = ..()
-	if(!.)
-		return
 	if(!ishuman(target))
 		to_chat(owner, span_warning("You can only restore the beauty of people."))
 		return
@@ -181,17 +172,12 @@
 
 	patient.add_stress(/datum/stressevent/artistic_inspiration_minor)
 
-	addtimer(CALLBACK(src, PROC_REF(clear_restoration_overlay), patient), 3 SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(deactivate), patient), 3 SECONDS)
 	owner.AddComponent(/datum/component/empathic_obsession, patient, 5 MINUTES)
 
-/datum/coven_power/eora/beautys_restoration/proc/clear_restoration_overlay(mob/living/carbon/human/target)
-	target?.remove_overlay(MUTATIONS_LAYER)
-
-/datum/coven_power/eora/beautys_restoration/deactivate(atom/target, direct = FALSE)
+/datum/coven_power/eora/beautys_restoration/deactivate(mob/living/carbon/human/target)
 	. = ..()
-	if(ishuman(target))
-		var/mob/living/carbon/human/patient = target
-		patient.remove_overlay(MUTATIONS_LAYER)
+	target.remove_overlay(MUTATIONS_LAYER)
 
 /datum/stressevent/artistic_inspiration
 	desc = span_love("I feel divinely inspired to create something beautiful!")

@@ -1,10 +1,18 @@
 /datum/sex_action/tonguebath
 	name = "Bathe with tongue"
 	user_sex_part = SEX_PART_JAWS
-	target_sex_part = SEX_PART_GROIN
+
+/datum/sex_action/tonguebath/shows_on_menu(mob/living/carbon/human/user, mob/living/carbon/human/target)
+	if(user == target)
+		return FALSE
+	return TRUE
 
 /datum/sex_action/tonguebath/can_perform(mob/living/user, mob/living/target)
-	if(!(. = ..()))
+	if(user == target)
+		return FALSE
+	if(!check_location_accessible(user, target, BODY_ZONE_PRECISE_GROIN))
+		return FALSE
+	if(!check_location_accessible(user, user, BODY_ZONE_PRECISE_MOUTH))
 		return FALSE
 	return TRUE
 
@@ -12,7 +20,7 @@
 	user.visible_message(span_warning("[user] sticks [user.p_their()] tongue out, getting close to [target]..."))
 
 /datum/sex_action/tonguebath/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
-	user.sexcon_action_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] bathes [target]'s body with [user.p_their()] tongue..."))
+	user.visible_message(user.sexcon.spanify_force("[user] [user.sexcon.get_generic_force_adjective()] bathes [target]'s body with [user.p_their()] tongue..."))
 	user.sexcon.make_sucking_noise()
 
 	user.sexcon.perform_sex_action(target, 0.5, 0, TRUE)
@@ -22,19 +30,19 @@
 	var/datum/status_effect/facial/creampie = target.has_status_effect(/datum/status_effect/facial/internal)
 	var/datum/status_effect/facial/external/external = target.has_status_effect(/datum/status_effect/facial/external)
 	if(user.zone_selected == BODY_ZONE_PRECISE_GROIN && creampie)
-		user.sexcon_action_message(user.sexcon.spanify_force("[user] cleans up the [target]'s crotch with [user.p_their()] tongue..."))
+		user.visible_message(user.sexcon.spanify_force("[user] cleans up the [target]'s crotch with [user.p_their()] tongue..."))
 		playsound(user, pick('sound/misc/mat/mouthend (1).ogg','sound/misc/mat/mouthend (2).ogg'), 100, FALSE, ignore_walls = FALSE)
 		creampie.clean_up(null, CLEAN_WEAK)
 		if(user.reagents)
 			user.reagents.add_reagent(/datum/reagent/erpjuice/cum, 3)
 	if(user.zone_selected == BODY_ZONE_HEAD && facial)
-		user.sexcon_action_message(user.sexcon.spanify_force("[user] cleans the [target]'s stained face with [user.p_their()] tongue..."))
+		user.visible_message(user.sexcon.spanify_force("[user] cleans the [target]'s stained face with [user.p_their()] tongue..."))
 		playsound(user, pick('sound/misc/mat/mouthend (1).ogg','sound/misc/mat/mouthend (2).ogg'), 100, FALSE, ignore_walls = FALSE)
 		facial.clean_up(null, CLEAN_WEAK)
 		if(user.reagents)
 			user.reagents.add_reagent(/datum/reagent/erpjuice/cum, 3)
 	if(user.zone_selected == BODY_ZONE_CHEST && external)
-		user.sexcon_action_message(user.sexcon.spanify_force("[user] licks [target]'s body clean with [user.p_their()] tongue..."))
+		user.visible_message(user.sexcon.spanify_force("[user] licks [target]'s body clean with [user.p_their()] tongue..."))
 		playsound(user, pick('sound/misc/mat/mouthend (1).ogg','sound/misc/mat/mouthend (2).ogg'), 100, FALSE, ignore_walls = FALSE)
 		external.clean_up(null, CLEAN_WEAK)
 		if(user.reagents)

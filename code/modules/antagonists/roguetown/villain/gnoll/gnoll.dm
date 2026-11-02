@@ -11,7 +11,7 @@
 	blocksound = SOFTHIT
 	blade_dulling = DULLING_BASHCHOP
 	sewrepair = FALSE
-	max_integrity = 675
+	max_integrity = 475
 	item_flags = DROPDEL
 	repair_time = 14 SECONDS
 	combat_taggable = TRUE
@@ -21,7 +21,6 @@
 	// Gnolls don't really get to unequip their skin so they might as well just register it as soon as they get it
 	// loc is shitcode here because the skin is created inside the gnoll so we can juse abuse that logic
 	RegisterSignal(loc, list(COMSIG_SPECIES_ATTACKED_BY, COMSIG_LIVING_ARMOR_CHECKED, COMSIG_MOB_APPLY_DAMGE), PROC_REF(on_attacked_by), override = TRUE)
-	AddComponent(/datum/component/cursed_item, TRAIT_HORDE, "HIDE", "#GNOLLED")/// no one should ever see this unless they spawn in gnoll skin via the game panel
 
 /datum/antagonist/gnoll
 	name = "Gnoll"
@@ -124,7 +123,7 @@
 /datum/antagonist/gnoll/proc/get_tracked_target_source(mob/living/target)
 	if(!target)
 		return null
-	if(HAS_TRAIT(target, TRAIT_GNOLL_HUNTED))
+	if(target.has_flaw(/datum/charflaw/hunted))
 		return "Hunted flaw"
 	if(target.job in get_gnoll_tracking_combat_roles())
 		return "Combat fallback"
@@ -133,7 +132,7 @@
 /datum/antagonist/gnoll/proc/is_examine_marked_target(mob/living/target)
 	if(!target)
 		return FALSE
-	if(HAS_TRAIT(target, TRAIT_GNOLL_HUNTED))
+	if(target.has_flaw(/datum/charflaw/hunted))
 		return TRUE
 	if(get_tracked_target() != target)
 		return FALSE
@@ -203,13 +202,15 @@
 	wlength = WLENGTH_SHORT
 
 /datum/intent/simple/werewolf/gnoll
-	name = "cutting claw"
-	icon_state = "incut"
-	animname = "cut"
+	name = "claw"
+	icon_state = "inchop"
+	blade_class = BCLASS_CHOP
+	attack_verb = list("claws", "mauls", "eviscerates")
+	animname = "chop"
 	hitsound = "genslash"
-	penfactor = PEN_LIGHT
-	blade_class = BCLASS_CUT
-	attack_verb = list("cuts", "slashes")
+	penfactor = 20
+	candodge = TRUE
+	canparry = TRUE
 	miss_text = "slashes the air!"
 	miss_sound = "bluntwooshlarge"
 	item_d_type = "slash"
@@ -220,35 +221,24 @@
 	desc = "A powerful smash of savage muscle that deals normal damage, but can throw a standing opponent back and slow them down, based on your strength. Ineffective below 10 strength. Slowdown & Knockback scales to your Strength up to 15 (1 - 5 tiles). Cannot be used consecutively more than every 5 seconds on the same target. Prone targets halve the knockback distance."
 	icon_state = "insmash"
 	chargetime = 1
-	penfactor = PEN_NONE
-	intent_intdamage_factor = BLUNT_DEFAULT_INT_DAMAGEFACTOR
+	penfactor = 0
 
 /datum/intent/simple/gnoll_cut
-	name = "chopping claw"
+	name = "cutting claw"
 	hitsound = "genslash"
-	penfactor = PEN_HEAVY
-	icon_state = "inchop"
+	penfactor = 60
+	candodge = TRUE
+	canparry = TRUE
 	miss_text = "slashes the air!"
 	miss_sound = "bluntwooshlarge"
-	icon_state = "inchop"
-	attack_verb = list("claws", "mauls", "eviscerates")
-	animname = "chop"
-	blade_class = BCLASS_CHOP
+	icon_state = "incut"
+	attack_verb = list("cuts", "slashes")
+	animname = "cut"
+	blade_class = BCLASS_CUT
 	item_d_type = "slash"
-	swingdelay = 1 SECONDS
-	clickcd = CLICK_CD_CHARGED
-	parriable_intent = FALSE
-	swingdelay_type = SWINGDELAY_CANCEL
 
 /datum/intent/mace/strike/gnoll
 	name = "armor rending strike"
-	intent_intdamage_factor = BLUNT_DEFAULT_INT_DAMAGEFACTOR
 	miss_text = "strikes the air!"
 	miss_sound = "bluntwooshlarge"
 	attack_verb = list("punches", "strikes", "tears")
-
-
-/obj/item/storage/backpack/rogue/satchel/gnoll 
-	name = "stained satchel"
-	desc = "A fetid sack fashioned into a storage accessory. Whatever's put there inevitably comes out twice the bloody."
-	mob_overlay_icon = null

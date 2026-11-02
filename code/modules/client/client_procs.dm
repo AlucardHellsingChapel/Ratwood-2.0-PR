@@ -160,11 +160,6 @@ GLOBAL_LIST_EMPTY(respawncounts)
 		answer_schizohelp(locate(href_list["schizohelp"]))
 		return
 
-	if(href_list["vieweconomics"])
-		var/datum/economic_chronicle/chronicle = get_economic_chronicle()
-		chronicle.ui_interact(mob)
-		return
-
 	if(href_list["viewchronicle"])
 		var/tab = href_list["chronicletab"] || "The Realm"
 		show_chronicle(tab)
@@ -633,6 +628,7 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 	GLOB.ahelp_tickets.ClientLogout(src)
 	GLOB.directory -= ckey
 	GLOB.clients -= src
+	QDEL_NULL(tgui_panel)
 	QDEL_LIST_ASSOC_VAL(char_render_holders)
 	if(movingmob != null)
 		movingmob.client_mobs_in_contents -= mob
@@ -1023,8 +1019,6 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 	else
 		winset(src, null, "input.focus=true command=activeInput input.background-color=[COLOR_INPUT_ENABLED] input.text-color = #EEEEEE")
 
-	SEND_SIGNAL(src, COMSIG_CLIENT_CLICK, object, location, control, params, usr)
-
 	..()
 
 /client/proc/add_verbs_from_config()
@@ -1273,8 +1267,6 @@ GLOBAL_LIST_EMPTY(external_rsc_urls)
 	return
 
 /client/proc/preload_music()
-	if(cached_sounds || !SSsounds.initialized)
-		return
-	cached_sounds = TRUE
-	for(var/sound_path as anything in SSsounds.all_music_sounds)
-		src << load_resource(sound_path, 0)
+	if(SSsounds.initialized == TRUE)
+		for(var/sound_path as anything in SSsounds.all_music_sounds)
+			src << load_resource(sound_path, -1)

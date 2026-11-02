@@ -96,26 +96,11 @@
 		SSblackbox.record_feedback("tally", "ic_blocked_words", 1, LOWER_TEXT(config.ic_filter_regex.match))
 		return
 
-	var/list/available_languages = list()
-	var/datum/language_holder/H = owner.get_language_holder()
-
-	for(var/L in H.languages)
-		var/datum/language/lang = L
-		if(owner.can_speak_in_language(lang))
-			available_languages[initial(lang.name)] = lang
-
-	if(!length(available_languages))
-		return
-
-	var/choice = input(owner, "Choose language for projected voice") as null|anything in available_languages
-	if(!choice)
-		return
-
-	var/datum/language/language = available_languages[choice]
+	var/language = owner.get_random_understood_language()
 	var/message = owner.compose_message(owner, language, input_message, , list())
 	to_chat(target, "<span class='purple'><i>You hear someone's voice in your head...</i></span>")
 	target.Hear(message, target, language, input_message, , , )
-	to_chat(owner, span_notice("You project your voice to [target]'s ears in [initial(language.name)]."))
+	to_chat(owner, span_notice("You project your voice to [target]'s ears."))
 
 //MADRIGAL
 /datum/coven_power/siren/madrigal
@@ -133,11 +118,11 @@
 	. = ..()
 	var/list/mobs_in_view = oviewers(4, owner)
 	if(!LAZYLEN(mobs_in_view))
-		try_deactivate(direct = TRUE)
+		deactivate()
 		return
 
 	for(var/mob/living/carbon/human/listener in mobs_in_view)
-		if(listener.is_clanmate(owner))
+		if(listener.clan == owner.clan)
 			continue
 
 		listener.create_walk_to(2 SECONDS, owner)
@@ -168,11 +153,11 @@
 	. = ..()
 	var/list/mobs_in_view = oviewers(4, owner)
 	if(!LAZYLEN(mobs_in_view))
-		try_deactivate(direct = TRUE)
+		deactivate()
 		return
 
 	for(var/mob/living/carbon/human/listener in mobs_in_view)
-		if(listener.is_clanmate(owner))
+		if(listener.clan == owner.clan)
 			continue
 
 		listener.Stun(duration_length)
@@ -199,18 +184,15 @@
 	duration_length = 3 SECONDS
 	cooldown_length = 30 SECONDS
 
-	hostile = TRUE
-	violates_masquerade = TRUE
-
 /datum/coven_power/siren/shattering_crescendo/activate()
 	. = ..()
 	var/list/mobs_in_view = oviewers(7, owner)
 	if(!LAZYLEN(mobs_in_view))
-		try_deactivate(direct = TRUE)
+		deactivate()
 		return
 
 	for(var/mob/living/carbon/human/listener in mobs_in_view)
-		if(listener.is_clanmate(owner))
+		if(listener.clan == owner.clan)
 			continue
 
 		listener.Stun(duration_length)

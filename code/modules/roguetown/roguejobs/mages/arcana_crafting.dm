@@ -33,24 +33,6 @@
 				/datum/reagent/medicine/manapot = 15)
 	craftdiff = 2
 
-/datum/crafting_recipe/roguetown/arcana/ritechalk
-	name = "ritual chalk (blessed)"
-	skillcraft = /datum/skill/magic/holy
-	result = /obj/item/ritechalk
-	reqs = list(/obj/item/rogueore/cinnabar = 1,
-				/datum/reagent/water/blessed = 15)
-	craftdiff = 2
-	craft_xp_override = 0
-
-/datum/crafting_recipe/roguetown/arcana/ritechalk_unholy
-	name = "ritual chalk (unholy)"
-	skillcraft = /datum/skill/magic/holy
-	result = /obj/item/ritechalk
-	reqs = list(/obj/item/rogueore/cinnabar = 1,
-				/datum/reagent/water/cursed = 15)
-	craftdiff = 2
-	craft_xp_override = 0
-
 /datum/crafting_recipe/roguetown/arcana/infernalfeather
 	name = "infernal feather"
 	result = /obj/item/natural/feather/infernal
@@ -343,6 +325,7 @@
 
 /datum/crafting_recipe/roguetown/arcana/findfamiliar
 	name = "scroll of find familiar"
+	result = /obj/item/book/granter/spell/blackstone/familiar
 	reqs = list(/obj/item/magic/manacrystal = 1,
 				/obj/item/paper/scroll = 1)
 	craftdiff = 1

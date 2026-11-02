@@ -7,19 +7,16 @@
 	sins = "Dispassion, Overindulgence, Sadism"
 	mob_traits = list(TRAIT_EMPATH, TRAIT_EXTEROCEPTION)
 	miracles = list(/obj/effect/proc_holder/spell/targeted/touch/orison			= CLERIC_ORI,
-					/obj/effect/proc_holder/spell/invoked/massage				= CLERIC_T0,
 					/obj/effect/proc_holder/spell/invoked/eora_blessing			= CLERIC_T0,
 					/obj/effect/proc_holder/spell/invoked/lesser_heal 			= CLERIC_T1,
 					/obj/effect/proc_holder/spell/invoked/blood_heal			= CLERIC_T1,
 					/obj/effect/proc_holder/spell/invoked/bless_food            = CLERIC_T1,
-					/obj/effect/proc_holder/spell/invoked/summon_bed			= CLERIC_T1,
 					/obj/effect/proc_holder/spell/invoked/bud					= CLERIC_T1,
 					/obj/effect/proc_holder/spell/invoked/heartweave			= CLERIC_T2,
 					/obj/effect/proc_holder/spell/invoked/eoracurse				= CLERIC_T3,
 					/obj/effect/proc_holder/spell/invoked/pomegranate			= CLERIC_T4,
 					/obj/effect/proc_holder/spell/invoked/resurrect/eora		= CLERIC_T4,
 	)
-	energy_color = COLOR_PATRON_EORA
 	confess_lines = list(
 		"EORA BRINGS US TOGETHER!",
 		"HER BEAUTY IS EVEN IN THIS TORMENT!",

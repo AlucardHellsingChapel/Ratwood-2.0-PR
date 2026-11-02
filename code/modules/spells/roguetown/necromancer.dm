@@ -2,9 +2,7 @@
 	name = "Bone Chill"
 	desc = "Chill the target with necrotic energy. Severely reduces speed and weakens physical prowess."
 	cost = 3
-	overlay_icon = 'icons/mob/actions/zizomiracles.dmi'
-	action_icon = 'icons/mob/actions/zizomiracles.dmi'
-	overlay_state = "bone_chill"
+	overlay_state = "profane"
 	releasedrain = 30
 	chargetime = 5
 	range = 7
@@ -45,9 +43,7 @@
 
 /obj/effect/proc_holder/spell/invoked/eyebite
 	name = "Eyebite"
-	overlay_icon = 'icons/mob/actions/zizomiracles.dmi'
-	action_icon = 'icons/mob/actions/zizomiracles.dmi'
-	overlay_state = "eye_bite"
+	overlay_state = "raiseskele"
 	releasedrain = 30
 	chargetime = 15
 	range = 7
@@ -73,14 +69,82 @@
 	target.blur_eyes(10)
 	return TRUE
 
+/obj/effect/proc_holder/spell/invoked/raise_undead_formation
+	name = "Raise Lesser Undead Formation"
+	desc = "Raises a formation of simple minded undead skeletons. Inferior shamblers. Husks in everything but zeal."
+	clothes_req = FALSE
+	overlay_state = "animate"
+	range = 7
+	sound = list('sound/magic/magnet.ogg')
+	releasedrain = 40
+	chargetime = 6 SECONDS
+	warnie = "spellwarning"
+	no_early_release = TRUE
+	charging_slowdown = 1
+	chargedloop = /datum/looping_sound/invokegen
+	gesture_required = TRUE // Summon spell
+	associated_skill = /datum/skill/magic/arcane
+	recharge_time = 20 SECONDS
+	var/cabal_affine = FALSE
+	var/is_summoned = FALSE
+	var/to_spawn = 4
+	hide_charge_effect = TRUE
+
+/obj/effect/proc_holder/spell/invoked/raise_undead_formation/cast(list/targets, mob/living/user)
+	..()
+
+	var/turf/T = get_turf(targets[1])
+	if(!isopenturf(T))
+		to_chat(user, span_warning("The targeted location is blocked. My summon fails to come forth."))
+		return FALSE
+
+
+	var/skeleton_roll
+
+	var/list/turf/target_turfs = list(T)
+	if(usr.dir == NORTH || usr.dir == SOUTH)
+		target_turfs += get_step(T, EAST)
+		target_turfs += get_step(T, WEST)
+	else
+		target_turfs += get_step(T, NORTH)
+		target_turfs += get_step(T, SOUTH)
+
+	for(var/i = 1 to to_spawn)
+		if(i > to_spawn)
+			i = 1
+
+		var/t_turf = target_turfs[i]
+
+		if(!isopenturf(t_turf))
+			continue
+
+		new /obj/effect/temp_visual/bluespace_fissure(t_turf)
+		skeleton_roll = rand(1,100)
+		switch(skeleton_roll)
+			if(1 to 20)
+				new /mob/living/simple_animal/hostile/rogue/skeleton/axe(t_turf, user, cabal_affine, is_summoned)
+			if(21 to 40)
+				new /mob/living/simple_animal/hostile/rogue/skeleton/spear(t_turf, user, cabal_affine, is_summoned)
+			if(41 to 60)
+				new /mob/living/simple_animal/hostile/rogue/skeleton/guard(t_turf, user, cabal_affine, is_summoned)
+			if(61 to 80)
+				new /mob/living/simple_animal/hostile/rogue/skeleton/bow(t_turf, user, cabal_affine, is_summoned)
+			if(81 to 100)
+				new /mob/living/simple_animal/hostile/rogue/skeleton(t_turf, user, cabal_affine, is_summoned)
+	return TRUE
+
+/obj/effect/proc_holder/spell/invoked/raise_undead_formation/necromancer
+	cabal_affine = TRUE
+	is_summoned = TRUE
+	recharge_time = 35 SECONDS
+	to_spawn = 3
+
 
 /obj/effect/proc_holder/spell/invoked/raise_undead_guard
 	name = "Conjure Undead"
 	desc = "Raises an undead guard in your servitude."
 	clothes_req = FALSE
-	overlay_icon = 'icons/mob/actions/zizomiracles.dmi'
-	action_icon = 'icons/mob/actions/zizomiracles.dmi'
-	overlay_state = "skeleton"
+	overlay_state = "animate"
 	range = 7
 	sound = list('sound/magic/magnet.ogg')
 	releasedrain = 40
@@ -130,7 +194,7 @@
 
 	// Handle single loose bones
 	else if(istype(sacrifice, /obj/item/natural/bone))
-		to_chat(user, span_warning("A single bone isn't enough to raise a skeleton! You need a bundle of at least four."))
+		to_chat(user, span_warning("A single bone isn’t enough to raise a skeleton! You need a bundle of at least four."))
 		revert_cast()
 		return FALSE
 
@@ -147,83 +211,11 @@
 	return TRUE
 
 
-/obj/effect/proc_holder/spell/invoked/raise_undead_formation
-	name = "Raise Lesser Undead Formation"
-	desc = "Raises a formation of simple minded undead skeletons. Inferior shamblers. Husks in everything but zeal."
-	clothes_req = FALSE
-	overlay_icon = 'icons/mob/actions/zizomiracles.dmi'
-	action_icon = 'icons/mob/actions/zizomiracles.dmi'
-	overlay_state = "skeleton_formation"
-	range = 7
-	sound = list('sound/magic/magnet.ogg')
-	releasedrain = 40
-	chargetime = 6 SECONDS
-	warnie = "spellwarning"
-	no_early_release = TRUE
-	charging_slowdown = 1
-	chargedloop = /datum/looping_sound/invokegen
-	gesture_required = TRUE // Summon spell
-	associated_skill = /datum/skill/magic/arcane
-	recharge_time = 20 SECONDS
-	var/cabal_affine = FALSE
-	var/is_summoned = FALSE
-	var/to_spawn = 4
-	hide_charge_effect = TRUE
-
-/obj/effect/proc_holder/spell/invoked/raise_undead_formation/cast(list/targets, mob/living/user)
-	..()
-
-	var/turf/T = get_turf(targets[1])
-	if(!isopenturf(T))
-		to_chat(user, span_warning("The targeted location is blocked. My summon fails to come forth."))
-		return FALSE
-
-
-	var/skeleton_roll
-
-	var/list/turf/target_turfs = list(T)
-	if(usr.dir == NORTH || usr.dir == SOUTH)
-		target_turfs += get_step(T, EAST)
-		target_turfs += get_step(T, WEST)
-	else
-		target_turfs += get_step(T, NORTH)
-		target_turfs += get_step(T, SOUTH)
-
-	for(var/i = 1 to min(to_spawn, length(target_turfs)))
-		var/t_turf = target_turfs[i]
-
-		if(!isopenturf(t_turf))
-			continue
-
-		new /obj/effect/temp_visual/bluespace_fissure(t_turf)
-		skeleton_roll = rand(1,100)
-		switch(skeleton_roll)
-			if(1 to 20)
-				new /mob/living/simple_animal/hostile/rogue/skeleton/axe(t_turf, user, cabal_affine, is_summoned)
-			if(21 to 40)
-				new /mob/living/simple_animal/hostile/rogue/skeleton/spear(t_turf, user, cabal_affine, is_summoned)
-			if(41 to 60)
-				new /mob/living/simple_animal/hostile/rogue/skeleton/guard(t_turf, user, cabal_affine, is_summoned)
-			if(61 to 80)
-				new /mob/living/simple_animal/hostile/rogue/skeleton/bow(t_turf, user, cabal_affine, is_summoned)
-			if(81 to 100)
-				new /mob/living/simple_animal/hostile/rogue/skeleton(t_turf, user, cabal_affine, is_summoned)
-	return TRUE
-
-/obj/effect/proc_holder/spell/invoked/raise_undead_formation/necromancer
-	cabal_affine = TRUE
-	is_summoned = TRUE
-	recharge_time = 35 SECONDS
-	to_spawn = 3
-
-
 /obj/effect/proc_holder/spell/invoked/tame_undead
-	name = "Tame Deadite"
+	name = "Tame Undead"
 	desc = "Oftentymes, husks and shamblers walk aimlessly - uncertain of their future. Befriends the undead \
 	Requires the target to be within four tiles. Works on undead animals, too, and they will heed your command."
-	overlay_icon = 'icons/mob/actions/zizomiracles.dmi'
-	action_icon = 'icons/mob/actions/zizomiracles.dmi'
-	overlay_state = "deadite_tame"
+	overlay_state = "wolf_head_undead"
 	range = 4
 	warnie = "sydwarning"
 	recharge_time = 60 SECONDS
@@ -285,8 +277,6 @@
 /obj/effect/proc_holder/spell/invoked/gravemark
 	name = "Gravemark"
 	desc = "Adds or removes a target from the list of allies exempt from your undead's aggression."
-	overlay_icon = 'icons/mob/actions/zizomiracles.dmi'
-	action_icon = 'icons/mob/actions/zizomiracles.dmi'
 	overlay_state = "gravemark"
 	range = 7
 	warnie = "sydwarning"
@@ -324,10 +314,8 @@
 	return FALSE
 
 /obj/effect/proc_holder/spell/invoked/command_undead
-	name = "Command Deadite"
+	name = "Command Undead"
 	desc = "Commands skeletons. Cast on turf to head in that direction ignoring all else. Cast on self to command it to follow, cast on target to attack them, Cast on a lesser skeleton to set to idle-aggressive,"
-	overlay_icon = 'icons/mob/actions/zizomiracles.dmi'
-	action_icon = 'icons/mob/actions/zizomiracles.dmi'
 	overlay_state = "ZIZO"
 	warnie = "sydwarning"
 	range = 8

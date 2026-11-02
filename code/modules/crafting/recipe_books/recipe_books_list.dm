@@ -20,7 +20,7 @@
 		)
 
 /obj/item/recipe_book/blacksmithing
-	name = "The Smith's Legacy"
+	name = "The Smith’s Legacy"
 	icon_state = "book3_0"
 	base_icon_state = "book3"
 
@@ -149,5 +149,6 @@
 		/datum/book_entry/magic1,
 		/datum/book_entry/magic2,
 		/datum/crafting_recipe/roguetown/arcana,
+		/datum/crafting_recipe/gemstaff,
 		/datum/runeritual,
 	)

@@ -287,7 +287,7 @@ GLOBAL_LIST_EMPTY(tennite_schisms)
 
 	if(uses_remaining <= 0)
 		if(action)
-			action.build_all_button_icons()
+			action.UpdateButtonIcon()
 		to_chat(user, span_boldnotice("Your allegiance in the schism is now final."))
 	return TRUE
 

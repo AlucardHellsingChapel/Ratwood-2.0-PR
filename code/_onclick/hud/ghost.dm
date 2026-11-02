@@ -19,7 +19,7 @@
 
 /atom/movable/screen/ghost/orbit/Click()
 	var/mob/dead/observer/G = usr
-	G.open_orbit_menu()
+	G.follow()
 //skull
 /atom/movable/screen/ghost/orbit/rogue
 	name = "AFTER LIFE"
@@ -32,7 +32,7 @@
 	var/mob/dead/observer/G = usr
 	var/paramslist = params2list(params)
 	if(paramslist["right"]) // screen objects don't do the normal Click() stuff so we'll cheat
-		G.open_orbit_menu()
+		G.follow()
 	else
 		if(G.client)
 			if(istype(G, /mob/dead/observer/rogue/arcaneeye))

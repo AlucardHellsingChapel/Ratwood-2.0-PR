@@ -91,7 +91,7 @@
 	if(!QDELETED(owner_mob) && world.time >= ignore_owner_defense_until)
 		var/mob/living/attacker = owner_mob.lastattacker_weakref?.resolve()
 		if(isliving(attacker) && attacker.stat != DEAD && attacker != src && attacker != owner_mob)
-			add_enemy(attacker)
+			enemies |= attacker
 			GiveTarget(attacker)
 			toggle_ai(AI_ON)
 			return
@@ -118,7 +118,7 @@
 	toggle_ai(AI_ON)
 	var/mob/living/attacker = lastattacker_weakref?.resolve()
 	if(isliving(attacker) && attacker != owner_mob && !faction_check_mob(attacker) && attacker.stat != DEAD)
-		add_enemy(attacker)
+		enemies |= attacker
 
 /// Zone targeting priority: head → legs (if skull broken) → random (if both skull and legs broken).
 /mob/living/simple_animal/hostile/retaliate/rogue/fae/dryad/lesser/AttackingTarget()
@@ -300,12 +300,12 @@
 	if(!can_see_cone(user))
 		return FALSE
 	// Respect parry cooldown inherited from hostile.dm (setparrytime = 30).
-	if(!COOLDOWN_FINISHED(src, last_parry))
+	if(world.time < last_parry + setparrytime)
 		return FALSE
 	// Some incoming intents cannot be parried (e.g. grab, jump).
-	if(intenty && !intenty.parriable_intent)
+	if(intenty && !intenty.canparry)
 		return FALSE
-	COOLDOWN_START(src, last_parry, setparrytime)
+	last_parry = world.time
 	// Expert unarmed (rank 4) = 48% base. Each attacker skill level costs 7%.
 	var/prob2defend = get_skill_level(/datum/skill/combat/unarmed) * 12
 	var/attacker_skill = intenty?.masteritem ? user.get_skill_level(intenty.masteritem.associated_skill) \

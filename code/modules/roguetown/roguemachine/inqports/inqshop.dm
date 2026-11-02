@@ -48,14 +48,14 @@
 	new /obj/item/roguecoin/silver/inqpile(src)
 
 /datum/inqports/supplies/stampstuff
-	name = "1 Lump of Inquisitorial Tallow"
+	name = "1 Lump of Redtallow"
 	item_type = /obj/item/reagent_containers/food/snacks/tallow/red
-	marquescost = 1
+	marquescost = 2
 
 /datum/inqports/supplies/medical
 	name = "5 Rolls of Cloth and Needles"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/supplies/medical
-	marquescost = 1
+	marquescost = 8
 
 /obj/item/natural/bundle/cloth/roll/Initialize(mapload)
 	. = ..()
@@ -78,51 +78,12 @@
 /datum/inqports/supplies/chains
 	name = "2 Lengths of Chain"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/supplies/chains
-	marquescost = 1
+	marquescost = 6
 
 /datum/inqports/supplies/blessedbolts
 	name = "1 Quiver of Holy Water Bolts"
 	item_type = /obj/item/quiver/holybolts
 	marquescost = 2
-
-/datum/inqports/supplies/skullcrackerbolts
-	name = "1 Quiver of Heavy Blunt Bolts (Not for the sauterelle)"
-	item_type = /obj/item/quiver/bluntbolts
-	marquescost = 4
-
-/datum/inqports/supplies/heavyholybolts
-	name = "5 Blessed Heavy Bolts"
-	item_type = /obj/structure/closet/crate/chest/inqcrate/supplies/heavyholybolts
-	marquescost = 5
-
-/obj/structure/closet/crate/chest/inqcrate/supplies/heavyholybolts/Initialize(mapload)
-	. = ..()
-	new /obj/item/ammo_casing/caseless/rogue/heavy_bolt/holy(src)
-	new /obj/item/ammo_casing/caseless/rogue/heavy_bolt/holy(src)
-	new /obj/item/ammo_casing/caseless/rogue/heavy_bolt/holy(src)
-	new /obj/item/ammo_casing/caseless/rogue/heavy_bolt/holy(src)
-	new /obj/item/ammo_casing/caseless/rogue/heavy_bolt/holy(src)
-
-/datum/inqports/supplies/silverblessedslingbullet
-	name = "10 Silver Blessed Psysling Bullets & Sling"
-	item_type = /obj/structure/closet/crate/chest/inqcrate/supplies/silverblessedslingbullet
-	marquescost = 5 //this shit hurts a surprising amount
-
-/obj/structure/closet/crate/chest/inqcrate/supplies/silverblessedslingbullet/Initialize(mapload)
-	. = ..()
-	new /obj/item/ammo_casing/caseless/rogue/sling_bullet/silverblessed(src)
-	new /obj/item/ammo_casing/caseless/rogue/sling_bullet/silverblessed(src)
-	new /obj/item/ammo_casing/caseless/rogue/sling_bullet/silverblessed(src)
-	new /obj/item/ammo_casing/caseless/rogue/sling_bullet/silverblessed(src)
-	new /obj/item/ammo_casing/caseless/rogue/sling_bullet/silverblessed(src)
-	new /obj/item/ammo_casing/caseless/rogue/sling_bullet/silverblessed(src)
-	new /obj/item/ammo_casing/caseless/rogue/sling_bullet/silverblessed(src)
-	new /obj/item/ammo_casing/caseless/rogue/sling_bullet/silverblessed(src)
-	new /obj/item/ammo_casing/caseless/rogue/sling_bullet/silverblessed(src)
-	new /obj/item/ammo_casing/caseless/rogue/sling_bullet/silverblessed(src)
-	new /obj/item/quiver/sling(src)
-	new /obj/item/gun/ballistic/revolver/grenadelauncher/sling(src)
-
 
 /obj/structure/closet/crate/chest/inqcrate/supplies/chains/Initialize(mapload)
 	. = ..()
@@ -132,7 +93,7 @@
 /datum/inqports/supplies/redpotions
 	name = "3 Bottles of Red"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/supplies/redpots
-	marquescost = 3
+	marquescost = 6
 
 /obj/structure/closet/crate/chest/inqcrate/supplies/redpots/Initialize(mapload)
 	. = ..()
@@ -143,7 +104,8 @@
 /datum/inqports/supplies/lifebloodvials
 	name = "3 Vials of Strong Red"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/supplies/sredvials
-	marquescost = 6
+	maximum = 1
+	marquescost = 10
 
 /obj/structure/closet/crate/chest/inqcrate/supplies/sredvials/Initialize(mapload)
 	. = ..()
@@ -154,7 +116,7 @@
 /datum/inqports/supplies/bluepotions
 	name = "3 Bottles of Blue"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/supplies/bluepots
-	marquescost = 3
+	marquescost = 8
 
 /obj/structure/closet/crate/chest/inqcrate/supplies/bluepots/Initialize(mapload)
 	. = ..()
@@ -165,7 +127,8 @@
 /datum/inqports/supplies/strongbluevials
 	name = "3 Vials of Strong Blue"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/supplies/sbluevials
-	marquescost = 6
+	maximum = 1
+	marquescost = 16
 
 /obj/structure/closet/crate/chest/inqcrate/supplies/sbluevials/Initialize(mapload)
 	. = ..()
@@ -173,15 +136,10 @@
 	new /obj/item/reagent_containers/glass/bottle/alchemical/strongmanapot(src)
 	new /obj/item/reagent_containers/glass/bottle/alchemical/strongmanapot(src)
 
-/datum/inqports/supplies/revivalpotion
-	name = "Saint Eora's Elixr of Lyfe"
-	item_type = /obj/item/reagent_containers/glass/bottle/revival
-	marquescost = 10
-
 /datum/inqports/supplies/smokes
 	name = "4 Smokebombs"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/supplies/smokes
-	marquescost = 3
+	marquescost = 8
 
 /obj/structure/closet/crate/chest/inqcrate/supplies/smokes/Initialize(mapload)
 	. = ..()
@@ -193,11 +151,11 @@
 /datum/inqports/supplies/psybuns
 	name = "The Otavan Bakery Special"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/supplies/psybuns
-	marquescost = 1
+	marquescost = 8
 
 /obj/structure/closet/crate/chest/inqcrate/supplies/psybuns/Initialize(mapload)
 	. = ..()
-	new /obj/item/reagent_containers/food/snacks/rogue/psycrossbun_jamtallowed(src)
+	new /obj/item/reagent_containers/food/snacks/rogue/psycrossbun(src)
 	new /obj/item/reagent_containers/food/snacks/rogue/psycrossbun(src)
 	new /obj/item/reagent_containers/food/snacks/rogue/psycrossbun(src)
 	new /obj/item/reagent_containers/food/snacks/rogue/psycrossbun(src)
@@ -221,18 +179,7 @@
 /datum/inqports/supplies/bottlebombs
 	name = "3 Bottlebombs"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/supplies/bottlebombs
-	marquescost = 3
-
-/datum/inqports/supplies/blastsandsticks
-	name = "3 Blastsand Sticks"
-	item_type = /obj/structure/closet/crate/chest/inqcrate/supplies/tntstick
-	marquescost = 6
-
-/obj/structure/closet/crate/chest/inqcrate/supplies/tntstick/Initialize(mapload)
-	. = ..()
-	new /obj/item/tntstick(src)
-	new /obj/item/tntstick(src)
-	new /obj/item/tntstick(src)
+	marquescost = 12
 
 /obj/structure/closet/crate/chest/inqcrate/supplies/bottlebombs/Initialize(mapload)
 	. = ..()
@@ -240,21 +187,10 @@
 	new /obj/item/bomb(src)
 	new /obj/item/bomb(src)
 
-/datum/inqports/supplies/mutegas
-	name = "3 Silencing Gas Bombs"
-	item_type = /obj/structure/closet/crate/chest/inqcrate/supplies/mutegas
-	marquescost = 6
-
-/obj/structure/closet/crate/chest/inqcrate/supplies/mutegas/Initialize(mapload)
-	. = ..()
-	new /obj/item/impact_grenade/smoke/mute_gas(src)
-	new /obj/item/impact_grenade/smoke/mute_gas(src)
-	new /obj/item/impact_grenade/smoke/mute_gas(src)
-
 /datum/inqports/supplies/bullion
 	name = "6 Blessed Silver Bullion"
 	item_type = /obj/structure/closet/crate/chest/inqreliquary/relic/bullion/
-	marquescost = 12
+	marquescost = 16
 
 /obj/structure/closet/crate/chest/inqreliquary/relic/bullion/Initialize(mapload)
 	. = ..()
@@ -272,12 +208,12 @@
 	name = "1 Emergency Poultice"
 	item_type = /obj/item/quicksilver
 	maximum = 1
-	marquescost = 10
+	marquescost = 12
 
 /datum/inqports/articles/psycrosssilver
 	name = "1 Silver Psycross"
 	item_type = /obj/item/clothing/neck/roguetown/psicross/silver
-	marquescost = 6
+	marquescost = 14
 
 /datum/inqports/articles/psycross
 	name = "1 Psycross"
@@ -287,7 +223,7 @@
 /datum/inqports/articles/indexaccused
 	name = "3 INDEXERs, 3 Accusations"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/articles/indexaccused
-	marquescost = 3
+	marquescost = 6
 
 /obj/structure/closet/crate/chest/inqcrate/articles/indexaccused/Initialize(mapload)
 	. = ..()
@@ -298,10 +234,35 @@
 	new /obj/item/paper/inqslip/accusation(src)
 	new /obj/item/paper/inqslip/accusation(src)
 
+/*
+/datum/inqports/articles/indexers
+	name = "3 INDEXERs"
+	item_type = /obj/structure/closet/crate/chest/inqcrate/articles/indexers
+	marquescost = 4
+
+/obj/structure/closet/crate/chest/inqcrate/articles/indexers/Initialize(mapload)
+	. = ..()
+	new /obj/item/inqarticles/indexer(src)
+	new /obj/item/inqarticles/indexer(src)
+	new /obj/item/inqarticles/indexer(src)
+*/
+/*
+/datum/inqports/articles/accusations
+	name = "3 Accusations"
+	item_type = /obj/structure/closet/crate/chest/inqcrate/articles/accusations
+	marquescost = 8
+
+/obj/structure/closet/crate/chest/inqcrate/articles/accusations/Initialize(mapload)
+	. = ..()
+	new /obj/item/paper/inqslip/accusation(src)
+	new /obj/item/paper/inqslip/accusation(src)
+	new /obj/item/paper/inqslip/accusation(src)
+*/
+
 /datum/inqports/articles/confessions
 	name = "3 Confessions"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/articles/confessions
-	marquescost = 5
+	marquescost = 12
 
 /obj/structure/closet/crate/chest/inqcrate/articles/confessions/Initialize(mapload)
 	. = ..()
@@ -312,7 +273,7 @@
 /datum/inqports/articles/psybles
 	name = "3 Books Of Psydon"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/articles/psybles
-	marquescost = 2
+	marquescost = 6
 
 /obj/structure/closet/crate/chest/inqcrate/articles/psybles/Initialize(mapload)
 	. = ..()
@@ -323,25 +284,20 @@
 /datum/inqports/articles/bmirror
 	name = "1 Black Mirror"
 	item_type = /obj/item/inqarticles/bmirror
-	marquescost = 6
+	marquescost = 8
 
 /datum/inqports/articles/listener
 	name = "1 Attentive Ear"
 	item_type = /obj/item/listeningdevice
-	marquescost = 3
+	marquescost = 4
 
 /datum/inqports/articles/whisperer
 	name = "1 Secret Whisperer"
 	item_type = /obj/item/speakerinq
-	marquescost = 3
+	marquescost = 8
 
 
 // ✤ EQUIPMENT ✤ BELONGS HERE! JUST BELOW!
-
-/datum/inqports/equipment/holymonkrobes
-	name = "1 Holy Monk Robes"
-	item_type = /obj/item/clothing/suit/roguetown/shirt/robe/monk/holy
-	marquescost = 8
 
 /datum/inqports/equipment/psydonthorns
 	name = "1 Psydonian Thorns"
@@ -356,17 +312,17 @@
 /datum/inqports/equipment/strangemask
 	name = "1 Confessional Mask"
 	item_type = /obj/item/clothing/mask/rogue/facemask/steel/confessor
-	marquescost = 8
+	marquescost = 10
 
 /datum/inqports/equipment/otavansatchel
 	name = "1 Otavan Leather Satchel"
 	item_type = /obj/item/storage/backpack/rogue/satchel/otavan
-	marquescost = 2
+	marquescost = 8
 
 /datum/inqports/equipment/psysack
 	name = "1 Identity Concealer"
 	item_type = /obj/item/clothing/mask/rogue/sack/psy
-	marquescost = 2
+	marquescost = 6
 
 /datum/inqports/equipment/inqcordage
 	name = "2 Spools of Inquiry Cordage"
@@ -381,7 +337,7 @@
 /datum/inqports/equipment/blackbags
 	name = "3 Black Bags"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/equipment/blackbags
-	marquescost = 6
+	marquescost = 8
 
 /obj/structure/closet/crate/chest/inqcrate/equipment/blackbags/Initialize(mapload)
 	. = ..()
@@ -393,8 +349,8 @@
 /datum/inqports/equipment/psydonhelms
 	name = "Helms of Psydon"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/equipment/psydonhelms
-	marquescost = 10
-	maximum = 2
+	marquescost = 12
+	maximum = 1
 
 /obj/structure/closet/crate/chest/inqcrate/equipment/psydonhelms/Initialize(mapload)
 	. = ..()
@@ -402,7 +358,6 @@
 	new /obj/item/clothing/head/roguetown/helmet/heavy/psysallet(src)
 	new /obj/item/clothing/head/roguetown/helmet/heavy/psybucket(src)
 	new /obj/item/clothing/head/roguetown/helmet/heavy/psydonhelm(src)
-	new /obj/item/clothing/head/roguetown/helmet/heavy/volfplate/psydonic(src)
 
 /datum/inqports/equipment/crankbox
 	name = "The Crankbox"
@@ -417,12 +372,7 @@
 /datum/inqports/equipment/nocshades
 	name = "1 Nocshade Lens-Pair"
 	item_type = /obj/item/clothing/mask/rogue/spectacles/inq
-	marquescost = 10
-
-/datum/inqports/equipment/inqscomm
-	name = "1 Inquisitorial SCOMgnet Ring"
-	item_type = /obj/item/clothing/ring/signet/silver/inqscomm
-	marquescost = 6
+	marquescost = 12
 
 // ✤ WARDROBE ✤ STARTS HERE! YEP!
 
@@ -437,7 +387,7 @@
 /datum/inqports/wardrobe/fencerset
 	name = "The Otavan Fencer's Finest Set Crate"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/wardrobe/fencerset
-	marquescost = 10
+	marquescost = 12
 
 /obj/structure/closet/crate/chest/inqcrate/wardrobe/fencerset/Initialize(mapload)
 	. = ..()
@@ -484,7 +434,7 @@
 /datum/inqports/wardrobe/fencersthree
 	name = "The Fencer's Gambeson Three-Pack"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/wardrobe/fencersthree
-	marquescost = 8
+	marquescost = 12
 
 /obj/structure/closet/crate/chest/inqcrate/wardrobe/fencersthree/Initialize(mapload)
 	. = ..()
@@ -507,7 +457,7 @@
 /datum/inqports/wardrobe/nobledressup
 	name = "The Cost of Nobility Crate"
 	item_type = /obj/structure/closet/crate/chest/inqcrate/wardrobe/nobledressup
-	marquescost = 14
+	marquescost = 18
 
 /obj/structure/closet/crate/chest/inqcrate/wardrobe/nobledressup/Initialize(mapload)
 	. = ..()

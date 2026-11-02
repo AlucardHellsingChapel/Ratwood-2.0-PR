@@ -25,7 +25,6 @@
 		/datum/skill/craft/crafting = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/misc/reading = SKILL_LEVEL_NOVICE,
 		/datum/skill/misc/sneaking = SKILL_LEVEL_NOVICE,  //They don't get massive skilll list anymore aside of journeyman in few key areas.
-		/datum/skill/misc/hunting = SKILL_LEVEL_NOVICE,
 	)
 
 /datum/outfit/job/roguetown/homesteader/pre_equip(mob/living/carbon/human/H)
@@ -318,7 +317,7 @@
 			H.social_rank = SOCIAL_RANK_PEASANT
 
 	// STAT PACK SELECTION
-	var/stat_packs = list("Agile - SPD +2, CON +1, STR -1, WIL -1", "Bookworm - INT +1, PER +2, WIL +2, STR -2, CON -2", "Toned - STR +1, CON +1, WIL +1, INT -1", "All-Rounded - No Changes")
+	var/stat_packs = list("Agile - SPD +2, CON +1, STR -1, WIL -1", "Bookworm - INT +1, PER +1, WIL +1, STR -2, CON -2", "Toned - STR +1, CON +1, WIL +1, INT -1", "All-Rounded - No Changes")
 	var/stat_choice = input(H, "Select your stat focus. [1/1]", "Stat Pack Selection") as anything in stat_packs
 
 	switch(stat_choice)
@@ -380,9 +379,10 @@
 			/obj/item/ingot/iron,
 			/obj/item/rogueore/coal
 		),
-		"Craftsman Set" = list(
-			/obj/item/rogueweapon/stoneaxe/handaxe,
-			/obj/item/rogueweapon/hammer/steel,
+		"Carpenter Set" = list(
+			/obj/item/rogueweapon/stoneaxe/woodcut/bronze,
+			/obj/item/rogueweapon/handsaw,
+			/obj/item/rogueweapon/hammer/copper,
 			/obj/item/folding_table_stored
 		),
 		"Hunter Set" = list(
@@ -415,6 +415,14 @@
 			/obj/item/paper,
 			/obj/item/paper/scroll,
 			/obj/item/natural/feather
+		),
+		"Mason Set" = list(
+			/obj/item/rogueweapon/chisel,
+			/obj/item/rogueweapon/hammer/copper,
+			/obj/item/natural/stone,
+			/obj/item/natural/stone,
+			/obj/item/natural/stone,
+			/obj/item/folding_table_stored
 		)
 	)
 
@@ -446,9 +454,6 @@
 						var/unique_key = "[item_name] ([profession_set_name] [counter])"
 						H.mind.special_items[unique_key] = item_path
 					counter++
-				if(profession_set_name == "Craftsman Set")
-					ADD_TRAIT(H, TRAIT_MASTER_CARPENTER, TRAIT_GENERIC)
-					ADD_TRAIT(H, TRAIT_MASTER_MASON, TRAIT_GENERIC)
 				if(profession_set_name in profession_sets)
 					profession_sets -= profession_set_name
 
@@ -657,6 +662,7 @@
 			"Unarmed" = /datum/skill/combat/unarmed,
 			"Knives" = /datum/skill/combat/knives,
 			"Wrestling" = /datum/skill/combat/wrestling,
+			"Staves" = /datum/skill/combat/staves,
 			"Whips & Flails" = /datum/skill/combat/whipsflails,
 			"Bows" = /datum/skill/combat/bows,
 			"Crossbows" = /datum/skill/combat/crossbows,

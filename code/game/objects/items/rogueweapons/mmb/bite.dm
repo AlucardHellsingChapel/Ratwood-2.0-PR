@@ -1,5 +1,7 @@
 /datum/intent/bite
 	name = "bite"
+	candodge = TRUE
+	canparry = TRUE
 	chargedrain = 0
 	chargetime = 0
 	swingdelay = 0
@@ -43,7 +45,6 @@
 			. = ..()
 			return
 	user.changeNext_move(clickcd)
-	user.break_invisibility()
 	target.onbite(user)
 	. = ..()
 	return
@@ -91,10 +92,10 @@
 		if(!affecting.has_wound(/datum/wound/bite))
 			nodmg = TRUE
 	if(!nodmg)
-		var/armor_block = run_armor_check(user.zone_selected, "stab", armor_penetration = PEN_NONE, blade_dulling=BCLASS_BITE, damage = dam2do)
+		var/armor_block = run_armor_check(user.zone_selected, "stab",blade_dulling=BCLASS_BITE)
 		if(!apply_damage(dam2do, BRUTE, def_zone, armor_block, user))
 			nodmg = TRUE
-			next_attack_msg += VISMSG_ARMOR_BLOCKED
+			next_attack_msg += span_warning("Armor stops the damage.")
 		else if(!nodmg && (HAS_TRAIT(user, TRAIT_VAMPBITE)))
 			var/ramount = 15
 			var/rid = /datum/reagent/vampsolution
@@ -121,8 +122,7 @@
 				if(HAS_TRAIT(src, TRAIT_SILVER_BLESSED))
 					to_chat(user, span_warning("BLEH! [bite_victim] tastes of SILVER! My gift cannot take hold."))
 				else
-					if(caused_wound?.werewolf_infect_attempt())
-						to_chat(user, span_danger("You feel your beastly gift trickling from your mouth into [bite_victim]'s wound..."))
+					caused_wound?.werewolf_infect_attempt()
 					if(prob(30))
 						user.werewolf_feed(bite_victim, 10)
 			if(istype(user.dna.species, /datum/species/gnoll))
@@ -131,7 +131,9 @@
 			/*
 				ZOMBIE INFECTION VIA BITE
 			*/
-			if(user.is_risen_deadite())
+			var/datum/antagonist/zombie/zombie_antag = user.mind.has_antag_datum(/datum/antagonist/zombie)
+			if(zombie_antag && zombie_antag.has_turned)
+				zombie_antag.last_bite = world.time
 				if(bite_victim.zombie_infect_attempt())   // infect_attempt on bite
 					to_chat(user, span_danger("You feel your gift trickling from your mouth into [bite_victim]'s wound..."))
 
@@ -146,7 +148,6 @@
 		B.grabbee = user
 		B.limb_grabbed = BP
 		B.sublimb_grabbed = used_limb
-		B.update_grabbed_spell_hud()
 
 		lastattacker = user.real_name
 		lastattackerckey = user.ckey
@@ -177,9 +178,6 @@
 
 /obj/item/grabbing/bite/valid_check()
 	// We require adjacency to count the grab as valid
-	if(!grabbee || !grabbed)
-		qdel(src)
-		return FALSE
 
 	if(isdullahan(grabbee) && ishuman(grabbed))
 		var/mob/living/carbon/human/target = grabbed
@@ -242,12 +240,11 @@
 		return FALSE*/
 
 	user.changeNext_move(CLICK_CD_GRABBING)
-	user.break_invisibility()
 	var/mob/living/carbon/C = grabbed
+	var/armor_block = C.run_armor_check(sublimb_grabbed, d_type, armor_penetration = BLUNT_DEFAULT_PENFACTOR)
 	var/damage = user.get_punch_dmg()
 	if(HAS_TRAIT(user, TRAIT_STRONGBITE))
 		damage = damage*2
-	var/armor_block = C.run_armor_check(sublimb_grabbed, d_type, armor_penetration = PEN_NONE, damage = damage)
 	C.next_attack_msg.Cut()
 	user.do_attack_animation(C, "bite")
 	if(C.apply_damage(damage, BRUTE, limb_grabbed, armor_block))
@@ -255,23 +252,19 @@
 		var/datum/wound/caused_wound = limb_grabbed.bodypart_attacked_by(BCLASS_BITE, damage, user, sublimb_grabbed, crit_message = TRUE)
 		if(user.mind && caused_wound)
 			/*
-				WEREWOLF CHEW. WEREWOLFIFICATION
+				WEREWOLF CHEW.
 			*/
 			if(istype(user.dna.species, /datum/species/werewolf))
-				if(HAS_TRAIT(C, TRAIT_SILVER_BLESSED))
-					to_chat(user, span_warning("BLEH! [C] tastes of SILVER! My gift cannot take hold."))
-				else
-					if(caused_wound?.werewolf_infect_attempt())
-						to_chat(user, span_danger("You feel your beastly gift trickling into [C]'s wound..."))
-					if(prob(30))
-						user.werewolf_feed(C, 10)
+				if(prob(30))
+					user.werewolf_feed(C)
 
 			/*
 				ZOMBIE CHEW. ZOMBIFICATION
 			*/
-			if(user.is_risen_deadite())
-				var/existing_zombie = C.is_risen_deadite() || C.mind?.has_antag_datum(/datum/antagonist/zombie) // Already risen, or already pending
-				if(!existing_zombie && caused_wound?.zombie_infect_attempt(user))   // infect_attempt on wound
+			var/datum/antagonist/zombie/zombie_antag = user.mind.has_antag_datum(/datum/antagonist/zombie)
+			if(zombie_antag && zombie_antag.has_turned)
+				var/datum/antagonist/zombie/existing_zombie = C.mind?.has_antag_datum(/datum/antagonist/zombie) //If the bite target is a zombie
+				if(!existing_zombie && caused_wound?.zombie_infect_attempt())   // infect_attempt on wound
 					to_chat(user, span_danger("You feel your gift trickling into [C]'s wound...")) //message to the zombie they infected the target
 
 			/*
@@ -303,7 +296,7 @@
 							playsound(C.loc, 'sound/combat/fracture/headcrush (2).ogg', 100, FALSE, -1)
 							return*/
 	else
-		C.next_attack_msg += VISMSG_ARMOR_BLOCKED
+		C.next_attack_msg += " <span class='warning'>Armor stops the damage.</span>"
 	C.visible_message(span_danger("[user] bites [C]'s [parse_zone(sublimb_grabbed)]![C.next_attack_msg.Join()]"), \
 					span_userdanger("[user] bites my [parse_zone(sublimb_grabbed)]![C.next_attack_msg.Join()]"), span_hear("I hear a sickening sound of chewing!"), COMBAT_MESSAGE_RANGE, user)
 	to_chat(user, span_danger("I bite [C]'s [parse_zone(sublimb_grabbed)].[C.next_attack_msg.Join()]"))
@@ -319,8 +312,6 @@
 	if(!limb_grabbed.get_bleed_rate())
 		to_chat(user, span_warning("Sigh. It's not bleeding."))
 		return
-
-	user.break_invisibility()
 
 	if(HAS_TRAIT(user, TRAIT_VAMPBITE))
 		if(isliving(grabbed))

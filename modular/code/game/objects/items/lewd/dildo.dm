@@ -8,7 +8,7 @@
 	righthand_file = 'modular/icons/mob/inhands/lewd/items_righthand.dmi'
 	force = 1
 	throwforce = 10
-	w_class = WEIGHT_CLASS_TINY
+	w_class = WEIGHT_CLASS_SMALL
 	obj_flags = CAN_BE_HIT
 	sellprice = 1
 	var/dildo_type = "human"
