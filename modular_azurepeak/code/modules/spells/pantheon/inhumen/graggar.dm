@@ -581,7 +581,7 @@
 	releasedrain = 5
 	chargedrain = 0
 	chargetime = 1 SECONDS
-	recharge_time = 10 MINUTES
+	recharge_time = 20 MINUTES
 	invocations = list("I WILL TEAR YOU LIMB FROM LIMB!!")
 	sound = 'sound/magic/graggar_rage.ogg'
 	chargedloop = /datum/looping_sound/invokeascendant
@@ -627,7 +627,6 @@
 	ADD_TRAIT(owner, TRAIT_STRENGTH_UNCAPPED, TRAIT_MIRACLE)
 	ADD_TRAIT(owner, TRAIT_NOPAINSTUN, TRAIT_MIRACLE)
 	ADD_TRAIT(owner, TRAIT_NOPAIN, TRAIT_MIRACLE)
-	ADD_TRAIT(owner, TRAIT_INFINITE_STAMINA, TRAIT_MIRACLE)
 	ADD_TRAIT(owner, TRAIT_GRABIMMUNE, TRAIT_MIRACLE)
 	shake_camera(owner, 5, 2) //Aura
 	to_chat(owner, span_userdanger(pick("KILL, FUCKING KILL! SLAUGHTER THEM!", "BLOOD, FUCKING SPILL THE BLOOD!", "BLOOD AND FURY, SPLITTING MY SKULL!", "I'LL KILL ANYTHING THAT MOVES!", "I'M FUCKING UNSTOPPABLE, I'LL BREAK THEM!", "GRAGGAR MAKE A WORLD OF BLOODSHED!", "GRAGGAR FEAST UPON MY SLAUGHTER!")))
@@ -641,7 +640,6 @@
 	REMOVE_TRAIT(owner, TRAIT_STRENGTH_UNCAPPED, TRAIT_MIRACLE)
 	REMOVE_TRAIT(owner, TRAIT_NOPAINSTUN, TRAIT_MIRACLE)
 	REMOVE_TRAIT(owner, TRAIT_NOPAIN, TRAIT_MIRACLE)
-	REMOVE_TRAIT(owner, TRAIT_INFINITE_STAMINA, TRAIT_MIRACLE)
 	REMOVE_TRAIT(owner, TRAIT_GRABIMMUNE, TRAIT_MIRACLE)
 	owner.visible_message(span_warning("[owner] wavers, their rage simmering down."))
 	owner.OffBalance(3 SECONDS)
